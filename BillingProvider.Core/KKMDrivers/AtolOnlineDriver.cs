@@ -16,7 +16,7 @@ namespace BillingProvider.Core.KKMDrivers
         private readonly RestClient _client;
         readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
 
-        public AtolOnlineDriver(string inn, string groupId, string login, string password, string cashierName,
+        public AtolOnlineDriver(string atolHost, string inn, string groupId, string login, string password, string cashierName,
             string cashierVatin, string hostname, string companyEmail)
         {
             Inn = inn;
@@ -28,7 +28,7 @@ namespace BillingProvider.Core.KKMDrivers
             Hostname = hostname;
             CompanyEmail = companyEmail;
 
-            _client = new RestClient("https://testonline.atol.ru/possystem/v4/");
+            _client = new RestClient(atolHost);
         }
 
         public string Inn { get; }

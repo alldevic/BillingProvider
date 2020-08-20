@@ -46,6 +46,15 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlinePassword { get; set; } = "";
 
+        
+        [Category("АТОЛ Онлайн")]
+        [Description(
+            "Адрес тестовой среды (ФФД 1.05): https://testonline.atol.ru/possystem/v4/" +
+            "Адрес production: https://online.atol.ru/possystem/v4/")]
+        [DisplayName("Адрес среды:")]
+        [RefreshProperties(RefreshProperties.All)]
+        public string AtolHost { get; set; } = "";
+        
         #endregion
 
         #region KKMServer
@@ -188,6 +197,9 @@ namespace BillingProvider.WinForms
 
                 IncludeSubfolders = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(IncludeSubfolders)}"]);
                 Log.Trace($"{nameof(IncludeSubfolders)}='{IncludeSubfolders}'");
+                
+                AtolHost = ConfigurationManager.AppSettings[$"{nameof(AtolHost)}"];
+                Log.Trace($"{nameof(AtolHost)}='{AtolHost}'");
 
                 Check();
             }
@@ -261,8 +273,10 @@ namespace BillingProvider.WinForms
             
             configuration.AppSettings.Settings[nameof(IncludeSubfolders)].Value = IncludeSubfolders.ToString();
             Log.Trace($"{nameof(IncludeSubfolders)}='{IncludeSubfolders}'");
-            
 
+            configuration.AppSettings.Settings[nameof(AtolHost)].Value = AtolHost;
+            Log.Trace($"{nameof(AtolHost)}='{AtolHost}'");
+            
             configuration.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");
             Log.Debug("End saving app settings");

@@ -54,7 +54,8 @@ namespace BillingProvider.WinForms
             gridSettings.SelectedObject = _appSettings;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
             {
-                _conn = new AtolOnlineDriver(_appSettings.AtolOnlineINN, _appSettings.AtolOnlineGroupID,
+                _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
+                    _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
                     _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
             }
@@ -124,7 +125,8 @@ namespace BillingProvider.WinForms
             _changed = true;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
             {
-                _conn = new AtolOnlineDriver(_appSettings.AtolOnlineINN, _appSettings.AtolOnlineGroupID,
+                _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
+                    _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
                     _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
             }
