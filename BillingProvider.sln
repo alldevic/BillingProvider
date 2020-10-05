@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillingProvider.WinForms", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillingProvider.Core.Tests", "BillingProvider.Core.Tests\BillingProvider.Core.Tests.csproj", "{7BCE1A27-D933-4746-A229-23E88591A4B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BillingProvider.KkmServer", "BillingProvider.KkmServer\BillingProvider.KkmServer.csproj", "{27F652E1-7E27-4C21-A22C-843B2869447F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{7BCE1A27-D933-4746-A229-23E88591A4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BCE1A27-D933-4746-A229-23E88591A4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BCE1A27-D933-4746-A229-23E88591A4B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27F652E1-7E27-4C21-A22C-843B2869447F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27F652E1-7E27-4C21-A22C-843B2869447F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27F652E1-7E27-4C21-A22C-843B2869447F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27F652E1-7E27-4C21-A22C-843B2869447F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
