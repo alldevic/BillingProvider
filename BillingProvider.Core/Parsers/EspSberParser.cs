@@ -39,7 +39,15 @@ namespace BillingProvider.Core.Parsers
                     for (var i = 0; i < result.Count - 1; i++)
                     {
                         var x = result[i];
-                        Log.Debug($"{x[1]}; {x[2]}; Обращение с ТКО; {x[4]}");
+                        Log.Debug($"{x[1]}; Обращение с ТКО; {x[3]}");
+                        
+                        var tmpsum = x[3].ToString();
+                        while (tmpsum.Length < 3)
+                        {
+                            tmpsum = tmpsum.Insert(0, "0");
+                        }
+                        tmpsum = tmpsum.Insert(tmpsum.Length - 2, ".");
+                        
                         var tmp = new ClientInfo
                         {
                             Address = x[1].ToString(),
@@ -48,10 +56,10 @@ namespace BillingProvider.Core.Parsers
                         tmp.Positions.Add(new Position
                         {
                             Name = "Вывоз ТКО",
-                            Sum = x[3].ToString().Insert(x[3].ToString().Length-2, ".")
+                            Sum = tmpsum
                         });
 
-                        tmp.Sum = x[3].ToString().Insert(x[3].ToString().Length - 2, ".");
+                        tmp.Sum = tmpsum;
                         
                         Data.Add(tmp);
                     }

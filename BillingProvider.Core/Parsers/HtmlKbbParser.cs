@@ -25,7 +25,6 @@ namespace BillingProvider.Core.Parsers
             };
         }
 
-
         public void Load()
         {
             Log.Debug("Begin parsing");

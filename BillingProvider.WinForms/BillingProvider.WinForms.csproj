@@ -37,8 +37,20 @@
     </PropertyGroup>
     <PropertyGroup />
     <ItemGroup>
+        <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+          <HintPath>..\packages\Portable.BouncyCastle.1.8.5\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
           <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="MailKit, Version=2.8.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b">
+          <HintPath>..\packages\MailKit.2.8.0\lib\net45\MailKit.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="MimeKit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814">
+          <HintPath>..\packages\MimeKit.2.9.1\lib\net45\MimeKit.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
@@ -47,6 +59,10 @@
         </Reference>
         <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
           <HintPath>..\packages\NLog.4.7.5\lib\net45\NLog.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="NLog.MailKit, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
+          <HintPath>..\packages\NLog.MailKit.3.3.0\lib\net45\NLog.MailKit.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="NLog.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
@@ -59,6 +75,7 @@
         <Reference Include="System.Design" />
         <Reference Include="System.IO.Compression" />
         <Reference Include="System.Runtime.Serialization" />
+        <Reference Include="System.Security" />
         <Reference Include="System.ServiceModel" />
         <Reference Include="System.Transactions" />
         <Reference Include="System.Xml.Linq" />
