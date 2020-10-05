@@ -1,1 +1,1 @@
-# Billing Provider v0.3.8\n\n- Add AtolHost setting\n
+# Billing Provider v0.3.9\n\n- Fix espsber parser\n
