@@ -39,16 +39,22 @@ namespace BillingProvider.Core.Parsers
                     for (var i = 0; i < result.Count; i++)
                     {
                         var x = result[i];
-                        Log.Debug($"{x[6]}; {x[7]}; Вывоз ТКО; {x[16]}");
-                        if (string.IsNullOrEmpty(x[16].ToString()) || string.IsNullOrEmpty(x[6].ToString()))
+                        Log.Debug($"{x[5]}; {x[6]}; {x[7]}; Вывоз ТКО; {x[16]}");
+                        if (string.IsNullOrEmpty(x[16].ToString()))
                         {
                             continue;
+                        }
+
+                        var name = x[6].ToString();
+                        if (string.IsNullOrEmpty(name))
+                        {
+                            name = x[5].ToString();
                         }
 
                         var tmp = new ClientInfo
                         {
                             Address = x[7].ToString(),
-                            Name = x[6].ToString(),
+                            Name = name,
                         };
                         tmp.Positions.Add(new Position
                         {
