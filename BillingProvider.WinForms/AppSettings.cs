@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.Drawing.Design;
-using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using BillingProvider.WinForms.Extensions;
 using NLog;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BillingProvider.Core.Models;
 using ExcelDataReader;
@@ -44,9 +45,9 @@ namespace BillingProvider.Core.Parsers
 
                             Data.Add(tmp);
                         }
-                        catch
+                        catch (Exception e)
                         {
-                            continue;
+                            Log.Error($"Ошибка при парсинге файла {Path}: {e.Message}");
                         }
                     }
                 }

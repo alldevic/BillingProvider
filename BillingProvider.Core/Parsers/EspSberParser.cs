@@ -41,12 +41,12 @@ namespace BillingProvider.Core.Parsers
                         var x = result[i];
                         Log.Debug($"{x[1]}; Обращение с ТКО; {x[3]}");
                         
-                        var tmpsum = x[3].ToString();
-                        while (tmpsum.Length < 3)
+                        var sum = x[3].ToString();
+                        while (sum.Length < 3)
                         {
-                            tmpsum = tmpsum.Insert(0, "0");
+                            sum = sum.Insert(0, "0");
                         }
-                        tmpsum = tmpsum.Insert(tmpsum.Length - 2, ".");
+                        sum = sum.Insert(sum.Length - 2, ".");
                         
                         var tmp = new ClientInfo
                         {
@@ -56,10 +56,10 @@ namespace BillingProvider.Core.Parsers
                         tmp.Positions.Add(new Position
                         {
                             Name = "Вывоз ТКО",
-                            Sum = tmpsum
+                            Sum = sum
                         });
 
-                        tmp.Sum = tmpsum;
+                        tmp.Sum = sum;
                         
                         Data.Add(tmp);
                     }

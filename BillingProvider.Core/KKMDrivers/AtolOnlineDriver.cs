@@ -128,7 +128,7 @@ namespace BillingProvider.Core.KKMDrivers
             }
             catch (Exception e)
             {
-                Log.Warn("Не удалость преобразовать дату из пути");
+                Log.Warn($"Не удалость преобразовать дату из пути: {e.Message}");
             }
 
             try

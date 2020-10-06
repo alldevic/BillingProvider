@@ -48,7 +48,7 @@ namespace BillingProvider.Core
             }
             catch (Exception e)
             {
-                Log.Error("Невозможно записать историю в файл");
+                Log.Error($"Невозможно записать историю в файл: {e.Message}");
             }
         }
 

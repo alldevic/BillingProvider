@@ -205,7 +205,7 @@ namespace BillingProvider.WinForms
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Белый Н. С.\nbeliy_ns@kuzro.ru", @"О программе");
+            MessageBox.Show(@"Белый Н. С.\nbeliy_ns@kuzro.ru", @"О программе");
         }
 
         private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
