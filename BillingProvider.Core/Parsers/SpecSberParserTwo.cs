@@ -40,7 +40,15 @@ namespace BillingProvider.Core.Parsers
                     {
                         var x = result[i];
                         Log.Debug($"{x[5]}; {x[6]}; {x[7]}; Вывоз ТКО; {x[16]}");
-                        if (string.IsNullOrEmpty(x[16].ToString()))
+
+                        var sum = x[16].ToString();
+
+                        if (string.Equals(x[14].ToString(), @"ПЕНЯ"))
+                        {
+                            sum = x[19].ToString();
+                        }
+
+                        if (string.IsNullOrEmpty(sum))
                         {
                             continue;
                         }
@@ -59,10 +67,10 @@ namespace BillingProvider.Core.Parsers
                         tmp.Positions.Add(new Position
                         {
                             Name = "Вывоз ТКО",
-                            Sum = x[16].ToString().Replace(",", ".")
+                            Sum = sum.Replace(",", ".")
                         });
 
-                        tmp.Sum = x[16].ToString().Replace(",", ".");
+                        tmp.Sum = sum.Replace(",", ".");
 
                         Data.Add(tmp);
                     }
