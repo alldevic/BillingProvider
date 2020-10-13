@@ -13,7 +13,6 @@ using BillingProvider.Core.KKMDrivers;
 using BillingProvider.Core.Parsers;
 using BillingProvider.WinForms.Extensions;
 using NLog;
-using NLog.Fluent;
 
 namespace BillingProvider.WinForms
 {
@@ -268,7 +267,7 @@ namespace BillingProvider.WinForms
         private void rtxtLog_LinkClicked(object sender, LinkClickedEventArgs e)
         {
             Process.Start(e.LinkText);
-            Log.Debug($"{e.LinkText} clicked");
+            _log.Debug($"{e.LinkText} clicked");
         }
 
         private void WatchFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -283,23 +282,45 @@ namespace BillingProvider.WinForms
             }
             else
             {
-                _folderName = _appSettings.FolderPath;
-                _isWatching = true;
-                WatchFolderToolStripMenuItem.Text = @"Прекратить отслеживание";
-
-                _watcher = new FileSystemWatcher
+                try
                 {
-                    Filter = "*.*",
-                    Path = _folderName,
-                    IncludeSubdirectories = _appSettings.IncludeSubfolders,
-                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName,
-                    EnableRaisingEvents = true
-                };
+                    _folderName = _appSettings.FolderPath;
+                    if (!Directory.Exists(_folderName))
+                    {
+                        _log.Error($"Папка {_folderName} не найдена");
+                    }
+
+                    _isWatching = true;
+                    WatchFolderToolStripMenuItem.Text = @"Прекратить отслеживание";
 
 
-                _watcher.Created += OnCreated;
+                    _watcher = new FileSystemWatcher
+                    {
+                        Filter = "*.*",
+                        Path = _folderName,
+                        IncludeSubdirectories = _appSettings.IncludeSubfolders,
+                        NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName,
+                        EnableRaisingEvents = true
+                    };
 
-                _log.Info($"Начато отслеживание папки {_folderName}");
+
+                    _watcher.Created += OnCreated;
+
+                    _log.Info($"Начато отслеживание папки {_folderName}");
+                }
+                catch (Exception exception)
+                {
+                    _log.Error(exception, $"Невозможно отслеживание папки {_folderName}");
+                    _isWatching = false;
+                    if (_watcher != null)
+                    {
+                        _watcher.EnableRaisingEvents = false;
+                        _watcher.Dispose();
+                    }
+
+                    WatchFolderToolStripMenuItem.Text = @"Отслеживать папку";
+                    _log.Info($"Отслеживание папки заверешено {_folderName}");
+                }
             }
         }
 
@@ -365,7 +386,7 @@ namespace BillingProvider.WinForms
             }
             catch
             {
-                Log.Error($"Не удалось открыть файл: {_filePath}");
+                _log.Error($"Не удалось открыть файл: {_filePath}");
             }
         }
 
@@ -399,9 +420,22 @@ namespace BillingProvider.WinForms
 
         private async void ScanToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!Directory.Exists(_appSettings.FolderPath))
+            {
+                _log.Error($"Папка {_appSettings.FolderPath} не найдена");
+                return;
+            }
+
             foreach (var file in Directory.EnumerateFiles(_appSettings.FolderPath, "*.*", SearchOption.AllDirectories))
             {
                 _log.Info($"Select file: {file}");
+
+                if (!File.Exists(file))
+                {
+                    _log.Error($"Файд {file} не найден");
+                    continue;
+                }
+
                 string hash;
                 using (var md5 = MD5.Create())
                 {
@@ -439,7 +473,7 @@ namespace BillingProvider.WinForms
                 }
                 catch
                 {
-                    Log.Error($"Не удалось открыть файл: {_filePath}");
+                    _log.Error($"Не удалось открыть файл: {_filePath}");
                 }
             }
         }
