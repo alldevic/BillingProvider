@@ -42,6 +42,7 @@ namespace BillingProvider.Core.Parsers
                         Log.Debug($"{x[6]}; {x[7]}; Вывоз ТКО; {x[10]}");
                         if (string.IsNullOrEmpty(x[10].ToString()) || string.IsNullOrEmpty(x[6].ToString()))
                         {
+                            Log.Warn($"Пропущена строка {Path}: {x[6]}; {x[7]}; Вывоз ТКО; {x[10]}");
                             continue;
                         }
 

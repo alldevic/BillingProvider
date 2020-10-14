@@ -50,18 +50,13 @@ namespace BillingProvider.Core
                 return new TxtMailParser(path);
             }
 
-            if (firstLine.Split(';').Length == 21)
+            if (firstLine.Split(';').Length == 21 ||
+                firstLine.Split(';').Length == 18)
             {
                 Log.Debug("Select specsber parser");
                 return new SpecSberParser(path);
             }
-
-            if (firstLine.Split(';').Length == 18)
-            {
-                Log.Debug("Select specsbertwo parser");
-                return new SpecSberParserTwo(path);
-            }
-
+            
             if (firstLine.Split(';').Length == 12)
             {
                 Log.Debug("Select specsberthree parser");
