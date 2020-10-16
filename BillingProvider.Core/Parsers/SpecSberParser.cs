@@ -40,7 +40,7 @@ namespace BillingProvider.Core.Parsers
                     for (var i = 0; i < result.Count; i++)
                     {
                         var x = result[i];
-                        Log.Debug($"{x[5]}; {x[6]}; {x[7]}; Вывоз ТКО; {x[14]}; {x[16]}; {x[19]}");
+                        Log.Debug($"{x[5]}; {x[6]}; {x[7]}; Вывоз ТКО; {x[14]}; {x[16]}");
 
                         var sum = x[16].ToString();
 
