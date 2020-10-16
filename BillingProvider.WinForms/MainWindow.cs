@@ -39,6 +39,10 @@ namespace BillingProvider.WinForms
             _sbLog = new StringBuilder();
             _logDirty = false;
             _isWatching = false;
+            DeviceListToolStripMenuItem.Enabled = false;
+            PingToolStripMenuItem.Enabled = false;
+            KktStateToolStripMenuItem.Enabled = false;
+            TestCheckToolStripMenuItem.Enabled = false;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)

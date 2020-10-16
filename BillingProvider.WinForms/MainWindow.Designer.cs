@@ -265,7 +265,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 334;
+            this.splitContainer2.SplitterDistance = 341;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -303,7 +303,7 @@
             this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 334);
+            this.gridSource.Size = new System.Drawing.Size(408, 341);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -312,7 +312,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 125);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 118);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
