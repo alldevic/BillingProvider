@@ -156,7 +156,7 @@
         <GetAssemblyIdentity AssemblyFiles="$(TargetDir)\BillingProvider.exe">
             <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
         </GetAssemblyIdentity>
-        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider.v%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true" />
+        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider_%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true" />
     </Target>
     
     <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets')" />
