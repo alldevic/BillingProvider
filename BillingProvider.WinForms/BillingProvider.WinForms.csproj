@@ -132,15 +132,27 @@
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets')" />
+
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
         <PropertyGroup>
             <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
         </PropertyGroup>
         <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
         <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets'))" />
+        <AssemblyInfo CodeLanguage="CS"
+                      OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs"
+                      AssemblyVersion="$(Version)"
+                      AssemblyFileVersion="$(Version)"
+                      AssemblyTitle="BillingProvider $(Version)"
+                      AssemblyDescription="BillingProvider $(Version)"
+                      AssemblyCompany="Nikolay Bely"
+                      AssemblyProduct="BillingProvider"
+                      AssemblyCopyright="Copyright (c) Nikolay Bely 2020"
+                      ComVisible="false"
+                      Guid="75A2B281-0EE5-40D0-A491-8EADFCCC609D"/>
     </Target>
 
-    <Import Project="..\Dependecies\ILRepack.Lib.MSBuild.Task\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\Dependecies\ILRepack.Lib.MSBuild.Task\ILRepack.Lib.MSBuild.Task.targets')" />
     
     <Target Name="GenerateZip" AfterTargets="CleanReferenceCopyLocalPaths" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <RemoveDir Directories="@(FluentValidationExcludedCultures->'$(OutputPath)%(Filename)')" />
@@ -158,6 +170,4 @@
         </GetAssemblyIdentity>
         <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider_%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true" />
     </Target>
-    
-    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.1\build\ILRepack.Lib.MSBuild.Task.targets')" />
 </Project>
