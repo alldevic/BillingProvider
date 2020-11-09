@@ -1,5 +1,3 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/8ec25ucvdr6my869/branch/master?svg=true)](https://ci.appveyor.com/project/alldevic/billingprovider/branch/master)
-
 # BillingProvider
 
 1. Запустить kkmserver
