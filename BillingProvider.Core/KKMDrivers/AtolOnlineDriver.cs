@@ -192,9 +192,16 @@ namespace BillingProvider.Core.KKMDrivers
                 };
                 req.AddHeader("Token", Token);
                 await Task.Delay(7500);
+                
                 var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
-                var json = JObject.Parse(res0.Data.Payload);
-                var url = json["ofd_receipt_url"];
+                var url = string.Empty;
+                
+                if (!string.IsNullOrEmpty(res0.Data?.Payload))
+                {
+                    var json = JObject.Parse(res0.Data.Payload);
+                    url = json["ofd_receipt_url"]?.ToString();    
+                }
+                
                 Log.Info($"Ссылка на ОФД ({res.Data.Uuid}): {url}");
             }
             catch (Exception e)
