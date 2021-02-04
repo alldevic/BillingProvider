@@ -42,7 +42,7 @@ namespace BillingProvider.Core
                     foreach (var hash in Storage)
                     {
                         file.WriteLine(hash);
-                        Log.Debug($"Файл {hash} успешно записан в историю");
+                        // Log.Debug($"Файл {hash} успешно записан в историю");
                     }
                 }
             }
