@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using BillingProvider.Core.Comm.Tasks.Response;
 using Newtonsoft.Json.Linq;
 using NLog;
 using RestSharp;
@@ -47,8 +48,17 @@ namespace BillingProvider.Core.KKMDrivers
         private string Token { get; set; }
         private DateTime TokenDate { get; set; }
 
-        public async void RegisterCheck(string clientInfo, string name, string sum, string filePath)
+        public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, CancellationToken ct)
         {
+            if (ct.IsCancellationRequested)
+            {
+                return new ResponseTaskBase()
+                {
+                    ErrorMessage = "Task was cancelled",
+                    ResponseTaskStatus = ResponseTaskStatus.TaskCancelled
+                };
+            }
+            
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
             sum = sum.Replace(".", ",");
@@ -87,30 +97,21 @@ namespace BillingProvider.Core.KKMDrivers
                 }
             }
 
-            RestRequest request;
             try
             {
-                if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)
-                {
-                    request = new RestRequest("getToken", Method.POST)
-                    {
-                        RequestFormat = DataFormat.Json
-                    };
-                    request.AddHeader("Content-Type", "application/json; charset=utf-8");
-                    request.AddBody(new {login = Login, pass = Password});
-                    var res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
-                    Token = res3.Data.Token;
-                    TokenDate = DateTime.Parse(res3.Data.Timestamp) + TimeSpan.FromHours(24);
-                    Log.Info($"Получен токен: {Token}");
-                }
+                await UpdateTokenIfNeeded();
             }
             catch (Exception e)
             {
                 Log.Error(e);
-                return;
+                return new ResponseTaskBase()
+                {
+                    ErrorMessage = "Task was cancelled",
+                    ResponseTaskStatus = ResponseTaskStatus.Failed
+                };
             }
 
-            request = new RestRequest($"{GroupId}/sell", Method.POST)
+            var request = new RestRequest($"{GroupId}/sell", Method.POST)
             {
                 RequestFormat = DataFormat.Json
             };
@@ -207,6 +208,34 @@ namespace BillingProvider.Core.KKMDrivers
             catch (Exception e)
             {
                 Log.Error(e, $"Ошибка при получении данных. Файл: {filePath}, строка {name};{clientInfo};{sum}");
+            }
+             
+            return new ResponseTaskBase()
+            {
+                ErrorMessage = string.Empty,
+                ResponseTaskStatus = ResponseTaskStatus.Complete
+            };
+        }
+
+        private async Task UpdateTokenIfNeeded()
+        {
+            if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now.AddHours(25))
+            {
+                Token = string.Empty;
+                var request = new RestRequest("getToken", Method.POST)
+                {
+                    RequestFormat = DataFormat.Json
+                };
+                request.AddHeader("Content-Type", "application/json; charset=utf-8");
+                request.AddBody(new {login = Login, pass = Password});
+                IRestResponse<AuthResponse> res3 = null;
+                while (string.IsNullOrEmpty(Token))
+                {
+                    res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+                    Token = res3?.Data?.Token;
+                }
+                TokenDate = DateTime.Parse(res3?.Data?.Timestamp) + TimeSpan.FromHours(24);
+                Log.Info($"Получен токен: {Token}");
             }
         }
 

@@ -1,4 +1,8 @@
-﻿namespace BillingProvider.Core.KKMDrivers
+﻿using System.Threading;
+using System.Threading.Tasks;
+using BillingProvider.Core.Comm.Tasks.Response;
+
+namespace BillingProvider.Core.KKMDrivers
 {
     public interface IKkmDriver
     {
@@ -11,7 +15,7 @@
 
         string CompanyEmail { get; }
 
-        void RegisterCheck(string clientInfo, string name, string sum, string filePath);
+        Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, CancellationToken ct);
         void RegisterTestCheck();
 
         void TestConnection();

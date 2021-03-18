@@ -1,4 +1,8 @@
-﻿namespace BillingProvider.Core.KKMDrivers
+﻿using System.Threading;
+using System.Threading.Tasks;
+using BillingProvider.Core.Comm.Tasks.Response;
+
+namespace BillingProvider.Core.KKMDrivers
 {
     public class KkmServerDriver : IKkmDriver
     {
@@ -23,7 +27,7 @@
         public string CompanyEmail { get; }
 
 
-        public void RegisterCheck(string clientInfo, string name, string sum, string filePath)
+        public Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,CancellationToken ct)
         {
             throw new System.NotImplementedException();
         }

@@ -6,9 +6,11 @@ using System.Drawing;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
+using BillingProvider.Core.Comm.Tasks.Response;
 using BillingProvider.Core.KKMDrivers;
 using BillingProvider.Core.Parsers;
 using BillingProvider.WinForms.Extensions;
@@ -222,7 +224,8 @@ namespace BillingProvider.WinForms
             _log.Debug($"{nameof(FiscalAllToolStripMenuItem)} clicked");
             _processing = true;
 
-
+            var tokenSource = new CancellationTokenSource();
+            var token = tokenSource.Token;
             for (var i = 0; i < gridSource.RowCount - 1; i++)
             {
                 var currentRow = gridSource.Rows[i];
@@ -233,12 +236,28 @@ namespace BillingProvider.WinForms
 
                 try
                 {
-                    _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(), currentRow.Cells[3].Value.ToString(),
-                        currentRow.Cells[2].Value.ToString(), string.Empty);
+                    var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
+                        currentRow.Cells[3].Value.ToString(),
+                        currentRow.Cells[2].Value.ToString(), string.Empty, token);
 
-                    await Task.Delay(1500);
-
-                    Utils.ChangeBackground(currentRow, Color.YellowGreen);
+                    if (response != null)
+                    {
+                        switch (response.ResponseTaskStatus)
+                        {
+                            case ResponseTaskStatus.Failed:
+                                _log.Debug($"{response.ErrorMessage}");
+                                Utils.ChangeBackground(currentRow, Color.Salmon);
+                                tokenSource.Cancel();
+                                break;
+                            case ResponseTaskStatus.Complete:
+                                Utils.ChangeBackground(currentRow, Color.YellowGreen);
+                                break;
+                            case ResponseTaskStatus.TaskCancelled:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
                 }
                 catch
                 {
@@ -377,10 +396,11 @@ namespace BillingProvider.WinForms
             {
                 var parser = ParserSelector.Select(_filePath);
                 await Task.Run(() => parser.Load());
+                var tokenSource = new CancellationTokenSource();
                 foreach (var node in parser.Data)
                 {
                     _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, _filePath));
+                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, tokenSource));
                 }
 
                 if (!tmrQueue.Enabled)
@@ -394,13 +414,19 @@ namespace BillingProvider.WinForms
             }
         }
 
-        private void ExecuteTask(string clientInfo, string name, string sum, string filePath)
+        private async void ExecuteTask(string clientInfo, string name, string sum, string filePath, CancellationTokenSource cancellationTokenSource)
         {
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
 
             try
             {
-                _conn.RegisterCheck(clientInfo, name, sum, filePath);
+                var response = await _conn.RegisterCheck(clientInfo, name, sum, filePath, cancellationTokenSource.Token);
+                if (response != null && response.ResponseTaskStatus == ResponseTaskStatus.Failed)
+                {
+                    _log.Debug($"{response.ErrorMessage}");
+                    _log.Warn($"Строку с {name}, {sum} не удалось обработать");
+                    cancellationTokenSource.Cancel();      
+                }
             }
             catch
             {
@@ -462,10 +488,11 @@ namespace BillingProvider.WinForms
                 {
                     var parser = ParserSelector.Select(file);
                     await Task.Run(() => parser.Load());
+                    var tokenSource = new CancellationTokenSource();
                     foreach (var node in parser.Data)
                     {
                         _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, file));
+                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, file, tokenSource));
                     }
 
                     if (!tmrQueue.Enabled)

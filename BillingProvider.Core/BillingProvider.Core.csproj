@@ -75,6 +75,8 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Comm\Tasks\Response\ResponseTaskBase.cs" />
+        <Compile Include="Comm\Tasks\Response\ResponseTaskStatus.cs" />
         <Compile Include="FileStorage.cs" />
         <Compile Include="KKMDrivers\AtolOnlineDriver.cs" />
         <Compile Include="KKMDrivers\IKKMDriver.cs" />
@@ -102,6 +104,9 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Comm\Tasks" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
