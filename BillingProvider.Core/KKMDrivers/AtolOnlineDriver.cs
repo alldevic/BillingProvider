@@ -17,7 +17,8 @@ namespace BillingProvider.Core.KKMDrivers
         private readonly RestClient _client;
         readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
 
-        public AtolOnlineDriver(string atolHost, string inn, string groupId, string login, string password, string cashierName,
+        public AtolOnlineDriver(string atolHost, string inn, string groupId, string login, string password,
+            string cashierName,
             string cashierVatin, string hostname, string companyEmail)
         {
             Inn = inn;
@@ -48,7 +49,8 @@ namespace BillingProvider.Core.KKMDrivers
         private string Token { get; set; }
         private DateTime TokenDate { get; set; }
 
-        public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, CancellationToken ct)
+        public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
+            CancellationToken ct)
         {
             if (ct.IsCancellationRequested)
             {
@@ -58,7 +60,7 @@ namespace BillingProvider.Core.KKMDrivers
                     ResponseTaskStatus = ResponseTaskStatus.TaskCancelled
                 };
             }
-            
+
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
             sum = sum.Replace(".", ",");
@@ -193,23 +195,23 @@ namespace BillingProvider.Core.KKMDrivers
                 };
                 req.AddHeader("Token", Token);
                 await Task.Delay(7500);
-                
+
                 var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
                 var url = string.Empty;
-                
+
                 if (!string.IsNullOrEmpty(res0.Data?.Payload))
                 {
                     var json = JObject.Parse(res0.Data.Payload);
-                    url = json["ofd_receipt_url"]?.ToString();    
+                    url = json["ofd_receipt_url"]?.ToString();
                 }
-                
+
                 Log.Info($"Ссылка на ОФД ({res.Data.Uuid}): {url}");
             }
             catch (Exception e)
             {
                 Log.Error(e, $"Ошибка при получении данных. Файл: {filePath}, строка {name};{clientInfo};{sum}");
             }
-             
+
             return new ResponseTaskBase()
             {
                 ErrorMessage = string.Empty,
@@ -234,6 +236,7 @@ namespace BillingProvider.Core.KKMDrivers
                     res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
                     Token = res3?.Data?.Token;
                 }
+
                 TokenDate = DateTime.Parse(res3?.Data?.Timestamp) + TimeSpan.FromHours(24);
                 Log.Info($"Получен токен: {Token}");
             }

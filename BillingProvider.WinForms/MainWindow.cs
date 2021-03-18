@@ -414,23 +414,29 @@ namespace BillingProvider.WinForms
             }
         }
 
-        private async void ExecuteTask(string clientInfo, string name, string sum, string filePath, CancellationTokenSource cancellationTokenSource)
+        private async void ExecuteTask(string clientInfo, string name, string sum, string filePath,
+            CancellationTokenSource cancellationTokenSource)
         {
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
-
+            tmrQueue.Stop();
             try
             {
-                var response = await _conn.RegisterCheck(clientInfo, name, sum, filePath, cancellationTokenSource.Token);
+                var response =
+                    await _conn.RegisterCheck(clientInfo, name, sum, filePath, cancellationTokenSource.Token);
                 if (response != null && response.ResponseTaskStatus == ResponseTaskStatus.Failed)
                 {
                     _log.Debug($"{response.ErrorMessage}");
                     _log.Warn($"Строку с {name}, {sum} не удалось обработать");
-                    cancellationTokenSource.Cancel();      
+                    cancellationTokenSource.Cancel();
                 }
             }
             catch
             {
                 _log.Warn($"Строку с {name}, {sum} не удалось обработать");
+            }
+            finally
+            {
+                tmrQueue.Start();
             }
         }
 
@@ -444,7 +450,7 @@ namespace BillingProvider.WinForms
                 return;
             }
 
-            Task.Factory.StartNew(_taskQueue.Dequeue());
+            _taskQueue.Dequeue().Invoke();
             _log.Info($"Позиций в очереди: {_taskQueue.Count}");
         }
 
