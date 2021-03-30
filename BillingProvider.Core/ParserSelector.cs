@@ -13,7 +13,7 @@ namespace BillingProvider.Core
         public static IParser Select(string path)
         {
             var firstLine = File.ReadLines(path).First();
-            
+
             if (firstLine.Contains("html"))
             {
                 Log.Debug("Select HtmlKbbParser");
@@ -25,7 +25,13 @@ namespace BillingProvider.Core
                 Log.Debug("Select etxlsx parser");
                 return new EtXlsxParser(path);
             }
-            
+
+            if (path.Contains("Почта 2"))
+            {
+                Log.Debug("Select txtmail2 parser");
+                return new TxtMail2Parser(path);
+            }
+
             if (path.EndsWith("xlsx") || path.EndsWith("xls"))
             {
                 Log.Debug("Select xlsx parser");
@@ -56,7 +62,7 @@ namespace BillingProvider.Core
                 Log.Debug("Select specsber parser");
                 return new SpecSberParser(path);
             }
-            
+
             if (firstLine.Split(';').Length == 12)
             {
                 Log.Debug("Select specsberthree parser");

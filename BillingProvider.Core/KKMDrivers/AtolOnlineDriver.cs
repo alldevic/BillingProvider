@@ -212,7 +212,7 @@ namespace BillingProvider.Core.KKMDrivers
                 Log.Error(e, $"Ошибка при получении данных. Файл: {filePath}, строка {name};{clientInfo};{sum}");
             }
 
-            return new ResponseTaskBase()
+            return new ResponseTaskBase
             {
                 ErrorMessage = string.Empty,
                 ResponseTaskStatus = ResponseTaskStatus.Complete
