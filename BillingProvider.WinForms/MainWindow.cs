@@ -33,7 +33,7 @@ namespace BillingProvider.WinForms
         private bool _isWatching;
         private string _folderName;
         private FileStorage _storage;
-
+        private readonly string _appname = $@"Billing Provider {Application.ProductVersion}";
 
         public MainWindow()
         {
@@ -54,7 +54,7 @@ namespace BillingProvider.WinForms
             // DeviceListToolStripMenuItem.Enabled = false;
 
             _log = LogManager.GetCurrentClassLogger();
-
+            Text = _appname;
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
@@ -98,7 +98,7 @@ namespace BillingProvider.WinForms
             {
                 parser = ParserSelector.Select(openFileDialog.FileName);
                 parser.Load();
-                Text = $@"{openFileDialog.FileName} - Billing Provider";
+                Text = $@"{openFileDialog.FileName} - {_appname}";
                 _log.Debug($"Добавление колонок в {nameof(gridSource)}");
                 foreach (var caption in parser.Captions)
                 {
@@ -118,7 +118,7 @@ namespace BillingProvider.WinForms
             catch
             {
                 _log.Error($"Не удалось открыть файл: {openFileDialog.FileName}");
-                Text = @"Billing Provider";
+                Text = _appname;;
             }
         }
 
@@ -210,7 +210,8 @@ namespace BillingProvider.WinForms
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(@"Белый Н. С.\nbeliy_ns@kuzro.ru", @"О программе");
+            MessageBox.Show(@"Белый Н. С.
+beliy_ns@kuzro.ru", @"О программе");
         }
 
         private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -271,7 +272,7 @@ namespace BillingProvider.WinForms
 
         private void CreateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Text = @"Billing Provider";
+            Text = _appname;
 
             var dt = new DataTable();
             gridSource.DataSource = dt;
