@@ -62,6 +62,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tmrEditNotify = new System.Windows.Forms.Timer(this.components);
             this.tmrQueue = new System.Windows.Forms.Timer(this.components);
+            this.DownlaodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -205,7 +207,7 @@
             // 
             // справкаToolStripMenuItem
             // 
-            this.справкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.AboutToolStripMenuItem});
+            this.справкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.DownlaodToolStripMenuItem, this.toolStripSeparator3, this.AboutToolStripMenuItem});
             this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
             this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.справкаToolStripMenuItem.Text = "Спра&вка";
@@ -265,7 +267,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 341;
+            this.splitContainer2.SplitterDistance = 342;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -303,7 +305,7 @@
             this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 341);
+            this.gridSource.Size = new System.Drawing.Size(408, 342);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -312,7 +314,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 118);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 117);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
@@ -326,6 +328,18 @@
             // 
             this.tmrQueue.Interval = 2500;
             this.tmrQueue.Tick += new System.EventHandler(this.tmrQueue_Tick);
+            // 
+            // DownlaodToolStripMenuItem
+            // 
+            this.DownlaodToolStripMenuItem.Name = "DownlaodToolStripMenuItem";
+            this.DownlaodToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.DownlaodToolStripMenuItem.Text = "Скачать...";
+            this.DownlaodToolStripMenuItem.Click += new System.EventHandler(this.DownlaodToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(155, 6);
             // 
             // MainWindow
             // 
@@ -355,6 +369,10 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+
+        private System.Windows.Forms.ToolStripMenuItem DownlaodToolStripMenuItem;
 
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CreateToolStripMenuItem;

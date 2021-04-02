@@ -118,7 +118,7 @@ namespace BillingProvider.WinForms
             catch
             {
                 _log.Error($"Не удалось открыть файл: {openFileDialog.FileName}");
-                Text = _appname;;
+                Text = _appname;
             }
         }
 
@@ -515,5 +515,8 @@ beliy_ns@kuzro.ru", @"О программе");
                 }
             }
         }
+
+        private void DownlaodToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Process.Start(@"https://github.com/alldevic/BillingProvider/releases/");
     }
 }
