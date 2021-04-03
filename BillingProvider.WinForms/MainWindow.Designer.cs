@@ -53,6 +53,8 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.FiscalAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DownlaodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainSplitontainer = new System.Windows.Forms.SplitContainer();
             this.gridSettings = new System.Windows.Forms.PropertyGrid();
@@ -62,8 +64,6 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tmrEditNotify = new System.Windows.Forms.Timer(this.components);
             this.tmrQueue = new System.Windows.Forms.Timer(this.components);
-            this.DownlaodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -212,6 +212,18 @@
             this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.справкаToolStripMenuItem.Text = "Спра&вка";
             // 
+            // DownlaodToolStripMenuItem
+            // 
+            this.DownlaodToolStripMenuItem.Name = "DownlaodToolStripMenuItem";
+            this.DownlaodToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.DownlaodToolStripMenuItem.Text = "Скачать...";
+            this.DownlaodToolStripMenuItem.Click += new System.EventHandler(this.DownlaodToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(155, 6);
+            // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
@@ -267,7 +279,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 342;
+            this.splitContainer2.SplitterDistance = 350;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -305,8 +317,9 @@
             this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 342);
+            this.gridSource.Size = new System.Drawing.Size(408, 350);
             this.gridSource.TabIndex = 0;
+            this.gridSource.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridSource_CellEndEdit);
             // 
             // rtxtLog
             // 
@@ -314,7 +327,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 117);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 109);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
@@ -328,18 +341,6 @@
             // 
             this.tmrQueue.Interval = 2500;
             this.tmrQueue.Tick += new System.EventHandler(this.tmrQueue_Tick);
-            // 
-            // DownlaodToolStripMenuItem
-            // 
-            this.DownlaodToolStripMenuItem.Name = "DownlaodToolStripMenuItem";
-            this.DownlaodToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
-            this.DownlaodToolStripMenuItem.Text = "Скачать...";
-            this.DownlaodToolStripMenuItem.Click += new System.EventHandler(this.DownlaodToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(155, 6);
             // 
             // MainWindow
             // 

@@ -126,8 +126,7 @@ namespace BillingProvider.WinForms
         public KkmDrivers KkmDriver { get; set; }
         
         #endregion
-
-
+        
         #region Watcher
 
         [Category("Отслеживание папки")]
@@ -147,6 +146,38 @@ namespace BillingProvider.WinForms
         
         #endregion
 
+        #region Defaults
+
+        [Category("Умолчания")]
+        [Description("Наименование позиции по умолчанию")]
+        [DisplayName("Позиция")]
+        [RefreshProperties(RefreshProperties.All)]
+        public string DefaultPositionName { get; set; }
+        
+        [Category("Умолчания")]
+        [Description("Использовать имя позиции по умолчанию")]
+        [DisplayName("Использовать позицию")]
+        [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
+        [RefreshProperties(RefreshProperties.All)]
+        public bool PositionEnabled { get; set; }
+        
+        [Category("Умолчания")]
+        [Description("Подставлять сумму в позицию сгенерированную по умолчанию (только таблица)")]
+        [DisplayName("Подставлять сумму")]
+        [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
+        [RefreshProperties(RefreshProperties.All)]
+        public bool AutosumEnabled { get; set; }  
+        
+        [Category("Умолчания")]
+        [Description("Обновлять позицию даже если в ней уже записано значени")]
+        [DisplayName("Пересчитывать принудительно")]
+        [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
+        [RefreshProperties(RefreshProperties.All)]
+        public bool ForceAutosumEnabled { get; set; }
+        
+        #endregion
+        
+        
         public AppSettings()
         {
             Log.Debug("Begin app settings loading");
@@ -199,7 +230,19 @@ namespace BillingProvider.WinForms
                 
                 AtolHost = ConfigurationManager.AppSettings[$"{nameof(AtolHost)}"];
                 Log.Trace($"{nameof(AtolHost)}='{AtolHost}'");
+                
+                DefaultPositionName = ConfigurationManager.AppSettings[$"{nameof(DefaultPositionName)}"];
+                Log.Trace($"{nameof(DefaultPositionName)}='{DefaultPositionName}'");
 
+                PositionEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(PositionEnabled)}"]);
+                Log.Trace($"{nameof(PositionEnabled)}='{PositionEnabled}'");
+                
+                AutosumEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(AutosumEnabled)}"]);
+                Log.Trace($"{nameof(AutosumEnabled)}='{AutosumEnabled}'");
+                
+                ForceAutosumEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(ForceAutosumEnabled)}"]);
+                Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
+                
                 Check();
             }
             catch (Exception e)
@@ -275,6 +318,18 @@ namespace BillingProvider.WinForms
 
             configuration.AppSettings.Settings[nameof(AtolHost)].Value = AtolHost;
             Log.Trace($"{nameof(AtolHost)}='{AtolHost}'");
+            
+            configuration.AppSettings.Settings[nameof(DefaultPositionName)].Value = DefaultPositionName;
+            Log.Trace($"{nameof(DefaultPositionName)}='{DefaultPositionName}'");
+            
+            configuration.AppSettings.Settings[nameof(PositionEnabled)].Value = PositionEnabled.ToString();
+            Log.Trace($"{nameof(PositionEnabled)}='{PositionEnabled}'");
+            
+            configuration.AppSettings.Settings[nameof(AutosumEnabled)].Value = AutosumEnabled.ToString();
+            Log.Trace($"{nameof(AutosumEnabled)}='{AutosumEnabled}'");
+            
+            configuration.AppSettings.Settings[nameof(ForceAutosumEnabled)].Value = ForceAutosumEnabled.ToString();
+            Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
             
             configuration.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");

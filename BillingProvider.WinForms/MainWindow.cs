@@ -54,6 +54,7 @@ namespace BillingProvider.WinForms
             // DeviceListToolStripMenuItem.Enabled = false;
 
             _log = LogManager.GetCurrentClassLogger();
+            
             Text = _appname;
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
@@ -103,6 +104,13 @@ namespace BillingProvider.WinForms
                 foreach (var caption in parser.Captions)
                 {
                     dt.Columns.Add(caption, typeof(string));
+                }
+
+                gridSource.Update();
+                
+                foreach (DataGridViewColumn column in gridSource.Columns)
+                {
+                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
                 }
 
                 gridSource.Update();
@@ -284,7 +292,16 @@ beliy_ns@kuzro.ru", @"О программе");
             {
                 dt.Columns.Add(caption, typeof(string));
             }
+            
 
+
+            gridSource.Update();
+            
+            foreach (DataGridViewColumn column in gridSource.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+            
             gridSource.Update();
         }
 
@@ -401,7 +418,8 @@ beliy_ns@kuzro.ru", @"О программе");
                 foreach (var node in parser.Data)
                 {
                     _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, node.Source, tokenSource));
+                    _taskQueue.Enqueue(() =>
+                        ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, node.Source, tokenSource));
                 }
 
                 if (!tmrQueue.Enabled)
@@ -499,7 +517,8 @@ beliy_ns@kuzro.ru", @"О программе");
                     foreach (var node in parser.Data)
                     {
                         _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, file, node.Source, tokenSource));
+                        _taskQueue.Enqueue(() =>
+                            ExecuteTask(node.Name, string.Empty, node.Sum, file, node.Source, tokenSource));
                     }
 
                     if (!tmrQueue.Enabled)
@@ -518,5 +537,34 @@ beliy_ns@kuzro.ru", @"О программе");
 
         private void DownlaodToolStripMenuItem_Click(object sender, EventArgs e) =>
             Process.Start(@"https://github.com/alldevic/BillingProvider/releases/");
+
+        private void gridSource_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if ((e.ColumnIndex != 2) || !_appSettings.PositionEnabled)
+            {
+                return;
+            }
+
+            var cur = gridSource.Rows[e.RowIndex].Cells[3].Value.ToString();
+            if (!_appSettings.ForceAutosumEnabled && !string.IsNullOrEmpty(cur))
+            {
+                return;
+            }
+
+            var sum = gridSource.Rows[e.RowIndex].Cells[2].Value.ToString();
+            var res = new StringBuilder();
+
+            res.Append(_appSettings.DefaultPositionName);
+
+            if (_appSettings.AutosumEnabled)
+            {
+                res.Append($"+{sum}");
+            }
+
+            gridSource.Rows[e.RowIndex].Cells[3].Value = res;
+
+            Utils.ChangeBackground(gridSource.Rows[e.RowIndex], gridSettings.ViewBackColor);
+            gridSource.Refresh();
+        }
     }
 }
