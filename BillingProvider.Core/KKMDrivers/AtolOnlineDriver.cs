@@ -16,6 +16,7 @@ namespace BillingProvider.Core.KKMDrivers
 
         private readonly RestClient _client;
         readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+        private IKkmDriver _kkmDriverImplementation;
 
         public AtolOnlineDriver(string atolHost, string inn, string groupId, string login, string password,
             string cashierName,
@@ -49,8 +50,8 @@ namespace BillingProvider.Core.KKMDrivers
         private string Token { get; set; }
         private DateTime TokenDate { get; set; }
 
-        public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
-            CancellationToken ct)
+        public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, 
+            string source, CancellationToken ct)
         {
             if (ct.IsCancellationRequested)
             {
@@ -95,7 +96,8 @@ namespace BillingProvider.Core.KKMDrivers
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e, $"Неверный формат строки$: {clientInfo}; {name}; {sum}");
+                    Log.Error(e, $"Неверный формат строки: {clientInfo}; {name}; {sum}");
+                    Log.Error($"Исходная строка: `{source}`");
                 }
             }
 
@@ -209,7 +211,7 @@ namespace BillingProvider.Core.KKMDrivers
             }
             catch (Exception e)
             {
-                Log.Error(e, $"Ошибка при получении данных. Файл: {filePath}, строка {name};{clientInfo};{sum}");
+                Log.Error(e, $"Ошибка при получении данных.\n{filePath}\n{source}");
             }
 
             return new ResponseTaskBase
@@ -241,7 +243,7 @@ namespace BillingProvider.Core.KKMDrivers
                 Log.Info($"Получен токен: {Token}");
             }
         }
-
+        
         public async void RegisterTestCheck()
         {
             RestRequest request;

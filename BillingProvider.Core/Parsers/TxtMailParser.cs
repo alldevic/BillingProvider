@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using BillingProvider.Core.Models;
 using ExcelDataReader;
@@ -42,6 +43,7 @@ namespace BillingProvider.Core.Parsers
                         Log.Debug($"{x[1]}; {x[2]}; Вывоз ТКО; {x[4]}");
                         var tmp = new ClientInfo
                         {
+                            Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
                             Address = x[2].ToString(),
                             Name = x[1].ToString(),
                         };

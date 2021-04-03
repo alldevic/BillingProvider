@@ -239,7 +239,7 @@ beliy_ns@kuzro.ru", @"О программе");
                 {
                     var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
                         currentRow.Cells[3].Value.ToString(),
-                        currentRow.Cells[2].Value.ToString(), string.Empty, token);
+                        currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token);
 
                     if (response != null)
                     {
@@ -401,7 +401,7 @@ beliy_ns@kuzro.ru", @"О программе");
                 foreach (var node in parser.Data)
                 {
                     _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, tokenSource));
+                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, node.Source, tokenSource));
                 }
 
                 if (!tmrQueue.Enabled)
@@ -415,7 +415,7 @@ beliy_ns@kuzro.ru", @"О программе");
             }
         }
 
-        private async void ExecuteTask(string clientInfo, string name, string sum, string filePath,
+        private async void ExecuteTask(string clientInfo, string name, string sum, string filePath, string source,
             CancellationTokenSource cancellationTokenSource)
         {
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
@@ -423,7 +423,7 @@ beliy_ns@kuzro.ru", @"О программе");
             try
             {
                 var response =
-                    await _conn.RegisterCheck(clientInfo, name, sum, filePath, cancellationTokenSource.Token);
+                    await _conn.RegisterCheck(clientInfo, name, sum, filePath, source, cancellationTokenSource.Token);
                 if (response != null && response.ResponseTaskStatus == ResponseTaskStatus.Failed)
                 {
                     _log.Debug($"{response.ErrorMessage}");
@@ -499,7 +499,7 @@ beliy_ns@kuzro.ru", @"О программе");
                     foreach (var node in parser.Data)
                     {
                         _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, file, tokenSource));
+                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, file, node.Source, tokenSource));
                     }
 
                     if (!tmrQueue.Enabled)

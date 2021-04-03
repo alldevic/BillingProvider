@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BillingProvider.Core.Models;
 using ExcelDataReader;
 using NLog;
@@ -30,6 +31,7 @@ namespace BillingProvider.Core.Parsers
                             Log.Debug($"{x[0]}, {x[1]}, {x[2]}; {x[3]}; {x[8]}; {x[7]}");
                             var tmp = new ClientInfo
                             {
+                                Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
                                 Address = $"{x[0]}, дом {x[1]}, кв. {x[2]}",
                                 Name = x[3].ToString(),
                             };

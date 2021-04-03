@@ -34,7 +34,9 @@ namespace BillingProvider.Core.Parsers
                 parser.SetDelimiters(";");
                 while (!parser.EndOfData)
                 {
-                    var row = parser.ReadFields() ?? throw new ArgumentNullException();
+                    var source = parser.ReadLine();
+                    var row = source.Split(new [] {';'}, StringSplitOptions.None);
+                    
                     Log.Debug($"Read row: '{string.Join(", ", row)}'");
 
                     if (row.Length < 10)
@@ -45,6 +47,7 @@ namespace BillingProvider.Core.Parsers
                     Log.Debug($"Client info: '{row[6]}; {row[7]}'");
                     var tmp = new ClientInfo
                     {
+                        Source = source,
                         Address = row[7],
                         Name = row[6]
                     };

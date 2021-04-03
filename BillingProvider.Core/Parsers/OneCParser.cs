@@ -39,6 +39,7 @@ namespace BillingProvider.Core.Parsers
             {
                 Data.Add(new ClientInfo
                 {
+                    Source = $"{document.PayerName};{document.Total.ToString(CultureInfo.InvariantCulture)};{document.PaymentPurpose}",
                     Name = document.PayerName,
                     Sum = document.Total.ToString(CultureInfo.InvariantCulture),
                     Positions = new List<Position>(new[]

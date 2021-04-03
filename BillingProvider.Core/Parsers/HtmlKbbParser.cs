@@ -40,6 +40,7 @@ namespace BillingProvider.Core.Parsers
                 Log.Debug($"Client info: '{data[0]}, {data[1]}, {data[2]}; {data[3]}; {data[7]}'");
                 var info = new ClientInfo
                 {
+                    Source = string.Join(";", data.ToArray()),
                     Address = $"{data[0]}, {data[1]}, {data[2]}",
                     Name = data[3],
                     Sum = data[7].Replace(",", ".")

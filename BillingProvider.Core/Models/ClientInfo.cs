@@ -9,6 +9,7 @@ namespace BillingProvider.Core.Models
             Positions = new List<Position>();
         }
 
+        public string Source { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string Sum { get; set; }
