@@ -191,23 +191,7 @@ namespace BillingProvider.Core.KKMDrivers
                     throw new ArgumentNullException("UUID не получени");
                 }
 
-                var req = new RestRequest($"{GroupId}/report/{res.Data.Uuid}", Method.GET)
-                {
-                    RequestFormat = DataFormat.Json
-                };
-                req.AddHeader("Token", Token);
-                await Task.Delay(7500);
-
-                var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
-                var url = string.Empty;
-
-                if (!string.IsNullOrEmpty(res0.Data?.Payload))
-                {
-                    var json = JObject.Parse(res0.Data.Payload);
-                    url = json["ofd_receipt_url"]?.ToString();
-                }
-
-                Log.Info($"Ссылка на ОФД ({res.Data.Uuid}): {url}");
+                GetOfdUrl(res.Data.Uuid);
             }
             catch (Exception e)
             {
@@ -219,6 +203,27 @@ namespace BillingProvider.Core.KKMDrivers
                 ErrorMessage = string.Empty,
                 ResponseTaskStatus = ResponseTaskStatus.Complete
             };
+        }
+
+        private async void GetOfdUrl(string uuid)
+        {
+            var req = new RestRequest($"{GroupId}/report/{uuid}", Method.GET)
+            {
+                RequestFormat = DataFormat.Json
+            };
+            req.AddHeader("Token", Token);
+            await Task.Delay(7500);
+
+            var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
+            var url = string.Empty;
+
+            if (!string.IsNullOrEmpty(res0.Data?.Payload))
+            {
+                var json = JObject.Parse(res0.Data.Payload);
+                url = json["ofd_receipt_url"]?.ToString();
+            }
+
+            Log.Info($"Ссылка на ОФД ({uuid}): {url}");
         }
 
         private async Task UpdateTokenIfNeeded()
