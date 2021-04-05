@@ -54,6 +54,12 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string AtolHost { get; set; } = "";
         
+        
+        [Category("АТОЛ Онлайн")]
+        [Description("Порт, на котором запущен сервер")]
+        [DisplayName("Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частым обращением к серверу")]
+        public int AtolOnlineDelay { get; set; } = 2500;
+        
         #endregion
 
         #region KKMServer
@@ -197,6 +203,9 @@ namespace BillingProvider.WinForms
 
                 AtolOnlinePassword = ConfigurationManager.AppSettings[$"{nameof(AtolOnlinePassword)}"];
                 Log.Trace($"{nameof(AtolOnlinePassword)}='{AtolOnlinePassword}'");
+                
+                AtolOnlineDelay = int.Parse(ConfigurationManager.AppSettings[$"{nameof(AtolOnlineDelay)}"]);
+                Log.Trace($"{nameof(AtolOnlineDelay)}='{AtolOnlineDelay}'");
 
                 ServerAddress = ConfigurationManager.AppSettings[$"{nameof(ServerAddress)}"];
                 Log.Trace($"{nameof(ServerAddress)}='{ServerAddress}'");
@@ -285,6 +294,9 @@ namespace BillingProvider.WinForms
             
             configuration.AppSettings.Settings[nameof(AtolOnlinePassword)].Value = AtolOnlinePassword;
             Log.Trace($"{nameof(AtolOnlinePassword)}='{AtolOnlinePassword}'");
+
+            configuration.AppSettings.Settings[nameof(AtolOnlineDelay)].Value = AtolOnlineDelay.ToString();
+            Log.Trace($"{nameof(AtolOnlineDelay)}='{AtolOnlineDelay}'");
 
             configuration.AppSettings.Settings[nameof(ServerAddress)].Value = ServerAddress;
             Log.Trace($"{nameof(ServerAddress)}='{ServerAddress}'");

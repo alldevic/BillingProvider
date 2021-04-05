@@ -74,6 +74,7 @@ namespace BillingProvider.WinForms
 
 
             _log.Debug("MainWindow loaded");
+            tmrQueue.Interval = _appSettings.AtolOnlineDelay;
             CreateToolStripMenuItem_Click(sender, e);
             _log.Info("Приложение запущено!");
             _storage = new FileStorage(@"history.txt");
