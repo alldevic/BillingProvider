@@ -26,12 +26,6 @@ namespace BillingProvider.Core
                 return new EtXlsxParser(path);
             }
 
-            if (path.Contains("Почта 2"))
-            {
-                Log.Debug("Select txtmail2 parser");
-                return new TxtMail2Parser(path);
-            }
-
             if (path.EndsWith("xlsx") || path.EndsWith("xls"))
             {
                 Log.Debug("Select xlsx parser");
@@ -56,29 +50,16 @@ namespace BillingProvider.Core
                 return new TxtMailParser(path);
             }
 
-            if (firstLine.Split(';').Length == 21 ||
-                firstLine.Split(';').Length == 18)
+            if (firstLine.Split(new[]{"[!]"}, StringSplitOptions.None).Length == 3)
             {
                 Log.Debug("Select specsber parser");
                 return new SpecSberParser(path);
-            }
-
-            if (firstLine.Split(';').Length == 12)
-            {
-                Log.Debug("Select specsberthree parser");
-                return new SpecSberParserThree(path);
             }
 
             if (firstLine.Split('|').Length == 7)
             {
                 Log.Debug("Select espsber parser");
                 return new EspSberParser(path);
-            }
-
-            if (firstLine.Length < 10)
-            {
-                Log.Debug("Select CsvSberParser");
-                return new CsvSberParser(path);
             }
 
             throw new ArgumentException();

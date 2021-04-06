@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,6 @@ using NLog;
 namespace BillingProvider.Core.Parsers
 {
     public class SpecSberParser : IParser
-
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         public List<ClientInfo> Data { get; }
@@ -40,42 +40,90 @@ namespace BillingProvider.Core.Parsers
                     var result = reader.AsDataSet().Tables[0].Rows;
                     for (var i = 0; i < result.Count; i++)
                     {
-                        var x = result[i];
-                        Log.Debug($"{x[5]}; {x[6]}; {x[7]}; Вывоз ТКО; {x[14]}; {x[16]}");
+                        var row = result[i].ItemArray;
+                        var rowStr = row[0].ToString();
 
-                        var sum = x[16].ToString();
-
-                        if (string.Equals(x[14].ToString(), @"ПЕНЯ"))
-                        {
-                            sum = x[19].ToString();
-                        }
-
-                        if (string.IsNullOrEmpty(sum))
+                        if (string.IsNullOrEmpty(rowStr) || (rowStr[0] == '='))
                         {
                             continue;
                         }
 
-                        var name = x[6].ToString();
-                        if (string.IsNullOrEmpty(name))
-                        {
-                            name = x[5].ToString();
-                        }
-
                         var tmp = new ClientInfo
                         {
-                            Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
-                            Address = x[7].ToString(),
-                            Name = name,
+                            Source = string.Join(";", row.Where(o => o is string).ToArray()),
+                            Address = row[7].ToString(),
+                            Name = !string.IsNullOrEmpty(row[6].ToString()) ? row[6].ToString() : row[5].ToString()
                         };
-                        tmp.Positions.Add(new Position
-                        {
-                            Name = "Вывоз ТКО",
-                            Sum = sum.Replace(",", ".")
-                        });
 
-                        tmp.Sum = sum.Replace(",", ".");
+                        var j = 10;
+                        var rawSum = 0m;
+                        if (string.Equals(row[j].ToString(), "[!]") && string.Equals(row[j - 1].ToString(), "[!]"))
+                        {
+                            tmp.Positions.Add(new Position {Name = "Вывоз ТКО", Sum = row[j + 3].ToString()});
+                            rawSum = decimal.Parse(row[j + 3].ToString());
+                        }
+                        else
+                        {
+                            while (true)
+                            {
+                                Log.Debug($"Read position: '{row[j + 1]}; {row[j + 2]}'");
+                                var posSum = row[j + 2].ToString();
+                                var posName = row[j + 1].ToString();
+                                if (string.IsNullOrEmpty(posSum) || 
+                                    string.Equals(posSum.Replace(",", "."), "0.00") ||
+                                    string.IsNullOrEmpty(posName) ||
+                                    string.Equals(posName, "ГОСПОШЛИНА")
+                                    )
+                                {
+                                    if (row[j + 3].ToString() == "[!]")
+                                    {
+                                        break;
+                                    }
+
+                                    j += 3;
+                                    continue;
+                                }
+
+                                
+                                tmp.Positions.Add(new Position {Name = posName, Sum = posSum});
+
+                                if (row[j + 3].ToString() == "[!]")
+                                {
+                                    break;
+                                }
+
+                                j += 3;
+                            }
+
+                            rawSum = decimal.Parse(row[j + 5].ToString());
+                        }
+
+
+                        var tmpSum = 0m;
+
+
+                        foreach (var position in tmp.Positions)
+                        {
+                            // if (string.Equals(position.Name, @"ГОСПОШЛИНА") ||
+                            //     string.Equals(position.Name, @"PEN") ||
+                            //     string.Equals(position.Name, @"ПЕНЯ"))
+                            // {
+                            //     continue;
+                            // }
+
+                            tmpSum += decimal.Parse(position.Sum.Replace(".", ","));
+                            position.Sum = position.Sum.Replace(",", ".");
+                        }
+
+
+                        tmp.Sum = tmpSum.ToString(CultureInfo.InvariantCulture);
 
                         Data.Add(tmp);
+
+                        if (tmpSum != rawSum)
+                        {
+                            Log.Warn($"Сумма не совпадает: {tmpSum}!={rawSum}\n{tmp.Source}");
+                        }
                     }
                 }
             }

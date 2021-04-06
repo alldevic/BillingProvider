@@ -531,7 +531,7 @@ beliy_ns@kuzro.ru", @"О программе");
                 }
                 catch
                 {
-                    _log.Error($"Не удалось открыть файл: {_filePath}");
+                    _log.Error($"Не удалось открыть файл: {file}");
                 }
             }
         }
