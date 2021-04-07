@@ -72,7 +72,8 @@ namespace BillingProvider.Core.Parsers
                                 if (string.IsNullOrEmpty(posSum) || 
                                     string.Equals(posSum.Replace(",", "."), "0.00") ||
                                     string.IsNullOrEmpty(posName) ||
-                                    string.Equals(posName, "ГОСПОШЛИНА")
+                                    string.Equals(posName, "ГОСПОШЛИНА") ||
+                                    string.Equals(posName, "ПЕНИ ПО СУДУ")
                                     )
                                 {
                                     if (row[j + 3].ToString() == "[!]")
@@ -106,7 +107,8 @@ namespace BillingProvider.Core.Parsers
                         {
                             // if (string.Equals(position.Name, @"ГОСПОШЛИНА") ||
                             //     string.Equals(position.Name, @"PEN") ||
-                            //     string.Equals(position.Name, @"ПЕНЯ"))
+                            //     string.Equals(position.Name, @"ПЕНЯ") ||
+                            //     string.Equals(position.Name, @"ПЕНИ ПО СУДУ"))
                             // {
                             //     continue;
                             // }
