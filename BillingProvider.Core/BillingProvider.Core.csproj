@@ -55,7 +55,7 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
-          <HintPath>..\packages\NLog.4.7.5\lib\net45\NLog.dll</HintPath>
+          <HintPath>..\packages\NLog.4.7.9\lib\net45\NLog.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, PublicKeyToken=null">
@@ -83,6 +83,7 @@
         <Compile Include="KKMDrivers\KKMServerDriver.cs" />
         <Compile Include="Models\ClientInfo.cs" />
         <Compile Include="Models\KkmServerResponse.cs" />
+        <Compile Include="ObjectExtensions.cs" />
         <Compile Include="ParserSelector.cs" />
         <Compile Include="Parsers\BankTransfer\BankTransferDocumentParser.cs" />
         <Compile Include="Parsers\BankTransfer\StringWorks.cs" />
@@ -91,6 +92,7 @@
         <Compile Include="Parsers\EspSberParser.cs" />
         <Compile Include="Parsers\EtXlsParser.cs" />
         <Compile Include="Parsers\HtmlKbbParser.cs" />
+        <Compile Include="Parsers\InnerParser.cs" />
         <Compile Include="Parsers\IParser.cs" />
         <Compile Include="Parsers\OneCParser.cs" />
         <Compile Include="Parsers\OneCXlsxParser.cs" />

@@ -51,6 +51,7 @@ namespace BillingProvider.Core.Parsers
                         var tmp = new ClientInfo
                         {
                             Source = string.Join(";", row.Where(o => o is string).ToArray()),
+                            SourcePath = Path,
                             Address = row[7].ToString(),
                             Name = !string.IsNullOrEmpty(row[6].ToString()) ? row[6].ToString() : row[5].ToString()
                         };
@@ -69,12 +70,13 @@ namespace BillingProvider.Core.Parsers
                                 Log.Debug($"Read position: '{row[j + 1]}; {row[j + 2]}'");
                                 var posSum = row[j + 2].ToString();
                                 var posName = row[j + 1].ToString();
-                                if (string.IsNullOrEmpty(posSum) || 
+                                if (string.IsNullOrEmpty(posSum) ||
                                     string.Equals(posSum.Replace(",", "."), "0.00") ||
                                     string.IsNullOrEmpty(posName) ||
                                     string.Equals(posName, "ГОСПОШЛИНА") ||
-                                    string.Equals(posName, "ПЕНИ ПО СУДУ")
-                                    )
+                                    string.Equals(posName, "ПЕНИ ПО СУДУ") ||
+                                    string.Equals(posName, "ПЕНЯ")
+                                )
                                 {
                                     if (row[j + 3].ToString() == "[!]")
                                     {
@@ -85,7 +87,7 @@ namespace BillingProvider.Core.Parsers
                                     continue;
                                 }
 
-                                
+
                                 tmp.Positions.Add(new Position {Name = posName, Sum = posSum});
 
                                 if (row[j + 3].ToString() == "[!]")
@@ -105,14 +107,6 @@ namespace BillingProvider.Core.Parsers
 
                         foreach (var position in tmp.Positions)
                         {
-                            // if (string.Equals(position.Name, @"ГОСПОШЛИНА") ||
-                            //     string.Equals(position.Name, @"PEN") ||
-                            //     string.Equals(position.Name, @"ПЕНЯ") ||
-                            //     string.Equals(position.Name, @"ПЕНИ ПО СУДУ"))
-                            // {
-                            //     continue;
-                            // }
-
                             tmpSum += decimal.Parse(position.Sum.Replace(".", ","));
                             position.Sum = position.Sum.Replace(",", ".");
                         }
@@ -122,9 +116,22 @@ namespace BillingProvider.Core.Parsers
 
                         Data.Add(tmp);
 
-                        if (tmpSum != rawSum)
+                        if ((tmpSum != rawSum) || (tmp.Positions.Count != 1))
                         {
-                            Log.Warn($"Сумма не совпадает: {tmpSum}!={rawSum}\n{tmp.Source}");
+                            var msg = tmpSum != rawSum ? $"Сумма не совпадает: {tmpSum}!={rawSum}" : "Позиций != 1";
+
+                            var eventInfo = new LogEventInfo
+                            {
+                                Message = msg,
+                                Level = LogLevel.Warn,
+                            };
+
+                            foreach (var item in tmp.AsDictionary())
+                            {
+                                eventInfo.Properties.Add(new KeyValuePair<object, object>(item.Key, item.Value));
+                            }
+
+                            Log.Warn(eventInfo);
                         }
                     }
                 }

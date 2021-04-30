@@ -15,6 +15,7 @@ using BillingProvider.Core.KKMDrivers;
 using BillingProvider.Core.Parsers;
 using BillingProvider.WinForms.Extensions;
 using NLog;
+using NLog.Targets;
 
 namespace BillingProvider.WinForms
 {
@@ -54,7 +55,7 @@ namespace BillingProvider.WinForms
             // DeviceListToolStripMenuItem.Enabled = false;
 
             _log = LogManager.GetCurrentClassLogger();
-            
+
             Text = _appname;
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
@@ -108,7 +109,7 @@ namespace BillingProvider.WinForms
                 }
 
                 gridSource.Update();
-                
+
                 foreach (DataGridViewColumn column in gridSource.Columns)
                 {
                     column.SortMode = DataGridViewColumnSortMode.NotSortable;
@@ -293,16 +294,15 @@ beliy_ns@kuzro.ru", @"О программе");
             {
                 dt.Columns.Add(caption, typeof(string));
             }
-            
 
 
             gridSource.Update();
-            
+
             foreach (DataGridViewColumn column in gridSource.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
-            
+
             gridSource.Update();
         }
 
@@ -482,6 +482,8 @@ beliy_ns@kuzro.ru", @"О программе");
                 return;
             }
 
+            LogManager.ReconfigExistingLoggers();
+
             foreach (var file in Directory.EnumerateFiles(_appSettings.FolderPath, "*.*", SearchOption.AllDirectories))
             {
                 _log.Info($"Select file: {file}");
@@ -534,6 +536,10 @@ beliy_ns@kuzro.ru", @"О программе");
                     _log.Error($"Не удалось открыть файл: {file}");
                 }
             }
+
+            var target = (FileTarget) LogManager.Configuration.FindTargetByName("errfile_parsed");
+            target.Flush(exception => { });
+            target.Dispose();
         }
 
         private void DownlaodToolStripMenuItem_Click(object sender, EventArgs e) =>

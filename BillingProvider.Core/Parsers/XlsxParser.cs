@@ -32,6 +32,7 @@ namespace BillingProvider.Core.Parsers
                             var tmp = new ClientInfo
                             {
                                 Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
+                                SourcePath = Path,
                                 Address = $"{x[0]}, дом {x[1]}, кв. {x[2]}",
                                 Name = x[3].ToString(),
                             };

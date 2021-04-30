@@ -49,6 +49,7 @@ namespace BillingProvider.Core.Parsers
                     var tmp = new ClientInfo
                     {
                         Source = source,
+                        SourcePath = Path,
                         Address = row[1],
                         Name = row[0]
                     };

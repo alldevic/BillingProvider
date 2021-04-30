@@ -13,6 +13,12 @@ namespace BillingProvider.Core
         public static IParser Select(string path)
         {
             var firstLine = File.ReadLines(path).First();
+            
+            if (string.Equals(firstLine, "[") || firstLine.StartsWith("{"))
+            {
+                Log.Debug("Select inner parser");
+                return new InnerParser(path);
+            }
 
             if (firstLine.Contains("html"))
             {
@@ -61,6 +67,7 @@ namespace BillingProvider.Core
                 Log.Debug("Select espsber parser");
                 return new EspSberParser(path);
             }
+
 
             throw new ArgumentException();
         }
