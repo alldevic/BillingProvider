@@ -11,7 +11,7 @@ namespace BillingProvider.Core.Parsers
 {
     public class SpecSberParser : IParser
     {
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger().WithProperty("ClassName", nameof(SpecSberParser));
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
