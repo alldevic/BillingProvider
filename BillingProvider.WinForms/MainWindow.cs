@@ -35,6 +35,7 @@ namespace BillingProvider.WinForms
         private string _folderName;
         private FileStorage _storage;
         private readonly string _appname = $@"Billing Provider {Application.ProductVersion}";
+        private IParser _openedFileParser;
 
         public MainWindow()
         {
@@ -96,10 +97,10 @@ namespace BillingProvider.WinForms
             var dt = new DataTable();
             gridSource.DataSource = dt;
 
-            IParser parser;
             try
             {
-                parser = ParserSelector.Select(openFileDialog.FileName);
+                var parser = ParserSelector.Select(openFileDialog.FileName);
+                _openedFileParser = parser;
                 parser.Load();
                 Text = $@"{openFileDialog.FileName} - {_appname}";
                 _log.Debug($"Добавление колонок в {nameof(gridSource)}");
@@ -572,6 +573,44 @@ beliy_ns@kuzro.ru", @"О программе");
 
             Utils.ChangeBackground(gridSource.Rows[e.RowIndex], gridSettings.ViewBackColor);
             gridSource.Refresh();
+        }
+
+        private void ReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_openedFileParser is null || _openedFileParser.GetType() != typeof(InnerParser))
+                {
+                    return;
+                }
+
+                var totalSum = 0m;
+                var fileSum = 0m;
+                for (var i = 0; i < gridSource.RowCount - 1; i++)
+                {
+                    var row = gridSource.Rows[i];
+                    var curSum = decimal.Parse(row.Cells[2].Value.ToString().Replace('.', ','));
+                    fileSum += curSum;
+                
+                    var tmp = row.Cells[1].Value.ToString().Split(new[] {"!="}, StringSplitOptions.None);
+                    if (tmp[0].Length > 10)
+                    {
+                        totalSum += decimal.Parse(tmp[1].Replace('.', ','));
+                    }
+                    else
+                    {
+                        totalSum += curSum;
+                    }
+                }
+
+                var delta = totalSum - fileSum;
+            
+                _log.Info($"Сводка по открытому файлу:\n\tСумма по реестру: {totalSum}\n\tСумма по файлу: {fileSum}\n\tРазница: {delta}\n\n");
+            }
+            catch (Exception exception)
+            {
+                _log.Error(exception, "Ошибка при построении сводки:");
+            }
         }
     }
 }
