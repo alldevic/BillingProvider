@@ -37,13 +37,13 @@ namespace BillingProvider.Core.Parsers
                 var data = row.Descendants("td").Select(x => x.InnerText.Trim()).ToList();
                 Log.Debug($"Read row: '{string.Join(", ", data)}'");
 
-                Log.Debug($"Client info: '{data[0]}, {data[1]}, {data[2]}; {data[3]}; {data[7]}'");
+                Log.Debug($"Client info: '{data[0]}, {data[1]}, {data[2]}; {data[3]}; {data[4]}, {data[7]}'");
                 var info = new ClientInfo
                 {
                     Source = string.Join(";", data.ToArray()),
                     SourcePath = Path,
                     Address = $"{data[0]}, {data[1]}, {data[2]}",
-                    Name = data[3],
+                    Name = !string.IsNullOrEmpty(data[3]) ? data[3] : data[4],
                     Sum = data[7].Replace(",", ".")
                 };
 
