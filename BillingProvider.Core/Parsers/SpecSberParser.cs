@@ -111,7 +111,6 @@ namespace BillingProvider.Core.Parsers
                             position.Sum = position.Sum.Replace(",", ".");
                         }
 
-
                         tmp.Sum = tmpSum.ToString(CultureInfo.InvariantCulture);
 
                         Data.Add(tmp);

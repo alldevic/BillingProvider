@@ -44,9 +44,9 @@ namespace BillingProvider.Core
                 return new OneCParser(path);
             }
 
-            if (firstLine.Contains("#"))
+            if ((firstLine.Split('#').Length == 2) && (firstLine.Split(';').Length == 2))
             {
-                Log.Debug("Select CsvKbbPareer");
+                Log.Debug("Select CsvKbbParser");
                 return new CsvKbbParser(path);
             }
 
