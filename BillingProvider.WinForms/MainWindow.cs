@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using BillingProvider.Core;
 using BillingProvider.Core.Comm.Tasks.Response;
 using BillingProvider.Core.KKMDrivers;
+using BillingProvider.Core.Models;
 using BillingProvider.Core.Parsers;
 using BillingProvider.WinForms.Extensions;
 using NLog;
@@ -51,9 +52,10 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            // TestCheckToolStripMenuItem.Enabled = false;
-            // KktStateToolStripMenuItem.Enabled = false;
-            // DeviceListToolStripMenuItem.Enabled = false;
+            PingToolStripMenuItem.Enabled = true;
+            TestCheckToolStripMenuItem.Enabled = false;
+            KktStateToolStripMenuItem.Enabled = false;
+            DeviceListToolStripMenuItem.Enabled = false;
 
             _log = LogManager.GetCurrentClassLogger();
 
@@ -69,6 +71,9 @@ namespace BillingProvider.WinForms
             }
             else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
             {
+                TestCheckToolStripMenuItem.Enabled = true;
+                KktStateToolStripMenuItem.Enabled = true;
+                DeviceListToolStripMenuItem.Enabled = true;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
                     _appSettings.ServerPort, _appSettings.CompanyMail);
@@ -106,7 +111,10 @@ namespace BillingProvider.WinForms
                 _log.Debug($"Добавление колонок в {nameof(gridSource)}");
                 foreach (var caption in parser.Captions)
                 {
-                    dt.Columns.Add(caption, typeof(string));
+                    dt.Columns.Add(caption,
+                        string.Equals(caption, "Признак способа расчета")
+                            ? typeof(SignMethodCalculation)
+                            : typeof(string));
                 }
 
                 gridSource.Update();
@@ -141,6 +149,9 @@ namespace BillingProvider.WinForms
             _changed = true;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
             {
+                TestCheckToolStripMenuItem.Enabled = false;
+                KktStateToolStripMenuItem.Enabled = false;
+                DeviceListToolStripMenuItem.Enabled = false;
                 _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
                     _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
@@ -148,6 +159,9 @@ namespace BillingProvider.WinForms
             }
             else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
             {
+                TestCheckToolStripMenuItem.Enabled = true;
+                KktStateToolStripMenuItem.Enabled = true;
+                DeviceListToolStripMenuItem.Enabled = true;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
                     _appSettings.ServerPort, _appSettings.CompanyMail);
@@ -196,7 +210,6 @@ namespace BillingProvider.WinForms
         private void PingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(PingToolStripMenuItem)} clicked");
-            // Utils.ServerAvailable(_appSettings.ServerAddress, _appSettings.ServerPort);
             _conn.TestConnection();
         }
 
@@ -209,7 +222,7 @@ namespace BillingProvider.WinForms
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(KktStateToolStripMenuItem)} clicked");
-            // _conn.GetDataKkt();
+            _conn.GetKktInfo();
         }
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -250,7 +263,7 @@ beliy_ns@kuzro.ru", @"О программе");
                 {
                     var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
                         currentRow.Cells[3].Value.ToString(),
-                        currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token);
+                        currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token, 4, 4);
 
                     if (response != null)
                     {
@@ -293,7 +306,10 @@ beliy_ns@kuzro.ru", @"О программе");
 
             foreach (var caption in parser.Captions)
             {
-                dt.Columns.Add(caption, typeof(string));
+                dt.Columns.Add(caption,
+                    string.Equals(caption, "Признак способа расчета")
+                        ? typeof(SignMethodCalculation)
+                        : typeof(string));
             }
 
 
@@ -421,7 +437,7 @@ beliy_ns@kuzro.ru", @"О программе");
                 {
                     _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
                     _taskQueue.Enqueue(() =>
-                        ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, node.Source, tokenSource));
+                        ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, node.Source, tokenSource, 4, 4));
                 }
 
                 if (!tmrQueue.Enabled)
@@ -436,14 +452,15 @@ beliy_ns@kuzro.ru", @"О программе");
         }
 
         private async void ExecuteTask(string clientInfo, string name, string sum, string filePath, string source,
-            CancellationTokenSource cancellationTokenSource)
+            CancellationTokenSource cancellationTokenSource, int signMethodCalculation, int signCalculationObject)
         {
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
             tmrQueue.Stop();
             try
             {
                 var response =
-                    await _conn.RegisterCheck(clientInfo, name, sum, filePath, source, cancellationTokenSource.Token);
+                    await _conn.RegisterCheck(clientInfo, name, sum, filePath, source, cancellationTokenSource.Token,
+                        signMethodCalculation, signCalculationObject);
                 if (response != null && response.ResponseTaskStatus == ResponseTaskStatus.Failed)
                 {
                     _log.Debug($"{response.ErrorMessage}");
@@ -522,7 +539,7 @@ beliy_ns@kuzro.ru", @"О программе");
                     {
                         _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
                         _taskQueue.Enqueue(() =>
-                            ExecuteTask(node.Name, string.Empty, node.Sum, file, node.Source, tokenSource));
+                            ExecuteTask(node.Name, string.Empty, node.Sum, file, node.Source, tokenSource, 4, 4));
                     }
 
                     if (!tmrQueue.Enabled)
@@ -591,7 +608,7 @@ beliy_ns@kuzro.ru", @"О программе");
                     var row = gridSource.Rows[i];
                     var curSum = decimal.Parse(row.Cells[2].Value.ToString().Replace('.', ','));
                     fileSum += curSum;
-                
+
                     var tmp = row.Cells[1].Value.ToString().Split(new[] {"!="}, StringSplitOptions.None);
                     if (tmp[0].Length > 10)
                     {
@@ -604,8 +621,9 @@ beliy_ns@kuzro.ru", @"О программе");
                 }
 
                 var delta = totalSum - fileSum;
-            
-                _log.Info($"Сводка по открытому файлу:\n\tСумма по реестру: {totalSum}\n\tСумма по файлу: {fileSum}\n\tРазница: {delta}\n\n");
+
+                _log.Info(
+                    $"Сводка по открытому файлу:\n\tСумма по реестру: {totalSum}\n\tСумма по файлу: {fileSum}\n\tРазница: {delta}\n\n");
             }
             catch (Exception exception)
             {

@@ -51,7 +51,7 @@ namespace BillingProvider.Core.KKMDrivers
         private DateTime TokenDate { get; set; }
 
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, 
-            string source, CancellationToken ct)
+            string source, CancellationToken ct, int signMethodCalculation = 4, int signCalculationObject = 4)
         {
             if (ct.IsCancellationRequested)
             {
@@ -354,6 +354,32 @@ namespace BillingProvider.Core.KKMDrivers
             Token = res.Data.Token;
             Log.Info($"Получен токен: {Token}");
             Log.Info($"Дата окончания: {res.Data.Timestamp}");
+        }
+
+        public async void GetKktInfo()
+        {
+            var client = new RestClient("https://online.atol.ru/api/auth/v1/");
+            var request = new RestRequest("gettoken", Method.POST)
+            {
+                RequestFormat = DataFormat.Json
+            };
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddBody(new {login = Login, pass = Password});
+            var res = await client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+            var token = res.Data.Token;
+            Log.Info($"Получен токен: {token}");
+            
+            client = new RestClient("https://online.atol.ru/api/kkt/v1/");
+            request = new RestRequest("cash-registers", Method.POST)
+            {
+                RequestFormat = DataFormat.Json
+            };
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddHeader("Token", token);
+            request.AddParameter("limit", "100");
+            res = await client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+            
+            Log.Info(res.Data);
         }
 
         private class ReportResponse

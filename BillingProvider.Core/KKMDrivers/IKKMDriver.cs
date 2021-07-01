@@ -15,9 +15,11 @@ namespace BillingProvider.Core.KKMDrivers
 
         string CompanyEmail { get; }
 
-        Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, string source, CancellationToken ct);
+        Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, string source, CancellationToken ct, int signMethodCalculation, int signCalculationObject);
         void RegisterTestCheck();
 
         void TestConnection();
+
+        void GetKktInfo();
     }
 }
