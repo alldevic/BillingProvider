@@ -16,6 +16,7 @@ namespace BillingProvider.Core.KKMDrivers
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private readonly RestClient _restClient;
+
         public KkmServerDriver(string cashierName, string cashierVatin, string password, string login, string address,
             int port, string companyEmail, Vat vat)
         {
@@ -27,7 +28,7 @@ namespace BillingProvider.Core.KKMDrivers
             Port = port;
             CompanyEmail = companyEmail;
             Vat = vat;
-            
+
             _restClient = new RestClient($"http://{Address}:{Port}");
         }
 
@@ -42,7 +43,8 @@ namespace BillingProvider.Core.KKMDrivers
 
 
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
-            string source, CancellationToken ct, int signMethodCalculation = 4, int signCalculationObject = 4)
+            string source, CancellationToken ct,
+            SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT)
         {
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
@@ -62,7 +64,7 @@ namespace BillingProvider.Core.KKMDrivers
                         Tax = Vat,
                         Amount = t[1].Replace(",", "."),
                         SignMethodCalculation = signMethodCalculation,
-                        SignCalculationObject = signCalculationObject
+                        SignCalculationObject = 4
                     }
                 });
             }
@@ -157,6 +159,7 @@ namespace BillingProvider.Core.KKMDrivers
                 NumDevice = 0
             }));
         }
+
         private async Task<ResponseTaskBase> ExecuteCommand(object obj)
         {
             Log.Debug("Begin command execution");
@@ -171,9 +174,9 @@ namespace BillingProvider.Core.KKMDrivers
             request.AddBody(obj);
             Log.Debug($"Request: obj0={request.Parameters?[0]}");
             Log.Debug($"Request: obj1={request.Parameters?[1]}");
-            
+
             RestResponse<KkmServerResponse> resp;
-            
+
             try
             {
                 resp = _restClient.Execute<KkmServerResponse>(request) as RestResponse<KkmServerResponse>;
@@ -188,7 +191,7 @@ namespace BillingProvider.Core.KKMDrivers
             }
 
             var response = resp?.Data;
-            
+
             if (response?.Status == 2 || response?.Status == 3)
             {
                 Log.Error(response.Error);
@@ -201,8 +204,8 @@ namespace BillingProvider.Core.KKMDrivers
 
             Log.Info($"{response?.Command}({response?.IdCommand}): запрос обработан успешно");
             Log.Debug(resp?.Content);
-            
-            
+
+
             return new ResponseTaskBase
             {
                 ErrorMessage = string.Empty,
