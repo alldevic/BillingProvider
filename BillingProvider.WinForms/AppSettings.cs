@@ -354,10 +354,10 @@ namespace BillingProvider.WinForms
             configuration.AppSettings.Settings[nameof(ForceAutosumEnabled)].Value = ForceAutosumEnabled.ToString();
             Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
 
-            configuration.AppSettings.Settings[nameof(ServerTax)].Value = ServerTax.ToString();
+            configuration.AppSettings.Settings[nameof(ServerTax)].Value = ((int)ServerTax).ToString();
             Log.Trace($"{nameof(ServerTax)}='{ServerTax}'");
             
-            configuration.Save(ConfigurationSaveMode.Full, true);
+            configuration.Save(ConfigurationSaveMode.Modified, false);
             ConfigurationManager.RefreshSection("appSettings");
             Log.Debug("End saving app settings");
             Log.Info("Настройки сохранены!");
