@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace BillingProvider.WinForms.Extensions
@@ -26,6 +28,24 @@ namespace BillingProvider.WinForms.Extensions
             }
 
             return enumerationValue.ToString();
+        }
+        
+        public static IList ToList(this Type type)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            var list = new ArrayList();
+            var enumValues = Enum.GetValues(type);
+
+            foreach (Enum value in enumValues)
+            {
+                list.Add(new KeyValuePair<Enum, string>(value, GetDescription(value)));
+            }
+
+            return list;
         }
     }
 }

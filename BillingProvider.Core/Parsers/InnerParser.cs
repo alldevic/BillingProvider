@@ -20,7 +20,9 @@ namespace BillingProvider.Core.Parsers
             Path = path;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
 

@@ -47,6 +47,8 @@
             this.DeviceListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.KktStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TestCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.ReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.ScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WatchFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,8 +66,6 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tmrEditNotify = new System.Windows.Forms.Timer(this.components);
             this.tmrQueue = new System.Windows.Forms.Timer(this.components);
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.ReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -176,6 +176,18 @@
             this.TestCheckToolStripMenuItem.Text = "Чек на 1 рубль";
             this.TestCheckToolStripMenuItem.Click += new System.EventHandler(this.TestCheckToolStripMenuItem_Click);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(203, 6);
+            // 
+            // ReportToolStripMenuItem
+            // 
+            this.ReportToolStripMenuItem.Name = "ReportToolStripMenuItem";
+            this.ReportToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.ReportToolStripMenuItem.Text = "Сводка";
+            this.ReportToolStripMenuItem.Click += new System.EventHandler(this.ReportToolStripMenuItem_Click);
+            // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
@@ -281,7 +293,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 351;
+            this.splitContainer2.SplitterDistance = 354;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -319,9 +331,11 @@
             this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 351);
+            this.gridSource.Size = new System.Drawing.Size(408, 354);
             this.gridSource.TabIndex = 0;
             this.gridSource.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridSource_CellEndEdit);
+            this.gridSource.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.gridSource_DefaultValuesNeeded);
+            this.gridSource.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.gridSource_EditingControlShowing);
             // 
             // rtxtLog
             // 
@@ -329,7 +343,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 108);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 105);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
@@ -343,18 +357,6 @@
             // 
             this.tmrQueue.Interval = 2500;
             this.tmrQueue.Tick += new System.EventHandler(this.tmrQueue_Tick);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(203, 6);
-            // 
-            // ReportToolStripMenuItem
-            // 
-            this.ReportToolStripMenuItem.Name = "ReportToolStripMenuItem";
-            this.ReportToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.ReportToolStripMenuItem.Text = "Сводка";
-            this.ReportToolStripMenuItem.Click += new System.EventHandler(this.ReportToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
