@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -67,7 +67,8 @@ namespace BillingProvider.WinForms
                 _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
                     _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
-                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
+                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail,
+                    _appSettings.ServerTax);
             }
             else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
             {
@@ -76,7 +77,7 @@ namespace BillingProvider.WinForms
                 DeviceListToolStripMenuItem.Enabled = true;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
-                    _appSettings.ServerPort, _appSettings.CompanyMail);
+                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerTax);
             }
 
 
@@ -155,7 +156,8 @@ namespace BillingProvider.WinForms
                 _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
                     _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
-                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
+                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail,
+                    _appSettings.ServerTax);
             }
             else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
             {
@@ -164,7 +166,7 @@ namespace BillingProvider.WinForms
                 DeviceListToolStripMenuItem.Enabled = true;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
-                    _appSettings.ServerPort, _appSettings.CompanyMail);
+                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerTax);
             }
         }
 

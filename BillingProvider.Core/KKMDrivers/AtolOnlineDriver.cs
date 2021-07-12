@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -7,6 +7,7 @@ using BillingProvider.Core.Comm.Tasks.Response;
 using Newtonsoft.Json.Linq;
 using NLog;
 using RestSharp;
+using BillingProvider.Core.Models;
 
 namespace BillingProvider.Core.KKMDrivers
 {
@@ -20,7 +21,7 @@ namespace BillingProvider.Core.KKMDrivers
 
         public AtolOnlineDriver(string atolHost, string inn, string groupId, string login, string password,
             string cashierName,
-            string cashierVatin, string hostname, string companyEmail)
+            string cashierVatin, string hostname, string companyEmail, Tax tax)
         {
             Inn = inn;
             GroupId = groupId;
@@ -30,6 +31,7 @@ namespace BillingProvider.Core.KKMDrivers
             CashierVatin = cashierVatin;
             Hostname = hostname;
             CompanyEmail = companyEmail;
+            Tax = tax;
 
             _client = new RestClient(atolHost);
         }
@@ -46,6 +48,8 @@ namespace BillingProvider.Core.KKMDrivers
         public string CashierVatin { get; }
 
         public string CompanyEmail { get; }
+
+        public Tax Tax { get; }
 
         private string Token { get; set; }
         private DateTime TokenDate { get; set; }

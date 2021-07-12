@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
+using BillingProvider.Core.Models;
 using BillingProvider.WinForms.Extensions;
 using NLog;
 
@@ -89,6 +90,13 @@ namespace BillingProvider.WinForms
         [Description("Пароль от учетной записи kktserver")]
         [DisplayName("Пароль")]
         public string ServerPassword { get; set; } = "";
+
+        [Category("KKM Server")]
+        [Description("НДС")]
+        [DisplayName("НДС")]
+        [RefreshProperties(RefreshProperties.All)]
+        [TypeConverter(typeof(EnumTypeConverter))]
+        public Tax ServerTax { get; set; } = Tax.NoTax_1105;
 
         #endregion
 
@@ -251,6 +259,9 @@ namespace BillingProvider.WinForms
                 
                 ForceAutosumEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(ForceAutosumEnabled)}"]);
                 Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
+
+                ServerTax = (Tax)Convert.ToInt32(ConfigurationManager.AppSettings[$"{nameof(ServerTax)}"]);
+                Log.Trace($"{nameof(ServerTax)}='{ServerTax}'");
                 
                 Check();
             }
@@ -342,6 +353,9 @@ namespace BillingProvider.WinForms
             
             configuration.AppSettings.Settings[nameof(ForceAutosumEnabled)].Value = ForceAutosumEnabled.ToString();
             Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
+
+            configuration.AppSettings.Settings[nameof(ServerTax)].Value = ServerTax.ToString();
+            Log.Trace($"{nameof(ServerTax)}='{ServerTax}'");
             
             configuration.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");
