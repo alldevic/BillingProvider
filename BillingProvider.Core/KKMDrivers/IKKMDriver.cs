@@ -21,7 +21,7 @@ namespace BillingProvider.Core.KKMDrivers
         Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, string source,
             CancellationToken ct, SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod);
 
-        void RegisterTestCheck();
+        void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod);
 
         void TestConnection();
 

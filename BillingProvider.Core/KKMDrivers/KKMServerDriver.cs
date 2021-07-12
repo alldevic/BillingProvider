@@ -109,11 +109,11 @@ namespace BillingProvider.Core.KKMDrivers
             return await ExecuteCommand(final_receipt);
         }
 
-        public async void RegisterTestCheck()
+        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod)
         {
             Log.Info($"Регистрация тестового чека");
 
-            await Task.Run(() => ExecuteCommand(new
+            var receipt = new
             {
                 Command = "RegisterCheck",
                 NumDevice = 0,
@@ -134,17 +134,38 @@ namespace BillingProvider.Core.KKMDrivers
                         {
                             Name = "Тестовая услуга",
                             Quantity = 1,
-                            Price = 1,
+                            Price = 0,
                             Tax = Vat,
-                            Amount = 1.00,
-                            SignMethodCalculation = 4,
+                            Amount = 0.00,
+                            SignMethodCalculation = signMethodCalculation,
                             SignCalculationObject = 4
                         }
                     }
                 },
+            };
 
-                ElectronicPayment = 1
-            }));
+            var final_receipt = receipt.AsDictionary();
+            
+            switch (paymentMethod)
+            {
+                case PaymentMethod.Cash_1031:
+                    final_receipt.Add("Cash", 0);
+                    break;
+                case PaymentMethod.Credit_1216:
+                    final_receipt.Add("Credit", 0);
+                    break;
+                case PaymentMethod.AdvancePayment_1215:
+                    final_receipt.Add("AdvancePayment", 0);
+                    break;
+                case PaymentMethod.CashProvision_1217:
+                    final_receipt.Add("CashProvision", 0);
+                    break;
+                case PaymentMethod.ElectronicPayment_1081:
+                    final_receipt.Add("ElectronicPayment", 0);
+                    break;
+            }
+
+            await ExecuteCommand(final_receipt);
         }
 
         public async void TestConnection()

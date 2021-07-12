@@ -255,7 +255,7 @@ namespace BillingProvider.Core.KKMDrivers
             }
         }
 
-        public async void RegisterTestCheck()
+        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod)
         {
             RestRequest request;
             if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)

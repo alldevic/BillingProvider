@@ -173,7 +173,7 @@
             // 
             this.TestCheckToolStripMenuItem.Name = "TestCheckToolStripMenuItem";
             this.TestCheckToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.TestCheckToolStripMenuItem.Text = "Чек на 1 рубль";
+            this.TestCheckToolStripMenuItem.Text = "Чек на 0 копеек";
             this.TestCheckToolStripMenuItem.Click += new System.EventHandler(this.TestCheckToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
@@ -293,7 +293,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 354;
+            this.splitContainer2.SplitterDistance = 358;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -331,7 +331,7 @@
             this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 354);
+            this.gridSource.Size = new System.Drawing.Size(408, 358);
             this.gridSource.TabIndex = 0;
             this.gridSource.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridSource_CellEndEdit);
             this.gridSource.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.gridSource_DefaultValuesNeeded);
@@ -343,7 +343,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 105);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 101);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);

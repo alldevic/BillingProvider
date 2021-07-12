@@ -53,9 +53,7 @@ namespace BillingProvider.WinForms
         private void MainWindow_Load(object sender, EventArgs e)
         {
             PingToolStripMenuItem.Enabled = true;
-            TestCheckToolStripMenuItem.Enabled = false;
-            KktStateToolStripMenuItem.Enabled = false;
-            DeviceListToolStripMenuItem.Enabled = false;
+            
 
             _log = LogManager.GetCurrentClassLogger();
 
@@ -64,6 +62,12 @@ namespace BillingProvider.WinForms
             gridSettings.SelectedObject = _appSettings;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
             {
+                TestCheckToolStripMenuItem.Enabled = false;
+                KktStateToolStripMenuItem.Enabled = false;
+                DeviceListToolStripMenuItem.Enabled = false;
+                ReportToolStripMenuItem.Enabled = true;
+                WatchFolderToolStripMenuItem.Enabled = true;
+                ScanToolStripMenuItem.Enabled = true;
                 _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
                     _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
@@ -75,6 +79,9 @@ namespace BillingProvider.WinForms
                 TestCheckToolStripMenuItem.Enabled = true;
                 KktStateToolStripMenuItem.Enabled = true;
                 DeviceListToolStripMenuItem.Enabled = true;
+                ReportToolStripMenuItem.Enabled = false;
+                WatchFolderToolStripMenuItem.Enabled = false;
+                ScanToolStripMenuItem.Enabled = false;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
                     _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerVat);
@@ -178,6 +185,9 @@ namespace BillingProvider.WinForms
                 TestCheckToolStripMenuItem.Enabled = false;
                 KktStateToolStripMenuItem.Enabled = false;
                 DeviceListToolStripMenuItem.Enabled = false;
+                ReportToolStripMenuItem.Enabled = true;
+                WatchFolderToolStripMenuItem.Enabled = true;
+                ScanToolStripMenuItem.Enabled = true;
                 _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
                     _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
@@ -189,6 +199,9 @@ namespace BillingProvider.WinForms
                 TestCheckToolStripMenuItem.Enabled = true;
                 KktStateToolStripMenuItem.Enabled = true;
                 DeviceListToolStripMenuItem.Enabled = true;
+                ReportToolStripMenuItem.Enabled = false;
+                WatchFolderToolStripMenuItem.Enabled = false;
+                ScanToolStripMenuItem.Enabled = false;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
                     _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerVat);
@@ -243,7 +256,7 @@ namespace BillingProvider.WinForms
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(TestCheckToolStripMenuItem)} clicked");
-            _conn.RegisterTestCheck();
+            _conn.RegisterTestCheck(_appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod);
         }
 
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -496,7 +509,7 @@ beliy_ns@kuzro.ru", @"О программе");
                     _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
                     _taskQueue.Enqueue(() =>
                         ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, node.Source, tokenSource,
-                            SignMethodCalculation.FULL_PAYMENT, PaymentMethod.ElectronicPayment_1081));
+                            _appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod));
                 }
 
                 if (!tmrQueue.Enabled)
@@ -600,7 +613,7 @@ beliy_ns@kuzro.ru", @"О программе");
                         _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
                         _taskQueue.Enqueue(() =>
                             ExecuteTask(node.Name, string.Empty, node.Sum, file, node.Source, tokenSource,
-                                SignMethodCalculation.FULL_PAYMENT, PaymentMethod.ElectronicPayment_1081));
+                                _appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod));
                     }
 
                     if (!tmrQueue.Enabled)
