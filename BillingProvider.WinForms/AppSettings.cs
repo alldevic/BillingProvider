@@ -17,29 +17,29 @@ namespace BillingProvider.WinForms
 
         #region AtolOnline
 
-        [Category("АТОЛ Онлайн")]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("ИНН организации; сравнивается со значением в фискальном накопителе")]
         [DisplayName("ИНН")]
         public string AtolOnlineINN { get; set; } = "";
 
-        [Category("АТОЛ Онлайн")]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("Код группы ККТ, относящейся к интернет-магазину, зарегистрированному в “АТОЛ Онлайн”")]
         [DisplayName("Идентификатор группы ККТ")]
         public string AtolOnlineGroupID { get; set; } = "";
 
-        [Category("АТОЛ Онлайн")]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("При расчётах в интернете это адрес сайта; сравнивается со значением в фискальном накопителе")]
         [DisplayName("Адрес места расчетов")]
         public string AtolOnlineHostname { get; set; } = "";
 
-        [Category("АТОЛ Онлайн")]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Логин пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
         [DisplayName("Логин")]
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlineLogin { get; set; } = "";
 
-        [Category("АТОЛ Онлайн")]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Пароль пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
         [DisplayName("Пароль")]
@@ -47,7 +47,7 @@ namespace BillingProvider.WinForms
         public string AtolOnlinePassword { get; set; } = "";
 
 
-        [Category("АТОЛ Онлайн")]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Адрес тестовой среды (ФФД 1.05): https://testonline.atol.ru/possystem/v4/" +
             "Адрес production: https://online.atol.ru/possystem/v4/")]
@@ -56,7 +56,7 @@ namespace BillingProvider.WinForms
         public string AtolHost { get; set; } = "";
 
 
-        [Category("АТОЛ Онлайн")]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частыми обращением к серверу")]
         [DisplayName("Задержка (мс)")]
@@ -66,47 +66,47 @@ namespace BillingProvider.WinForms
 
         #region KKMServer
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("IP-адрес сервера с кассой")]
         [DisplayName("Адрес")]
         public string ServerAddress { get; set; } = "127.0.0.1";
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Порт, на котором запущен сервер")]
         [DisplayName("Порт")]
         public int ServerPort { get; set; } = 5893;
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Номер устройства на сервере, 0 - первое активное")]
         [DisplayName("Номер устройства")]
         public int ServerDeviceId { get; set; }
 
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Имя учетной записи kktserver")]
         [DisplayName("Логин")]
         public string ServerLogin { get; set; } = "Admin";
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Пароль от учетной записи kktserver")]
         [DisplayName("Пароль")]
         public string ServerPassword { get; set; } = "";
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("НДС")]
         [DisplayName("НДС")]
         [RefreshProperties(RefreshProperties.All)]
         [TypeConverter(typeof(EnumTypeConverter))]
         public Vat ServerVat { get; set; } = Vat.NoVat_1105;
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Способ оплаты по умолчанию")]
         [DisplayName("Способ оплаты")]
         [RefreshProperties(RefreshProperties.All)]
         [TypeConverter(typeof(EnumTypeConverter))]
         public PaymentMethod ServerPaymentMethod { get; set; } = PaymentMethod.Cash_1031;
 
-        [Category("KKM Server")]
+        [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Признак способа расчета по умолчанию")]
         [DisplayName("Признак способа расчета")]
         [RefreshProperties(RefreshProperties.All)]
@@ -117,13 +117,13 @@ namespace BillingProvider.WinForms
 
         #region Cashier
 
-        [Category("Кассир")]
+        [CustomSortedCategory("Кассир", 1, 6)]
         [Description("Фамилия и инициалы текущего кассира")]
         [DisplayName("Имя")]
         [RefreshProperties(RefreshProperties.All)]
         public string CashierName { get; set; }
 
-        [Category("Кассир")]
+        [CustomSortedCategory("Кассир", 1, 6)]
         [Description("ИНН текущего кассира")]
         [DisplayName("ИНН")]
         [RefreshProperties(RefreshProperties.All)]
@@ -133,7 +133,7 @@ namespace BillingProvider.WinForms
 
         #region Common
 
-        [Category("Общие")]
+        [CustomSortedCategory("Общие", 3, 6)]
         [Description("Адрес электронной почты компании")]
         [DisplayName("Email")]
         [RefreshProperties(RefreshProperties.All)]
@@ -145,7 +145,7 @@ namespace BillingProvider.WinForms
             [Description("KkmServer")] kkmserver
         }
 
-        [Category("Общие")]
+        [CustomSortedCategory("Общие", 3, 6)]
         [Description("Драйвер ККМ")]
         [DisplayName("Драйвер ККМ")]
         [RefreshProperties(RefreshProperties.All)]
@@ -156,7 +156,7 @@ namespace BillingProvider.WinForms
 
         #region Watcher
 
-        [Category("Отслеживание папки")]
+        [CustomSortedCategory("Отслеживание папки", 6, 6)]
         [Description("Путь до папки")]
         [DisplayName("Папка")]
         [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
@@ -164,7 +164,7 @@ namespace BillingProvider.WinForms
         public string FolderPath { get; set; }
 
 
-        [Category("Отслеживание папки")]
+        [CustomSortedCategory("Отслеживание папки", 6, 6)]
         [Description("Сканирование подпапок на наличие изменений")]
         [DisplayName("Включая подпапки")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
@@ -175,27 +175,27 @@ namespace BillingProvider.WinForms
 
         #region Defaults
 
-        [Category("Умолчания")]
+        [CustomSortedCategory("Умолчания", 2, 6)]
         [Description("Наименование позиции по умолчанию")]
         [DisplayName("Позиция")]
         [RefreshProperties(RefreshProperties.All)]
         public string DefaultPositionName { get; set; }
 
-        [Category("Умолчания")]
+        [CustomSortedCategory("Умолчания", 2, 6)]
         [Description("Использовать имя позиции по умолчанию")]
         [DisplayName("Использовать позицию")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
         public bool PositionEnabled { get; set; }
 
-        [Category("Умолчания")]
+        [CustomSortedCategory("Умолчания", 2, 6)]
         [Description("Подставлять сумму в позицию сгенерированную по умолчанию (только таблица)")]
         [DisplayName("Подставлять сумму")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
         public bool AutosumEnabled { get; set; }
 
-        [Category("Умолчания")]
+        [CustomSortedCategory("Умолчания", 2, 6)]
         [Description("Обновлять позицию даже если в ней уже записано значени")]
         [DisplayName("Пересчитывать принудительно")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]

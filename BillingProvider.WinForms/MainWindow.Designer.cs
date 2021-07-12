@@ -276,6 +276,7 @@
             this.gridSettings.TabIndex = 0;
             this.gridSettings.ToolbarVisible = false;
             this.gridSettings.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.gridSettings_PropertyValueChanged);
+            this.gridSettings.PropertySortChanged += new System.EventHandler(this.gridSettings_PropertySortChanged);
             // 
             // splitContainer2
             // 
@@ -293,7 +294,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 358;
+            this.splitContainer2.SplitterDistance = 361;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -331,7 +332,7 @@
             this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 358);
+            this.gridSource.Size = new System.Drawing.Size(408, 361);
             this.gridSource.TabIndex = 0;
             this.gridSource.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridSource_CellEndEdit);
             this.gridSource.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.gridSource_DefaultValuesNeeded);
@@ -343,7 +344,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 101);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 98);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);

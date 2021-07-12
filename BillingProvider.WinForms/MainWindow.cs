@@ -53,7 +53,7 @@ namespace BillingProvider.WinForms
         private void MainWindow_Load(object sender, EventArgs e)
         {
             PingToolStripMenuItem.Enabled = true;
-            
+
 
             _log = LogManager.GetCurrentClassLogger();
 
@@ -726,6 +726,14 @@ beliy_ns@kuzro.ru", @"О программе");
 
             comboBox.DropDownStyle = ComboBoxStyle.DropDown;
             comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+        }
+
+        private void gridSettings_PropertySortChanged(object sender, EventArgs e)
+        {
+            if (gridSettings.PropertySort == PropertySort.CategorizedAlphabetical)
+            {
+                gridSettings.PropertySort = PropertySort.Categorized;
+            }
         }
     }
 }
