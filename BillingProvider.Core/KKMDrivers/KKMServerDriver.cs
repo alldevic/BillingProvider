@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BillingProvider.Core.Comm.Tasks.Response;
 using BillingProvider.Core.Models;
-using Microsoft.VisualBasic.CompilerServices;
 using NLog;
 using RestSharp;
 
@@ -44,7 +43,8 @@ namespace BillingProvider.Core.KKMDrivers
 
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
             string source, CancellationToken ct,
-            SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT)
+            SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT,
+            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081)
         {
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
@@ -69,7 +69,7 @@ namespace BillingProvider.Core.KKMDrivers
                 });
             }
 
-            return await ExecuteCommand(new
+            var receipt = new
             {
                 Command = "RegisterCheck",
                 NumDevice = 0,
@@ -82,9 +82,31 @@ namespace BillingProvider.Core.KKMDrivers
                 CashierVATIN = CashierVatin,
                 ClientInfo = clientInfo,
                 CheckStrings = tmpStrings.ToArray(),
-                ElectronicPayment = sum,
                 SenderEmail = CompanyEmail
-            });
+            };
+
+            var final_receipt = receipt.AsDictionary();
+            
+            switch (paymentMethod)
+            {
+                case PaymentMethod.Cash_1031:
+                    final_receipt.Add("Cash", sum);
+                    break;
+                case PaymentMethod.Credit_1216:
+                    final_receipt.Add("Credit", sum);
+                    break;
+                case PaymentMethod.AdvancePayment_1215:
+                    final_receipt.Add("AdvancePayment", sum);
+                    break;
+                case PaymentMethod.CashProvision_1217:
+                    final_receipt.Add("CashProvision", sum);
+                    break;
+                case PaymentMethod.ElectronicPayment_1081:
+                    final_receipt.Add("ElectronicPayment", sum);
+                    break;
+            }
+
+            return await ExecuteCommand(final_receipt);
         }
 
         public async void RegisterTestCheck()

@@ -56,7 +56,8 @@ namespace BillingProvider.Core.KKMDrivers
 
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
             string source, CancellationToken ct,
-            SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT)
+            SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT,
+            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081)
         {
             if (ct.IsCancellationRequested)
             {

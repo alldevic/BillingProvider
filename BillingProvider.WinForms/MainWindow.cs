@@ -266,7 +266,8 @@ beliy_ns@kuzro.ru", @"О программе");
                     var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
                         currentRow.Cells[3].Value.ToString(),
                         currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token,
-                        SignMethodCalculation.FULL_PAYMENT);
+                        _appSettings.ServerSignMethodCalculation,
+                        _appSettings.ServerPaymentMethod);
 
                     if (response != null)
                     {
@@ -441,7 +442,7 @@ beliy_ns@kuzro.ru", @"О программе");
                     _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
                     _taskQueue.Enqueue(() =>
                         ExecuteTask(node.Name, string.Empty, node.Sum, _filePath, node.Source, tokenSource,
-                            SignMethodCalculation.FULL_PAYMENT));
+                            SignMethodCalculation.FULL_PAYMENT, PaymentMethod.ElectronicPayment_1081));
                 }
 
                 if (!tmrQueue.Enabled)
@@ -456,7 +457,8 @@ beliy_ns@kuzro.ru", @"О программе");
         }
 
         private async void ExecuteTask(string clientInfo, string name, string sum, string filePath, string source,
-            CancellationTokenSource cancellationTokenSource, SignMethodCalculation signMethodCalculation)
+            CancellationTokenSource cancellationTokenSource, SignMethodCalculation signMethodCalculation,
+            PaymentMethod paymentMethod)
         {
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
             tmrQueue.Stop();
@@ -464,7 +466,7 @@ beliy_ns@kuzro.ru", @"О программе");
             {
                 var response =
                     await _conn.RegisterCheck(clientInfo, name, sum, filePath, source, cancellationTokenSource.Token,
-                        signMethodCalculation);
+                        signMethodCalculation, paymentMethod);
                 if (response != null && response.ResponseTaskStatus == ResponseTaskStatus.Failed)
                 {
                     _log.Debug($"{response.ErrorMessage}");
@@ -544,7 +546,7 @@ beliy_ns@kuzro.ru", @"О программе");
                         _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
                         _taskQueue.Enqueue(() =>
                             ExecuteTask(node.Name, string.Empty, node.Sum, file, node.Source, tokenSource,
-                                SignMethodCalculation.FULL_PAYMENT));
+                                SignMethodCalculation.FULL_PAYMENT, PaymentMethod.ElectronicPayment_1081));
                     }
 
                     if (!tmrQueue.Enabled)
