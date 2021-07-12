@@ -81,7 +81,7 @@
         <Compile Include="Models\KkmServerResponse.cs" />
         <Compile Include="Models\PaymentMethod.cs" />
         <Compile Include="Models\SignMethodCalculation.cs" />
-        <Compile Include="Models\Tax.cs" />
+        <Compile Include="Models\Vat.cs" />
         <Compile Include="ObjectExtensions.cs" />
         <Compile Include="ParserSelector.cs" />
         <Compile Include="Parsers\BankTransfer\BankTransferDocumentParser.cs" />

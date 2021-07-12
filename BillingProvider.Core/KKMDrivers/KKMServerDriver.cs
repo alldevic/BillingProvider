@@ -17,7 +17,7 @@ namespace BillingProvider.Core.KKMDrivers
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private readonly RestClient _restClient;
         public KkmServerDriver(string cashierName, string cashierVatin, string password, string login, string address,
-            int port, string companyEmail, Tax tax)
+            int port, string companyEmail, Vat vat)
         {
             CashierName = cashierName;
             CashierVatin = cashierVatin;
@@ -26,7 +26,7 @@ namespace BillingProvider.Core.KKMDrivers
             Address = address;
             Port = port;
             CompanyEmail = companyEmail;
-            Tax = tax;
+            Vat = vat;
             
             _restClient = new RestClient($"http://{Address}:{Port}");
         }
@@ -38,7 +38,7 @@ namespace BillingProvider.Core.KKMDrivers
         public string CashierName { get; }
         public string CashierVatin { get; }
         public string CompanyEmail { get; }
-        public Tax Tax { get; }
+        public Vat Vat { get; }
 
 
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
@@ -59,7 +59,7 @@ namespace BillingProvider.Core.KKMDrivers
                         Name = t[0],
                         Quantity = 1,
                         Price = t[1].Replace(",", "."),
-                        Tax = Tax,
+                        Tax = Vat,
                         Amount = t[1].Replace(",", "."),
                         SignMethodCalculation = signMethodCalculation,
                         SignCalculationObject = signCalculationObject
@@ -111,7 +111,7 @@ namespace BillingProvider.Core.KKMDrivers
                             Name = "Тестовая услуга",
                             Quantity = 1,
                             Price = 1,
-                            Tax = Tax,
+                            Tax = Vat,
                             Amount = 1.00,
                             SignMethodCalculation = 4,
                             SignCalculationObject = 4

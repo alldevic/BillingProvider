@@ -68,7 +68,7 @@ namespace BillingProvider.WinForms
                     _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
                     _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail,
-                    _appSettings.ServerTax);
+                    _appSettings.ServerVat);
             }
             else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
             {
@@ -77,7 +77,7 @@ namespace BillingProvider.WinForms
                 DeviceListToolStripMenuItem.Enabled = true;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
-                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerTax);
+                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerVat);
             }
 
 
@@ -157,7 +157,7 @@ namespace BillingProvider.WinForms
                     _appSettings.AtolOnlineGroupID,
                     _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
                     _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail,
-                    _appSettings.ServerTax);
+                    _appSettings.ServerVat);
             }
             else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
             {
@@ -166,7 +166,7 @@ namespace BillingProvider.WinForms
                 DeviceListToolStripMenuItem.Enabled = true;
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
-                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerTax);
+                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerVat);
             }
         }
 

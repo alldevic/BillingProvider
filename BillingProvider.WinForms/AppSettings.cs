@@ -46,7 +46,7 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlinePassword { get; set; } = "";
 
-        
+
         [Category("АТОЛ Онлайн")]
         [Description(
             "Адрес тестовой среды (ФФД 1.05): https://testonline.atol.ru/possystem/v4/" +
@@ -54,13 +54,14 @@ namespace BillingProvider.WinForms
         [DisplayName("Адрес среды:")]
         [RefreshProperties(RefreshProperties.All)]
         public string AtolHost { get; set; } = "";
-        
-        
+
+
         [Category("АТОЛ Онлайн")]
-        [Description("Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частыми обращением к серверу")]
+        [Description(
+            "Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частыми обращением к серверу")]
         [DisplayName("Задержка (мс)")]
         public int AtolOnlineDelay { get; set; } = 2500;
-        
+
         #endregion
 
         #region KKMServer
@@ -96,7 +97,21 @@ namespace BillingProvider.WinForms
         [DisplayName("НДС")]
         [RefreshProperties(RefreshProperties.All)]
         [TypeConverter(typeof(EnumTypeConverter))]
-        public Tax ServerTax { get; set; } = Tax.NoTax_1105;
+        public Vat ServerVat { get; set; } = Vat.NoVat_1105;
+
+        [Category("KKM Server")]
+        [Description("Способ оплаты по умолчанию")]
+        [DisplayName("Способ оплаты")]
+        [RefreshProperties(RefreshProperties.All)]
+        [TypeConverter(typeof(EnumTypeConverter))]
+        public PaymentMethod ServerPaymentMethod { get; set; } = PaymentMethod.Cash_1031;
+
+        [Category("KKM Server")]
+        [Description("Признак способа расчета по умолчанию")]
+        [DisplayName("Признак способа расчета")]
+        [RefreshProperties(RefreshProperties.All)]
+        [TypeConverter(typeof(EnumTypeConverter))]
+        public SignMethodCalculation ServerSignMethodCalculation { get; set; } = SignMethodCalculation.FULL_PAYMENT;
 
         #endregion
 
@@ -126,21 +141,19 @@ namespace BillingProvider.WinForms
 
         public enum KkmDrivers
         {
-            [Description("АТОЛ Онлайн")]
-            atol,
-            [Description("KkmServer")]
-            kkmserver
+            [Description("АТОЛ Онлайн")] atol,
+            [Description("KkmServer")] kkmserver
         }
-        
+
         [Category("Общие")]
         [Description("Драйвер ККМ")]
         [DisplayName("Драйвер ККМ")]
         [RefreshProperties(RefreshProperties.All)]
         [TypeConverter(typeof(EnumTypeConverter))]
         public KkmDrivers KkmDriver { get; set; }
-        
+
         #endregion
-        
+
         #region Watcher
 
         [Category("Отслеживание папки")]
@@ -150,14 +163,14 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string FolderPath { get; set; }
 
-        
+
         [Category("Отслеживание папки")]
         [Description("Сканирование подпапок на наличие изменений")]
         [DisplayName("Включая подпапки")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
         public bool IncludeSubfolders { get; set; }
-        
+
         #endregion
 
         #region Defaults
@@ -167,31 +180,31 @@ namespace BillingProvider.WinForms
         [DisplayName("Позиция")]
         [RefreshProperties(RefreshProperties.All)]
         public string DefaultPositionName { get; set; }
-        
+
         [Category("Умолчания")]
         [Description("Использовать имя позиции по умолчанию")]
         [DisplayName("Использовать позицию")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
         public bool PositionEnabled { get; set; }
-        
+
         [Category("Умолчания")]
         [Description("Подставлять сумму в позицию сгенерированную по умолчанию (только таблица)")]
         [DisplayName("Подставлять сумму")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
-        public bool AutosumEnabled { get; set; }  
-        
+        public bool AutosumEnabled { get; set; }
+
         [Category("Умолчания")]
         [Description("Обновлять позицию даже если в ней уже записано значени")]
         [DisplayName("Пересчитывать принудительно")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
         public bool ForceAutosumEnabled { get; set; }
-        
+
         #endregion
-        
-        
+
+
         public AppSettings()
         {
             Log.Debug("Begin app settings loading");
@@ -211,7 +224,7 @@ namespace BillingProvider.WinForms
 
                 AtolOnlinePassword = ConfigurationManager.AppSettings[$"{nameof(AtolOnlinePassword)}"];
                 Log.Trace($"{nameof(AtolOnlinePassword)}='{AtolOnlinePassword}'");
-                
+
                 AtolOnlineDelay = int.Parse(ConfigurationManager.AppSettings[$"{nameof(AtolOnlineDelay)}"]);
                 Log.Trace($"{nameof(AtolOnlineDelay)}='{AtolOnlineDelay}'");
 
@@ -237,32 +250,44 @@ namespace BillingProvider.WinForms
                 Log.Trace($"{nameof(CashierVatin)}='{CashierVatin}'");
 
                 CompanyMail = ConfigurationManager.AppSettings[$"{nameof(CompanyMail)}"];
-                Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");           
-                
+                Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");
+
                 FolderPath = ConfigurationManager.AppSettings[$"{nameof(FolderPath)}"];
                 Log.Trace($"{nameof(FolderPath)}='{FolderPath}'");
 
                 IncludeSubfolders = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(IncludeSubfolders)}"]);
                 Log.Trace($"{nameof(IncludeSubfolders)}='{IncludeSubfolders}'");
-                
+
                 AtolHost = ConfigurationManager.AppSettings[$"{nameof(AtolHost)}"];
                 Log.Trace($"{nameof(AtolHost)}='{AtolHost}'");
-                
+
                 DefaultPositionName = ConfigurationManager.AppSettings[$"{nameof(DefaultPositionName)}"];
                 Log.Trace($"{nameof(DefaultPositionName)}='{DefaultPositionName}'");
 
                 PositionEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(PositionEnabled)}"]);
                 Log.Trace($"{nameof(PositionEnabled)}='{PositionEnabled}'");
-                
+
                 AutosumEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(AutosumEnabled)}"]);
                 Log.Trace($"{nameof(AutosumEnabled)}='{AutosumEnabled}'");
-                
-                ForceAutosumEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(ForceAutosumEnabled)}"]);
+
+                ForceAutosumEnabled =
+                    Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(ForceAutosumEnabled)}"]);
                 Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
 
-                ServerTax = (Tax)Convert.ToInt32(ConfigurationManager.AppSettings[$"{nameof(ServerTax)}"]);
-                Log.Trace($"{nameof(ServerTax)}='{ServerTax}'");
-                
+                ServerVat = (Vat) Convert.ToInt32(ConfigurationManager.AppSettings[$"{nameof(ServerVat)}"]);
+                Log.Trace($"{nameof(ServerVat)}='{ServerVat}'");
+
+                KkmDriver = (KkmDrivers) Convert.ToInt32(ConfigurationManager.AppSettings[$"{nameof(KkmDriver)}"]);
+                Log.Trace($"{nameof(KkmDriver)}='{KkmDriver}'");
+
+                ServerPaymentMethod =
+                    (PaymentMethod) Convert.ToInt32(ConfigurationManager.AppSettings[$"{nameof(ServerPaymentMethod)}"]);
+                Log.Trace($"{nameof(ServerPaymentMethod)}='{ServerPaymentMethod}'");
+
+                ServerSignMethodCalculation =
+                    (SignMethodCalculation) Convert.ToInt32(
+                        ConfigurationManager.AppSettings[$"{nameof(ServerSignMethodCalculation)}"]);
+                Log.Trace($"{nameof(ServerSignMethodCalculation)}='{ServerSignMethodCalculation}'");
                 Check();
             }
             catch (Exception e)
@@ -293,16 +318,16 @@ namespace BillingProvider.WinForms
 
             configuration.AppSettings.Settings[nameof(AtolOnlineINN)].Value = AtolOnlineINN;
             Log.Trace($"{nameof(AtolOnlineINN)}='{AtolOnlineINN}'");
-            
+
             configuration.AppSettings.Settings[nameof(AtolOnlineGroupID)].Value = AtolOnlineGroupID;
             Log.Trace($"{nameof(AtolOnlineGroupID)}='{AtolOnlineGroupID}'");
-            
+
             configuration.AppSettings.Settings[nameof(AtolOnlineHostname)].Value = AtolOnlineHostname;
             Log.Trace($"{nameof(AtolOnlineHostname)}='{AtolOnlineHostname}'");
-            
+
             configuration.AppSettings.Settings[nameof(AtolOnlineLogin)].Value = AtolOnlineLogin;
             Log.Trace($"{nameof(AtolOnlineLogin)}='{AtolOnlineLogin}'");
-            
+
             configuration.AppSettings.Settings[nameof(AtolOnlinePassword)].Value = AtolOnlinePassword;
             Log.Trace($"{nameof(AtolOnlinePassword)}='{AtolOnlinePassword}'");
 
@@ -335,28 +360,39 @@ namespace BillingProvider.WinForms
 
             configuration.AppSettings.Settings[nameof(FolderPath)].Value = FolderPath;
             Log.Trace($"{nameof(FolderPath)}='{FolderPath}'");
-            
+
             configuration.AppSettings.Settings[nameof(IncludeSubfolders)].Value = IncludeSubfolders.ToString();
             Log.Trace($"{nameof(IncludeSubfolders)}='{IncludeSubfolders}'");
 
             configuration.AppSettings.Settings[nameof(AtolHost)].Value = AtolHost;
             Log.Trace($"{nameof(AtolHost)}='{AtolHost}'");
-            
+
             configuration.AppSettings.Settings[nameof(DefaultPositionName)].Value = DefaultPositionName;
             Log.Trace($"{nameof(DefaultPositionName)}='{DefaultPositionName}'");
-            
+
             configuration.AppSettings.Settings[nameof(PositionEnabled)].Value = PositionEnabled.ToString();
             Log.Trace($"{nameof(PositionEnabled)}='{PositionEnabled}'");
-            
+
             configuration.AppSettings.Settings[nameof(AutosumEnabled)].Value = AutosumEnabled.ToString();
             Log.Trace($"{nameof(AutosumEnabled)}='{AutosumEnabled}'");
-            
+
             configuration.AppSettings.Settings[nameof(ForceAutosumEnabled)].Value = ForceAutosumEnabled.ToString();
             Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
 
-            configuration.AppSettings.Settings[nameof(ServerTax)].Value = ((int)ServerTax).ToString();
-            Log.Trace($"{nameof(ServerTax)}='{ServerTax}'");
-            
+            configuration.AppSettings.Settings[nameof(ServerVat)].Value = ((int) ServerVat).ToString();
+            Log.Trace($"{nameof(ServerVat)}='{ServerVat}'");
+
+            configuration.AppSettings.Settings[nameof(KkmDriver)].Value = ((int) KkmDriver).ToString();
+            Log.Trace($"{nameof(KkmDriver)}='{KkmDriver}'");
+
+            configuration.AppSettings.Settings[nameof(ServerPaymentMethod)].Value =
+                ((int) ServerPaymentMethod).ToString();
+            Log.Trace($"{nameof(ServerPaymentMethod)}='{ServerPaymentMethod}'");
+
+            configuration.AppSettings.Settings[nameof(ServerSignMethodCalculation)].Value =
+                ((int) ServerSignMethodCalculation).ToString();
+            Log.Trace($"{nameof(ServerSignMethodCalculation)}='{ServerSignMethodCalculation}'");
+
             configuration.Save(ConfigurationSaveMode.Modified, false);
             ConfigurationManager.RefreshSection("appSettings");
             Log.Debug("End saving app settings");
