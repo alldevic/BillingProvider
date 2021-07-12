@@ -11,27 +11,31 @@ namespace BillingProvider.WinForms
 {
     //TODO: validation
 
-    public class AppSettings
+    public class AppSettings : FilterablePropertyBase
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         #region AtolOnline
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("ИНН организации; сравнивается со значением в фискальном накопителе")]
         [DisplayName("ИНН")]
         public string AtolOnlineINN { get; set; } = "";
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("Код группы ККТ, относящейся к интернет-магазину, зарегистрированному в “АТОЛ Онлайн”")]
         [DisplayName("Идентификатор группы ККТ")]
         public string AtolOnlineGroupID { get; set; } = "";
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("При расчётах в интернете это адрес сайта; сравнивается со значением в фискальном накопителе")]
         [DisplayName("Адрес места расчетов")]
         public string AtolOnlineHostname { get; set; } = "";
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Логин пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
@@ -39,6 +43,7 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlineLogin { get; set; } = "";
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Пароль пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
@@ -46,7 +51,7 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlinePassword { get; set; } = "";
 
-
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Адрес тестовой среды (ФФД 1.05): https://testonline.atol.ru/possystem/v4/" +
@@ -55,7 +60,7 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string AtolHost { get; set; } = "";
 
-
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частыми обращением к серверу")]
@@ -66,32 +71,37 @@ namespace BillingProvider.WinForms
 
         #region KKMServer
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("IP-адрес сервера с кассой")]
         [DisplayName("Адрес")]
         public string ServerAddress { get; set; } = "127.0.0.1";
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Порт, на котором запущен сервер")]
         [DisplayName("Порт")]
         public int ServerPort { get; set; } = 5893;
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Номер устройства на сервере, 0 - первое активное")]
         [DisplayName("Номер устройства")]
         public int ServerDeviceId { get; set; }
 
-
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Имя учетной записи kktserver")]
         [DisplayName("Логин")]
         public string ServerLogin { get; set; } = "Admin";
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Пароль от учетной записи kktserver")]
         [DisplayName("Пароль")]
         public string ServerPassword { get; set; } = "";
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("НДС")]
         [DisplayName("НДС")]
@@ -99,6 +109,7 @@ namespace BillingProvider.WinForms
         [TypeConverter(typeof(EnumTypeConverter))]
         public Vat ServerVat { get; set; } = Vat.NoVat_1105;
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Способ оплаты по умолчанию")]
         [DisplayName("Способ оплаты")]
@@ -106,6 +117,7 @@ namespace BillingProvider.WinForms
         [TypeConverter(typeof(EnumTypeConverter))]
         public PaymentMethod ServerPaymentMethod { get; set; } = PaymentMethod.Cash_1031;
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.kkmserver))]
         [CustomSortedCategory("KKM Server", 4, 6)]
         [Description("Признак способа расчета по умолчанию")]
         [DisplayName("Признак способа расчета")]
@@ -156,6 +168,7 @@ namespace BillingProvider.WinForms
 
         #region Watcher
 
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("Отслеживание папки", 6, 6)]
         [Description("Путь до папки")]
         [DisplayName("Папка")]
@@ -163,7 +176,7 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string FolderPath { get; set; }
 
-
+        [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("Отслеживание папки", 6, 6)]
         [Description("Сканирование подпапок на наличие изменений")]
         [DisplayName("Включая подпапки")]
