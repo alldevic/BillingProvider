@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using BillingProvider.Core.Comm.Tasks.Response;
 using BillingProvider.Core.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using RestSharp;
 
@@ -86,7 +88,7 @@ namespace BillingProvider.Core.KKMDrivers
             };
 
             var final_receipt = receipt.AsDictionary();
-            
+
             switch (paymentMethod)
             {
                 case PaymentMethod.Cash_1031:
@@ -145,7 +147,7 @@ namespace BillingProvider.Core.KKMDrivers
             };
 
             var final_receipt = receipt.AsDictionary();
-            
+
             switch (paymentMethod)
             {
                 case PaymentMethod.Cash_1031:
@@ -185,7 +187,7 @@ namespace BillingProvider.Core.KKMDrivers
         public async void GetKktInfo()
         {
             Log.Info($"Получение текущего состояниея КТТ");
-            await Task.Run(() => ExecuteCommand(new
+            var res = await Task.Run(() => ExecuteCommand(new
             {
                 Command = "GetDataKKT",
                 NumDevice = 0,
@@ -245,8 +247,14 @@ namespace BillingProvider.Core.KKMDrivers
                 };
             }
 
+            if (string.Equals(response?.Command, "GetDataKKT") || string.Equals(response?.Command, "List"))
+            {
+                var parsedJson = JToken.Parse(resp.Content);
+                Log.Info(parsedJson.ToString(Formatting.Indented));
+            }
+
             Log.Info($"{response?.Command}({response?.IdCommand}): запрос обработан успешно");
-            Log.Debug(resp?.Content);
+            Log.Debug(resp?.Data);
 
 
             return new ResponseTaskBase

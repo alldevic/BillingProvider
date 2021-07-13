@@ -53,7 +53,7 @@ namespace BillingProvider.WinForms
         private void MainWindow_Load(object sender, EventArgs e)
         {
             PingToolStripMenuItem.Enabled = true;
-
+            DeviceListToolStripMenuItem.Enabled = false;
 
             _log = LogManager.GetCurrentClassLogger();
 
@@ -78,7 +78,7 @@ namespace BillingProvider.WinForms
             {
                 TestCheckToolStripMenuItem.Enabled = true;
                 KktStateToolStripMenuItem.Enabled = true;
-                DeviceListToolStripMenuItem.Enabled = true;
+                // DeviceListToolStripMenuItem.Enabled = true;
                 ReportToolStripMenuItem.Enabled = false;
                 WatchFolderToolStripMenuItem.Enabled = false;
                 ScanToolStripMenuItem.Enabled = false;
@@ -215,7 +215,7 @@ namespace BillingProvider.WinForms
             {
                 TestCheckToolStripMenuItem.Enabled = true;
                 KktStateToolStripMenuItem.Enabled = true;
-                DeviceListToolStripMenuItem.Enabled = true;
+                // DeviceListToolStripMenuItem.Enabled = true;
                 ReportToolStripMenuItem.Enabled = false;
                 WatchFolderToolStripMenuItem.Enabled = false;
                 ScanToolStripMenuItem.Enabled = false;
