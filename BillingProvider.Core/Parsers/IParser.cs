@@ -9,6 +9,9 @@ namespace BillingProvider.Core.Parsers
         List<string> Captions { get; }
         string Path { get; }
 
+        PaymentMethod DefaultPaymentMethod { get; }
+        SignMethodCalculation DefaultSignMethodCalculation { get; }
+
         void Load();
     }
 }

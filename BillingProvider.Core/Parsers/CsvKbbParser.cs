@@ -11,17 +11,23 @@ namespace BillingProvider.Core.Parsers
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        public CsvKbbParser(string path)
+        public CsvKbbParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Data = new List<ClientInfo>();
             Path = path;
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
 
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
@@ -36,8 +42,8 @@ namespace BillingProvider.Core.Parsers
                 while (!parser.EndOfData)
                 {
                     var source = parser.ReadLine();
-                    var row = source.Split(new [] {';'}, StringSplitOptions.None);
-                    
+                    var row = source.Split(new[] {';'}, StringSplitOptions.None);
+
                     Log.Debug($"Read row: '{string.Join("; ", row)}'");
 
                     if (row.Length < 11)
@@ -51,7 +57,9 @@ namespace BillingProvider.Core.Parsers
                         Source = source,
                         SourcePath = Path,
                         Address = row[1],
-                        Name = row[0]
+                        Name = row[0],
+                        PaymentMethod = DefaultPaymentMethod,
+                        SignMethodCalculation = DefaultSignMethodCalculation
                     };
 
                     Log.Debug($"Add default position: 'Утилизация ТКО+{row[3]}'");

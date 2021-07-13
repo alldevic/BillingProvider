@@ -107,12 +107,14 @@ namespace BillingProvider.WinForms
             }
 
             _log.Info($"Выбран файл: {openFileDialog.FileName}");
+            gridSource.Columns.Clear();
             var dt = new DataTable();
             gridSource.DataSource = dt;
 
             try
             {
-                var parser = ParserSelector.Select(openFileDialog.FileName);
+                var parser = ParserSelector.Select(openFileDialog.FileName, _appSettings.ServerPaymentMethod,
+                    _appSettings.ServerSignMethodCalculation);
                 _openedFileParser = parser;
                 parser.Load();
                 Text = $@"{openFileDialog.FileName} - {_appname}";
@@ -121,31 +123,43 @@ namespace BillingProvider.WinForms
                 {
                     if (string.Equals(caption, "Признак способа расчета"))
                     {
-                        dt.Columns.Add(caption, typeof(SignMethodCalculation));
-                        gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                        if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
                         {
-                            Name = caption,
-                            DataSource = typeof(SignMethodCalculation).ToList(),
-                            ValueType = typeof(SignMethodCalculation),
-                            DisplayMember = "Value",
-                            ValueMember = "Key",
-                            SortMode = DataGridViewColumnSortMode.NotSortable
-                        });
+                            dt.Columns.Add(caption, typeof(SignMethodCalculation));
+                            gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                            {
+                                Name = caption,
+                                DataSource = typeof(SignMethodCalculation).ToExtendedList<int>(),
+                                ValueType = typeof(SignMethodCalculation),
+                                DisplayMember = "Value",
+                                ValueMember = "NumericKey",
+                                SortMode = DataGridViewColumnSortMode.NotSortable,
+                                FlatStyle = FlatStyle.Flat,
+                                DataPropertyName = caption
+                            });
+                        }
+
                         continue;
                     }
 
                     if (string.Equals(caption, "Способ оплаты"))
                     {
-                        dt.Columns.Add(caption, typeof(PaymentMethod));
-                        gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                        if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
                         {
-                            Name = caption,
-                            DataSource = typeof(PaymentMethod).ToList(),
-                            ValueType = typeof(PaymentMethod),
-                            DisplayMember = "Value",
-                            ValueMember = "Key",
-                            SortMode = DataGridViewColumnSortMode.NotSortable
-                        });
+                            dt.Columns.Add(caption, typeof(PaymentMethod));
+                            gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                            {
+                                Name = caption,
+                                DataSource = typeof(PaymentMethod).ToExtendedList<int>(),
+                                ValueType = typeof(PaymentMethod),
+                                DisplayMember = "Value",
+                                ValueMember = "NumericKey",
+                                SortMode = DataGridViewColumnSortMode.NotSortable,
+                                FlatStyle = FlatStyle.Flat,
+                                DataPropertyName = caption
+                            });
+                        }
+
                         continue;
                     }
 
@@ -153,7 +167,8 @@ namespace BillingProvider.WinForms
                     gridSource.Columns.Add(new DataGridViewTextBoxColumn
                     {
                         Name = caption,
-                        SortMode = DataGridViewColumnSortMode.NotSortable
+                        SortMode = DataGridViewColumnSortMode.NotSortable,
+                        DataPropertyName = caption
                     });
                 }
 
@@ -162,7 +177,9 @@ namespace BillingProvider.WinForms
                 _log.Debug($"Добавление данных в {nameof(gridSource)}");
                 foreach (var node in parser.Data)
                 {
-                    dt.LoadDataRow(node.AsArray(), LoadOption.Upsert);
+                    dt.LoadDataRow(
+                        _appSettings.KkmDriver == AppSettings.KkmDrivers.atol ? node.AsArrayAtol() : node.AsArrayKkm(),
+                        LoadOption.Upsert);
                 }
 
                 gridSource.Update();
@@ -205,6 +222,11 @@ namespace BillingProvider.WinForms
                 _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
                     _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerVat);
+            }
+
+            if (gridSource.Rows.Count == 1)
+            {
+                CreateToolStripMenuItem_Click(null, e);
             }
         }
 
@@ -304,8 +326,12 @@ beliy_ns@kuzro.ru", @"О программе");
                     var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
                         currentRow.Cells[3].Value.ToString(),
                         currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token,
-                        (SignMethodCalculation) currentRow.Cells[5].Value,
-                        (PaymentMethod) currentRow.Cells[4].Value);
+                        _appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver && currentRow.Cells.Count > 5
+                            ? (SignMethodCalculation) currentRow.Cells[5].Value
+                            : _appSettings.ServerSignMethodCalculation,
+                        _appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver && currentRow.Cells.Count > 4
+                            ? (PaymentMethod) currentRow.Cells[4].Value
+                            : _appSettings.ServerPaymentMethod);
 
                     if (response != null)
                     {
@@ -341,45 +367,57 @@ beliy_ns@kuzro.ru", @"О программе");
             Text = _appname;
 
             var dt = new DataTable();
+            gridSource.Columns.Clear();
             gridSource.AutoGenerateColumns = false;
             gridSource.DataSource = dt;
 
             _log.Debug($"Добавление колонок в {nameof(gridSource)}");
-            var parser = new InnerParser("");
+            var parser = new InnerParser("", _appSettings.ServerPaymentMethod,
+                _appSettings.ServerSignMethodCalculation);
 
             foreach (var caption in parser.Captions)
             {
                 if (string.Equals(caption, "Признак способа расчета"))
                 {
-                    dt.Columns.Add(caption, typeof(SignMethodCalculation));
-                    gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                    if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
                     {
-                        Name = caption,
-                        DataSource = typeof(SignMethodCalculation).ToList(),
-                        ValueType = typeof(SignMethodCalculation),
-                        DisplayMember = "Value",
-                        ValueMember = "Key",
-                        FlatStyle = FlatStyle.Flat,
-                        AutoComplete = true,
-                        SortMode = DataGridViewColumnSortMode.NotSortable
-                    });
+                        dt.Columns.Add(caption, typeof(SignMethodCalculation));
+                        gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                        {
+                            Name = caption,
+                            DataSource = typeof(SignMethodCalculation).ToExtendedList<int>(),
+                            ValueType = typeof(SignMethodCalculation),
+                            DisplayMember = "Value",
+                            ValueMember = "NumericKey",
+                            FlatStyle = FlatStyle.Flat,
+                            AutoComplete = true,
+                            SortMode = DataGridViewColumnSortMode.NotSortable,
+                            DataPropertyName = caption
+                        });
+                    }
+
                     continue;
                 }
 
                 if (string.Equals(caption, "Способ оплаты"))
                 {
-                    dt.Columns.Add(caption, typeof(PaymentMethod));
-                    gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                    if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
                     {
-                        Name = caption,
-                        DataSource = typeof(PaymentMethod).ToList(),
-                        ValueType = typeof(PaymentMethod),
-                        DisplayMember = "Value",
-                        ValueMember = "Key",
-                        FlatStyle = FlatStyle.Flat,
-                        AutoComplete = true,
-                        SortMode = DataGridViewColumnSortMode.NotSortable
-                    });
+                        dt.Columns.Add(caption, typeof(PaymentMethod));
+                        gridSource.Columns.Add(new DataGridViewComboBoxColumn
+                        {
+                            Name = caption,
+                            DataSource = typeof(PaymentMethod).ToExtendedList<int>(),
+                            ValueType = typeof(PaymentMethod),
+                            DisplayMember = "Value",
+                            ValueMember = "NumericKey",
+                            FlatStyle = FlatStyle.Flat,
+                            AutoComplete = true,
+                            SortMode = DataGridViewColumnSortMode.NotSortable,
+                            DataPropertyName = caption
+                        });
+                    }
+
                     continue;
                 }
 
@@ -387,7 +425,8 @@ beliy_ns@kuzro.ru", @"О программе");
                 gridSource.Columns.Add(new DataGridViewTextBoxColumn
                 {
                     Name = caption,
-                    SortMode = DataGridViewColumnSortMode.NotSortable
+                    SortMode = DataGridViewColumnSortMode.NotSortable,
+                    DataPropertyName = caption
                 });
             }
 
@@ -501,7 +540,8 @@ beliy_ns@kuzro.ru", @"О программе");
 
             try
             {
-                var parser = ParserSelector.Select(_filePath);
+                var parser = ParserSelector.Select(_filePath, _appSettings.ServerPaymentMethod,
+                    _appSettings.ServerSignMethodCalculation);
                 await Task.Run(() => parser.Load());
                 var tokenSource = new CancellationTokenSource();
                 foreach (var node in parser.Data)
@@ -605,7 +645,8 @@ beliy_ns@kuzro.ru", @"О программе");
 
                 try
                 {
-                    var parser = ParserSelector.Select(file);
+                    var parser = ParserSelector.Select(file, _appSettings.ServerPaymentMethod,
+                        _appSettings.ServerSignMethodCalculation);
                     await Task.Run(() => parser.Load());
                     var tokenSource = new CancellationTokenSource();
                     foreach (var node in parser.Data)

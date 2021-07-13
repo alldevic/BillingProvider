@@ -13,11 +13,15 @@ namespace BillingProvider.Core.Parsers
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
-        public InnerParser(string path)
+        public InnerParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Data = new List<ClientInfo>();
             Path = path;
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
                 "ФИО", "Адрес", "Сумма", "Позиции",

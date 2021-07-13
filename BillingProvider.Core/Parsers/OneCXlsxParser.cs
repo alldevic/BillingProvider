@@ -14,6 +14,8 @@ namespace BillingProvider.Core.Parsers
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
         public void Load()
         {
@@ -35,6 +37,8 @@ namespace BillingProvider.Core.Parsers
                                 SourcePath = Path,
                                 Address = $"{x[4]}-{x[3]}",
                                 Name = x[3].ToString(),
+                                PaymentMethod = DefaultPaymentMethod,
+                                SignMethodCalculation = DefaultSignMethodCalculation
                             };
                             tmp.Positions.Add(new Position
                             {
@@ -60,13 +64,17 @@ namespace BillingProvider.Core.Parsers
             Log.Info($"Файл {Path} успешно загружен");
         }
 
-        public OneCXlsxParser(string path)
+        public OneCXlsxParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Data = new List<ClientInfo>();
             Path = path;
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
     }

@@ -76,6 +76,7 @@
         <Compile Include="Extensions\BooleanToYesNoTypeConverter.cs" />
         <Compile Include="Extensions\CustomSortedCategoryAttribute.cs" />
         <Compile Include="Extensions\DynamicPropertyFilter.cs" />
+        <Compile Include="Extensions\KeyValueTriplet.cs" />
         <Compile Include="MainWindow.cs">
             <SubType>Form</SubType>
         </Compile>

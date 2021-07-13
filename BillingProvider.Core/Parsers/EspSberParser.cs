@@ -14,14 +14,21 @@ namespace BillingProvider.Core.Parsers
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
-        public EspSberParser(string path)
+
+        public EspSberParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Data = new List<ClientInfo>();
             Path = path;
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
 
@@ -41,20 +48,23 @@ namespace BillingProvider.Core.Parsers
                     {
                         var x = result[i];
                         Log.Debug($"{x[1]}; Обращение с ТКО; {x[3]}");
-                        
+
                         var sum = x[3].ToString();
                         while (sum.Length < 3)
                         {
                             sum = sum.Insert(0, "0");
                         }
+
                         sum = sum.Insert(sum.Length - 2, ".");
-                        
+
                         var tmp = new ClientInfo
                         {
                             Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
                             SourcePath = Path,
                             Address = x[1].ToString(),
                             Name = x[1].ToString(),
+                            PaymentMethod = DefaultPaymentMethod,
+                            SignMethodCalculation = DefaultSignMethodCalculation
                         };
                         tmp.Positions.Add(new Position
                         {
@@ -63,7 +73,7 @@ namespace BillingProvider.Core.Parsers
                         });
 
                         tmp.Sum = sum;
-                        
+
                         Data.Add(tmp);
                     }
                 }

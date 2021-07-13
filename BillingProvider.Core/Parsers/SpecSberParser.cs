@@ -11,18 +11,26 @@ namespace BillingProvider.Core.Parsers
 {
     public class SpecSberParser : IParser
     {
-        private static readonly Logger Log = LogManager.GetCurrentClassLogger().WithProperty("ClassName", nameof(SpecSberParser));
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger()
+            .WithProperty("ClassName", nameof(SpecSberParser));
+
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
-        public SpecSberParser(string path)
+        public SpecSberParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Data = new List<ClientInfo>();
             Path = path;
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
 
@@ -53,7 +61,9 @@ namespace BillingProvider.Core.Parsers
                             Source = string.Join(";", row.Where(o => o is string).ToArray()),
                             SourcePath = Path,
                             Address = row[7].ToString(),
-                            Name = !string.IsNullOrEmpty(row[6].ToString()) ? row[6].ToString() : row[5].ToString()
+                            Name = !string.IsNullOrEmpty(row[6].ToString()) ? row[6].ToString() : row[5].ToString(),
+                            PaymentMethod = DefaultPaymentMethod,
+                            SignMethodCalculation = DefaultSignMethodCalculation
                         };
 
                         var j = 10;

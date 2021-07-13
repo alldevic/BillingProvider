@@ -14,14 +14,20 @@ namespace BillingProvider.Core.Parsers
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
-        public TxtMailParser(string path)
+        public TxtMailParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Data = new List<ClientInfo>();
             Path = path;
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
 
@@ -47,6 +53,8 @@ namespace BillingProvider.Core.Parsers
                             SourcePath = Path,
                             Address = x[2].ToString(),
                             Name = x[1].ToString(),
+                            PaymentMethod = DefaultPaymentMethod,
+                            SignMethodCalculation = DefaultSignMethodCalculation
                         };
                         tmp.Positions.Add(new Position
                         {

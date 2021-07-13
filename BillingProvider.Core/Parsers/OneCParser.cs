@@ -13,15 +13,21 @@ namespace BillingProvider.Core.Parsers
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
 
-        public OneCParser(string path)
+        public OneCParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Data = new List<ClientInfo>();
             Path = path;
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
 
@@ -43,6 +49,8 @@ namespace BillingProvider.Core.Parsers
                     SourcePath = Path,
                     Name = document.PayerName,
                     Sum = document.Total.ToString(CultureInfo.InvariantCulture),
+                    PaymentMethod = DefaultPaymentMethod,
+                    SignMethodCalculation = DefaultSignMethodCalculation,
                     Positions = new List<Position>(new[]
                     {
                         new Position

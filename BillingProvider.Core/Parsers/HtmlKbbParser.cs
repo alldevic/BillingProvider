@@ -14,14 +14,20 @@ namespace BillingProvider.Core.Parsers
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
+        public PaymentMethod DefaultPaymentMethod { get; }
+        public SignMethodCalculation DefaultSignMethodCalculation { get; }
 
-        public HtmlKbbParser(string path)
+        public HtmlKbbParser(string path, PaymentMethod paymentMethod, SignMethodCalculation signMethodCalculation)
         {
             Path = path;
             Data = new List<ClientInfo>();
+            DefaultPaymentMethod = paymentMethod;
+            DefaultSignMethodCalculation = signMethodCalculation;
             Captions = new List<string>
             {
-                "ФИО", "Адрес", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции",
+                "Способ оплаты",
+                "Признак способа расчета"
             };
         }
 
@@ -44,7 +50,9 @@ namespace BillingProvider.Core.Parsers
                     SourcePath = Path,
                     Address = $"{data[0]}, {data[1]}, {data[2]}",
                     Name = !string.IsNullOrEmpty(data[3]) ? data[3] : data[4],
-                    Sum = data[7].Replace(",", ".")
+                    Sum = data[7].Replace(",", "."),
+                    PaymentMethod = DefaultPaymentMethod,
+                    SignMethodCalculation = DefaultSignMethodCalculation
                 };
 
                 Log.Debug($"Read position: '{data[8]}; {data[7]}'");
