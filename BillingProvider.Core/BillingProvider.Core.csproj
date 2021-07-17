@@ -40,8 +40,8 @@
           <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="HtmlAgilityPack, Version=1.11.33.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
-          <HintPath>..\packages\HtmlAgilityPack.1.11.33\lib\Net45\HtmlAgilityPack.dll</HintPath>
+        <Reference Include="HtmlAgilityPack, Version=1.11.34.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
+          <HintPath>..\packages\HtmlAgilityPack.1.11.34\lib\Net45\HtmlAgilityPack.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
@@ -51,7 +51,7 @@
           <Private>True</Private>
         </Reference>
         <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
-          <HintPath>..\packages\NLog.4.7.9\lib\net45\NLog.dll</HintPath>
+          <HintPath>..\packages\NLog.4.7.10\lib\net45\NLog.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, PublicKeyToken=null">

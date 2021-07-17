@@ -17,7 +17,6 @@ namespace BillingProvider.Core.KKMDrivers
 
         private readonly RestClient _client;
         readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
-        private IKkmDriver _kkmDriverImplementation;
 
         public AtolOnlineDriver(string atolHost, string inn, string groupId, string login, string password,
             string cashierName,
