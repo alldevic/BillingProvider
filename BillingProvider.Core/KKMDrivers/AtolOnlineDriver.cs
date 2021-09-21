@@ -68,8 +68,20 @@ namespace BillingProvider.Core.KKMDrivers
             }
 
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
-
+            
+            
             sum = sum.Replace(".", ",");
+
+            if (string.Equals(sum, "0") || string.Equals(sum, "0.0") || string.Equals(sum, "0.00"))
+            {
+                Log.Info($"Регистрация чека {clientInfo}; {name}; {sum} прервана: сумма равна 0");
+                return new ResponseTaskBase
+                {
+                    ErrorMessage = string.Empty,
+                    ResponseTaskStatus = ResponseTaskStatus.Complete
+                };
+            }
+            
             var checkStrings = name.Split(';');
             var tmpStrings = new List<object>();
             foreach (var str in checkStrings)
