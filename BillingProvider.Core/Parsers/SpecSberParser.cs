@@ -78,7 +78,7 @@ namespace BillingProvider.Core.Parsers
                             while (true)
                             {
                                 Log.Debug($"Read position: '{row[j + 1]}; {row[j + 2]}'");
-                                var posSum = row[j + 2].ToString();
+                                var posSum = row[j + 2].ToString().Replace(",", ".");
                                 var posName = row[j + 1].ToString();
                                 if (string.IsNullOrEmpty(posSum) ||
                                     string.Equals(posSum.Replace(",", "."), "0.00") ||
@@ -108,7 +108,7 @@ namespace BillingProvider.Core.Parsers
                                 j += 3;
                             }
 
-                            rawSum = decimal.Parse(row[j + 5].ToString());
+                            rawSum = decimal.Parse(row[j + 5].ToString().Replace(",", "."), NumberFormatInfo.InvariantInfo);
                         }
 
 
@@ -117,7 +117,7 @@ namespace BillingProvider.Core.Parsers
 
                         foreach (var position in tmp.Positions)
                         {
-                            tmpSum += decimal.Parse(position.Sum.Replace(".", ","));
+                            tmpSum += decimal.Parse(position.Sum.Replace(",", "."), NumberFormatInfo.InvariantInfo);
                             position.Sum = position.Sum.Replace(",", ".");
                         }
 
