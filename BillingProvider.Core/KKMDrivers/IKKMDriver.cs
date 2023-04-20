@@ -19,9 +19,9 @@ namespace BillingProvider.Core.KKMDrivers
         Vat Vat { get; }
 
         Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath, string source,
-            CancellationToken ct, SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod);
+            CancellationToken ct, SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod, string authToken);
 
-        void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod);
+        void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod, string authToken);
 
         void TestConnection();
 

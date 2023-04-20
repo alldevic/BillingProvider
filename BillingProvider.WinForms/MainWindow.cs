@@ -47,7 +47,7 @@ namespace BillingProvider.WinForms
             DeviceListToolStripMenuItem.Enabled = false;
             PingToolStripMenuItem.Enabled = false;
             KktStateToolStripMenuItem.Enabled = false;
-            TestCheckToolStripMenuItem.Enabled = false;
+            // TestCheckToolStripMenuItem.Enabled = false;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace BillingProvider.WinForms
             gridSettings.SelectedObject = _appSettings;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
             {
-                TestCheckToolStripMenuItem.Enabled = false;
+                // TestCheckToolStripMenuItem.Enabled = false;
                 KktStateToolStripMenuItem.Enabled = false;
                 DeviceListToolStripMenuItem.Enabled = false;
                 ReportToolStripMenuItem.Enabled = true;
@@ -94,6 +94,13 @@ namespace BillingProvider.WinForms
             _log.Info("Приложение запущено!");
             _storage = new FileStorage(@"history.txt");
             _storage.Load();
+
+
+            var tokenInfo = AtolAuthService.GetToken(_appSettings.AtolHost, _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword);
+            _appSettings.AtolToken = tokenInfo.Token;
+            _appSettings.AtolTokenExpiredDateTime = tokenInfo.Expired;
+
+
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -199,7 +206,7 @@ namespace BillingProvider.WinForms
             _changed = true;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
             {
-                TestCheckToolStripMenuItem.Enabled = false;
+                // TestCheckToolStripMenuItem.Enabled = false;
                 KktStateToolStripMenuItem.Enabled = false;
                 DeviceListToolStripMenuItem.Enabled = false;
                 ReportToolStripMenuItem.Enabled = true;
@@ -278,7 +285,7 @@ namespace BillingProvider.WinForms
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(TestCheckToolStripMenuItem)} clicked");
-            _conn.RegisterTestCheck(_appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod);
+            _conn.RegisterTestCheck(_appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod, _appSettings.AtolToken);
         }
 
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -331,7 +338,9 @@ beliy_ns@kuzro.ru", @"О программе");
                             : _appSettings.ServerSignMethodCalculation,
                         _appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver && currentRow.Cells.Count > 4
                             ? (PaymentMethod) currentRow.Cells[4].Value
-                            : _appSettings.ServerPaymentMethod);
+                            : _appSettings.ServerPaymentMethod,
+                        _appSettings.AtolToken
+                    );
 
                     if (response != null)
                     {
@@ -573,7 +582,7 @@ beliy_ns@kuzro.ru", @"О программе");
             {
                 var response =
                     await _conn.RegisterCheck(clientInfo, name, sum, filePath, source, cancellationTokenSource.Token,
-                        signMethodCalculation, paymentMethod);
+                        signMethodCalculation, paymentMethod, _appSettings.AtolToken);
                 if (response != null && response.ResponseTaskStatus == ResponseTaskStatus.Failed)
                 {
                     _log.Debug($"{response.ErrorMessage}");

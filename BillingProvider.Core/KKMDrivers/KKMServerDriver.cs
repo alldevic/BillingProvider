@@ -46,7 +46,7 @@ namespace BillingProvider.Core.KKMDrivers
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
             string source, CancellationToken ct,
             SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT,
-            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081)
+            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081, string authToken = null)
         {
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
@@ -111,7 +111,7 @@ namespace BillingProvider.Core.KKMDrivers
             return await ExecuteCommand(final_receipt);
         }
 
-        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod)
+        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod, string authToken = null)
         {
             Log.Info($"Регистрация тестового чека");
 
@@ -216,7 +216,7 @@ namespace BillingProvider.Core.KKMDrivers
             var bytes = Encoding.UTF8.GetBytes($"{Login}:{Password}");
 
             request.AddHeader("Authorization", $"Basic {Convert.ToBase64String(bytes)}");
-            request.AddBody(obj);
+            request.AddJsonBody(obj);
             Log.Debug($"Request: obj0={request.Parameters?[0]}");
             Log.Debug($"Request: obj1={request.Parameters?[1]}");
 
@@ -224,7 +224,7 @@ namespace BillingProvider.Core.KKMDrivers
 
             try
             {
-                resp = _restClient.Execute<KkmServerResponse>(request) as RestResponse<KkmServerResponse>;
+                resp = await _restClient.ExecuteAsync<KkmServerResponse>(request) as RestResponse<KkmServerResponse>;
             }
             catch (Exception e)
             {
