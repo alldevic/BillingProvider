@@ -77,9 +77,7 @@
         <Compile Include="FileStorage.cs" />
         <Compile Include="KKMDrivers\AtolOnlineDriver.cs" />
         <Compile Include="KKMDrivers\IKKMDriver.cs" />
-        <Compile Include="KKMDrivers\KKMServerDriver.cs" />
         <Compile Include="Models\ClientInfo.cs" />
-        <Compile Include="Models\KkmServerResponse.cs" />
         <Compile Include="Models\PaymentMethod.cs" />
         <Compile Include="Models\SignMethodCalculation.cs" />
         <Compile Include="Models\Vat.cs" />

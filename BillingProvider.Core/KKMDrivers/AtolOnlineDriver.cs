@@ -20,7 +20,7 @@ namespace BillingProvider.Core.KKMDrivers
 
         public AtolOnlineDriver(string atolHost, string inn, string groupId, string login, string password,
             string cashierName,
-            string cashierVatin, string hostname, string companyEmail, Vat vat)
+            string cashierVatin, string hostname, string companyEmail)
         {
             Inn = inn;
             GroupId = groupId;
@@ -30,7 +30,6 @@ namespace BillingProvider.Core.KKMDrivers
             CashierVatin = cashierVatin;
             Hostname = hostname;
             CompanyEmail = companyEmail;
-            Vat = vat;
 
             _client = new RestClient(atolHost);
         }
@@ -47,8 +46,6 @@ namespace BillingProvider.Core.KKMDrivers
         public string CashierVatin { get; }
 
         public string CompanyEmail { get; }
-
-        public Vat Vat { get; }
 
         private string Token { get; set; }
         private DateTime TokenDate { get; set; }

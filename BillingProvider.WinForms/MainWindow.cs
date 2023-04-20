@@ -60,33 +60,17 @@ namespace BillingProvider.WinForms
             Text = _appname;
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
-            if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
-            {
-                TestCheckToolStripMenuItem.Enabled = false;
-                KktStateToolStripMenuItem.Enabled = false;
-                DeviceListToolStripMenuItem.Enabled = false;
-                ReportToolStripMenuItem.Enabled = true;
-                WatchFolderToolStripMenuItem.Enabled = true;
-                ScanToolStripMenuItem.Enabled = true;
-                _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
-                    _appSettings.AtolOnlineGroupID,
-                    _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
-                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail,
-                    _appSettings.ServerVat);
-            }
-            else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
-            {
-                TestCheckToolStripMenuItem.Enabled = true;
-                KktStateToolStripMenuItem.Enabled = true;
-                // DeviceListToolStripMenuItem.Enabled = true;
-                ReportToolStripMenuItem.Enabled = false;
-                WatchFolderToolStripMenuItem.Enabled = false;
-                ScanToolStripMenuItem.Enabled = false;
-                _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
-                    _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
-                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerVat);
-            }
 
+            TestCheckToolStripMenuItem.Enabled = false;
+            KktStateToolStripMenuItem.Enabled = false;
+            DeviceListToolStripMenuItem.Enabled = false;
+            ReportToolStripMenuItem.Enabled = true;
+            WatchFolderToolStripMenuItem.Enabled = true;
+            ScanToolStripMenuItem.Enabled = true;
+            _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
+                _appSettings.AtolOnlineGroupID,
+                _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
+                _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
 
             _log.Debug("MainWindow loaded");
             tmrQueue.Interval = _appSettings.AtolOnlineDelay;
@@ -123,43 +107,11 @@ namespace BillingProvider.WinForms
                 {
                     if (string.Equals(caption, "Признак способа расчета"))
                     {
-                        if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
-                        {
-                            dt.Columns.Add(caption, typeof(SignMethodCalculation));
-                            gridSource.Columns.Add(new DataGridViewComboBoxColumn
-                            {
-                                Name = caption,
-                                DataSource = typeof(SignMethodCalculation).ToExtendedList<int>(),
-                                ValueType = typeof(SignMethodCalculation),
-                                DisplayMember = "Value",
-                                ValueMember = "NumericKey",
-                                SortMode = DataGridViewColumnSortMode.NotSortable,
-                                FlatStyle = FlatStyle.Flat,
-                                DataPropertyName = caption
-                            });
-                        }
-
                         continue;
                     }
 
                     if (string.Equals(caption, "Способ оплаты"))
                     {
-                        if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
-                        {
-                            dt.Columns.Add(caption, typeof(PaymentMethod));
-                            gridSource.Columns.Add(new DataGridViewComboBoxColumn
-                            {
-                                Name = caption,
-                                DataSource = typeof(PaymentMethod).ToExtendedList<int>(),
-                                ValueType = typeof(PaymentMethod),
-                                DisplayMember = "Value",
-                                ValueMember = "NumericKey",
-                                SortMode = DataGridViewColumnSortMode.NotSortable,
-                                FlatStyle = FlatStyle.Flat,
-                                DataPropertyName = caption
-                            });
-                        }
-
                         continue;
                     }
 
@@ -178,7 +130,7 @@ namespace BillingProvider.WinForms
                 foreach (var node in parser.Data)
                 {
                     dt.LoadDataRow(
-                        _appSettings.KkmDriver == AppSettings.KkmDrivers.atol ? node.AsArrayAtol() : node.AsArrayKkm(),
+                        node.AsArrayAtol(),
                         LoadOption.Upsert);
                 }
 
@@ -197,32 +149,17 @@ namespace BillingProvider.WinForms
         private void gridSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             _changed = true;
-            if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
-            {
-                TestCheckToolStripMenuItem.Enabled = false;
-                KktStateToolStripMenuItem.Enabled = false;
-                DeviceListToolStripMenuItem.Enabled = false;
-                ReportToolStripMenuItem.Enabled = true;
-                WatchFolderToolStripMenuItem.Enabled = true;
-                ScanToolStripMenuItem.Enabled = true;
-                _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
-                    _appSettings.AtolOnlineGroupID,
-                    _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
-                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail,
-                    _appSettings.ServerVat);
-            }
-            else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
-            {
-                TestCheckToolStripMenuItem.Enabled = true;
-                KktStateToolStripMenuItem.Enabled = true;
-                // DeviceListToolStripMenuItem.Enabled = true;
-                ReportToolStripMenuItem.Enabled = false;
-                WatchFolderToolStripMenuItem.Enabled = false;
-                ScanToolStripMenuItem.Enabled = false;
-                _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
-                    _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
-                    _appSettings.ServerPort, _appSettings.CompanyMail, _appSettings.ServerVat);
-            }
+            TestCheckToolStripMenuItem.Enabled = false;
+            KktStateToolStripMenuItem.Enabled = false;
+            DeviceListToolStripMenuItem.Enabled = false;
+            ReportToolStripMenuItem.Enabled = true;
+            WatchFolderToolStripMenuItem.Enabled = true;
+            ScanToolStripMenuItem.Enabled = true;
+            _conn = new AtolOnlineDriver(_appSettings.AtolHost, _appSettings.AtolOnlineINN,
+                _appSettings.AtolOnlineGroupID,
+                _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
+                _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
+
 
             if (gridSource.Rows.Count == 1)
             {
@@ -278,7 +215,6 @@ namespace BillingProvider.WinForms
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(TestCheckToolStripMenuItem)} clicked");
-            _conn.RegisterTestCheck(_appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod);
         }
 
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -326,12 +262,8 @@ beliy_ns@kuzro.ru", @"О программе");
                     var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
                         currentRow.Cells[3].Value.ToString(),
                         currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token,
-                        _appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver && currentRow.Cells.Count > 5
-                            ? (SignMethodCalculation) currentRow.Cells[5].Value
-                            : _appSettings.ServerSignMethodCalculation,
-                        _appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver && currentRow.Cells.Count > 4
-                            ? (PaymentMethod) currentRow.Cells[4].Value
-                            : _appSettings.ServerPaymentMethod);
+                         _appSettings.ServerSignMethodCalculation,
+                         _appSettings.ServerPaymentMethod);
 
                     if (response != null)
                     {
@@ -379,44 +311,13 @@ beliy_ns@kuzro.ru", @"О программе");
             {
                 if (string.Equals(caption, "Признак способа расчета"))
                 {
-                    if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
-                    {
-                        dt.Columns.Add(caption, typeof(SignMethodCalculation));
-                        gridSource.Columns.Add(new DataGridViewComboBoxColumn
-                        {
-                            Name = caption,
-                            DataSource = typeof(SignMethodCalculation).ToExtendedList<int>(),
-                            ValueType = typeof(SignMethodCalculation),
-                            DisplayMember = "Value",
-                            ValueMember = "NumericKey",
-                            FlatStyle = FlatStyle.Flat,
-                            AutoComplete = true,
-                            SortMode = DataGridViewColumnSortMode.NotSortable,
-                            DataPropertyName = caption
-                        });
-                    }
-
+                   
                     continue;
                 }
 
                 if (string.Equals(caption, "Способ оплаты"))
                 {
-                    if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
-                    {
-                        dt.Columns.Add(caption, typeof(PaymentMethod));
-                        gridSource.Columns.Add(new DataGridViewComboBoxColumn
-                        {
-                            Name = caption,
-                            DataSource = typeof(PaymentMethod).ToExtendedList<int>(),
-                            ValueType = typeof(PaymentMethod),
-                            DisplayMember = "Value",
-                            ValueMember = "NumericKey",
-                            FlatStyle = FlatStyle.Flat,
-                            AutoComplete = true,
-                            SortMode = DataGridViewColumnSortMode.NotSortable,
-                            DataPropertyName = caption
-                        });
-                    }
+                    
 
                     continue;
                 }
@@ -749,13 +650,7 @@ beliy_ns@kuzro.ru", @"О программе");
 
         private void gridSource_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
-            if (_appSettings.KkmDriver != AppSettings.KkmDrivers.kkmserver)
-            {
-                return;
-            }
 
-            e.Row.Cells["Признак способа расчета"].Value = _appSettings.ServerSignMethodCalculation;
-            e.Row.Cells["Способ оплаты"].Value = _appSettings.ServerPaymentMethod;
         }
 
         private void gridSource_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
