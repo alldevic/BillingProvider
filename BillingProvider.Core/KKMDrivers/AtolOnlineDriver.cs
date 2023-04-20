@@ -191,7 +191,7 @@ namespace BillingProvider.Core.KKMDrivers
                 );
 
 
-                var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
+                var res = await _client.ExecuteAsync<SellResponse>(request, _cancelTokenSource.Token);
                 if (!string.IsNullOrEmpty(res.Data?.Uuid))
                 {
                     Log.Info($"UUID чека для {clientInfo}: {res.Data?.Uuid}");
@@ -231,7 +231,7 @@ namespace BillingProvider.Core.KKMDrivers
             req.AddHeader("Token", Token);
             await Task.Delay(7500);
 
-            var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
+            var res0 = await _client.ExecuteAsync<ReportResponse>(req, _cancelTokenSource.Token);
             var url = string.Empty;
 
             if (!string.IsNullOrEmpty(res0.Data?.Payload))
@@ -257,7 +257,7 @@ namespace BillingProvider.Core.KKMDrivers
                 IRestResponse<AuthResponse> res3 = null;
                 while (string.IsNullOrEmpty(Token))
                 {
-                    res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+                    res3 = await _client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
                     Token = res3?.Data?.Token;
                 }
 
@@ -277,7 +277,7 @@ namespace BillingProvider.Core.KKMDrivers
                 };
                 request.AddHeader("Content-Type", "application/json; charset=utf-8");
                 request.AddBody(new {login = Login, pass = Password});
-                var res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+                var res3 = await _client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
                 Token = res3.Data.Token;
                 TokenDate = DateTime.Parse(res3.Data.Timestamp) + TimeSpan.FromHours(24);
                 Log.Info($"Получен токен: {Token}");
@@ -335,7 +335,7 @@ namespace BillingProvider.Core.KKMDrivers
                     total = 1.00
                 }
             });
-            var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
+            var res = await _client.ExecuteAsync<SellResponse>(request, _cancelTokenSource.Token);
             Log.Info($"UUID тестового чека: {res.Data.Uuid}");
             // Log.Info(
             //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
@@ -346,7 +346,7 @@ namespace BillingProvider.Core.KKMDrivers
             };
             req.AddHeader("Token", Token);
             await Task.Delay(7500);
-            var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
+            var res0 = await _client.ExecuteAsync<ReportResponse>(req, _cancelTokenSource.Token);
             try
             {
                 var json = JObject.Parse(res0.Data.Payload);
@@ -367,7 +367,7 @@ namespace BillingProvider.Core.KKMDrivers
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddBody(new {login = Login, pass = Password});
-            var res = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+            var res = await _client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
             Token = res.Data.Token;
             Log.Info($"Получен токен: {Token}");
             Log.Info($"Дата окончания: {res.Data.Timestamp}");
@@ -382,7 +382,7 @@ namespace BillingProvider.Core.KKMDrivers
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddBody(new {login = Login, pass = Password});
-            var res = await client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+            var res = await client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
             var token = res.Data.Token;
             Log.Info($"Получен токен: {token}");
 
@@ -394,7 +394,7 @@ namespace BillingProvider.Core.KKMDrivers
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddHeader("Token", token);
             request.AddParameter("limit", "100");
-            res = await client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+            res = await client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
 
             Log.Info(res.Data);
         }

@@ -224,7 +224,7 @@ namespace BillingProvider.Core.KKMDrivers
 
             try
             {
-                resp = _restClient.Execute<KkmServerResponse>(request) as RestResponse<KkmServerResponse>;
+                resp = await _restClient.ExecuteAsync<KkmServerResponse>(request) as RestResponse<KkmServerResponse>;
             }
             catch (Exception e)
             {
