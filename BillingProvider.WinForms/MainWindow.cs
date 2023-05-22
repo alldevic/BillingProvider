@@ -47,7 +47,7 @@ namespace BillingProvider.WinForms
             DeviceListToolStripMenuItem.Enabled = false;
             PingToolStripMenuItem.Enabled = false;
             KktStateToolStripMenuItem.Enabled = false;
-            TestCheckToolStripMenuItem.Enabled = false;
+            // TestCheckToolStripMenuItem.Enabled = false;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -78,6 +78,12 @@ namespace BillingProvider.WinForms
             _log.Info("Приложение запущено!");
             _storage = new FileStorage(@"history.txt");
             _storage.Load();
+
+
+            var tokenInfo = AtolAuthService.GetToken(_appSettings.AtolHost, _appSettings.AtolOnlineLogin,
+                _appSettings.AtolOnlinePassword);
+            _appSettings.AtolToken = tokenInfo.Token;
+            _appSettings.AtolTokenExpiredDateTime = tokenInfo.Expired;
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -262,8 +268,8 @@ beliy_ns@kuzro.ru", @"О программе");
                     var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
                         currentRow.Cells[3].Value.ToString(),
                         currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token,
-                         _appSettings.ServerSignMethodCalculation,
-                         _appSettings.ServerPaymentMethod);
+                        _appSettings.ServerSignMethodCalculation,
+                        _appSettings.ServerPaymentMethod, _appSettings.AtolToken);
 
                     if (response != null)
                     {
@@ -311,14 +317,11 @@ beliy_ns@kuzro.ru", @"О программе");
             {
                 if (string.Equals(caption, "Признак способа расчета"))
                 {
-                   
                     continue;
                 }
 
                 if (string.Equals(caption, "Способ оплаты"))
                 {
-                    
-
                     continue;
                 }
 
@@ -468,13 +471,14 @@ beliy_ns@kuzro.ru", @"О программе");
             CancellationTokenSource cancellationTokenSource, SignMethodCalculation signMethodCalculation,
             PaymentMethod paymentMethod)
         {
+            
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
             tmrQueue.Stop();
             try
             {
                 var response =
                     await _conn.RegisterCheck(clientInfo, name, sum, filePath, source, cancellationTokenSource.Token,
-                        signMethodCalculation, paymentMethod);
+                        signMethodCalculation, paymentMethod, _appSettings.AtolToken);
                 if (response != null && response.ResponseTaskStatus == ResponseTaskStatus.Failed)
                 {
                     _log.Debug($"{response.ErrorMessage}");
@@ -502,7 +506,12 @@ beliy_ns@kuzro.ru", @"О программе");
                 return;
             }
 
-            _taskQueue.Dequeue().Invoke();
+            if (_appSettings.AtolTokenExpiredDateTime < DateTime.Now + TimeSpan.FromSeconds(60))
+            {
+                RenewToken();
+            }
+
+                _taskQueue.Dequeue().Invoke();
             _log.Info($"Позиций в очереди: {_taskQueue.Count}");
         }
 
@@ -650,7 +659,6 @@ beliy_ns@kuzro.ru", @"О программе");
 
         private void gridSource_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
-
         }
 
         private void gridSource_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -670,6 +678,17 @@ beliy_ns@kuzro.ru", @"О программе");
             {
                 gridSettings.PropertySort = PropertySort.Categorized;
             }
+        }
+
+        private void NewTokenToolStripMenuItem_Click(object sender, EventArgs e) => RenewToken();
+
+        private void RenewToken()
+        {
+            var tmp = AtolAuthService.GetToken(_appSettings.AtolHost, _appSettings.AtolOnlineLogin,
+                _appSettings.AtolOnlinePassword);
+            _appSettings.AtolToken = tmp.Token;
+            _appSettings.AtolTokenExpiredDateTime = tmp.Expired;
+            _appSettings.UpdateSettings();
         }
     }
 }

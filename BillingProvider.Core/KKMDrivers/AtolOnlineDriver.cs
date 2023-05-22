@@ -53,7 +53,8 @@ namespace BillingProvider.Core.KKMDrivers
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
             string source, CancellationToken ct,
             SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT,
-            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081)
+            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081,
+            string authToken = "")
         {
             if (ct.IsCancellationRequested)
             {
@@ -65,8 +66,8 @@ namespace BillingProvider.Core.KKMDrivers
             }
 
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
-            
-            
+
+
             sum = sum.Replace(".", ",");
 
             if (string.Equals(sum, "0") || string.Equals(sum, "0.0") || string.Equals(sum, "0.00"))
@@ -78,7 +79,7 @@ namespace BillingProvider.Core.KKMDrivers
                     ResponseTaskStatus = ResponseTaskStatus.Complete
                 };
             }
-            
+
             var checkStrings = name.Split(';');
             var tmpStrings = new List<object>();
             foreach (var str in checkStrings)
@@ -115,26 +116,12 @@ namespace BillingProvider.Core.KKMDrivers
                 }
             }
 
-            try
-            {
-                await UpdateTokenIfNeeded();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-                return new ResponseTaskBase()
-                {
-                    ErrorMessage = "Task was cancelled",
-                    ResponseTaskStatus = ResponseTaskStatus.Failed
-                };
-            }
-
             var request = new RestRequest($"{GroupId}/sell", Method.POST)
             {
                 RequestFormat = DataFormat.Json
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
-            request.AddHeader("Token", Token);
+            request.AddHeader("Token", authToken);
 
             var dt = DateTime.Now;
             try
@@ -152,7 +139,7 @@ namespace BillingProvider.Core.KKMDrivers
 
             try
             {
-                request.AddBody(
+                request.AddJsonBody(
                     new
                     {
                         // timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
@@ -202,10 +189,10 @@ namespace BillingProvider.Core.KKMDrivers
 
                 if (res?.Data?.Uuid == null)
                 {
-                    throw new ArgumentNullException("UUID не получени");
+                    throw new ArgumentNullException("UUID не получен");
                 }
 
-                GetOfdUrl(res.Data.Uuid);
+                GetOfdUrl(res.Data.Uuid, authToken);
             }
             catch (Exception e)
             {
@@ -219,13 +206,13 @@ namespace BillingProvider.Core.KKMDrivers
             };
         }
 
-        private async void GetOfdUrl(string uuid)
+        private async void GetOfdUrl(string uuid, string authToken)
         {
             var req = new RestRequest($"{GroupId}/report/{uuid}", Method.GET)
             {
                 RequestFormat = DataFormat.Json
             };
-            req.AddHeader("Token", Token);
+            req.AddHeader("Token", authToken);
             await Task.Delay(7500);
 
             var res0 = await _client.ExecuteAsync<ReportResponse>(req, _cancelTokenSource.Token);
@@ -240,53 +227,18 @@ namespace BillingProvider.Core.KKMDrivers
             Log.Info($"Ссылка на ОФД ({uuid}): {url}");
         }
 
-        private async Task UpdateTokenIfNeeded()
-        {
-            if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now.AddHours(25))
-            {
-                Token = string.Empty;
-                var request = new RestRequest("getToken", Method.POST)
-                {
-                    RequestFormat = DataFormat.Json
-                };
-                request.AddHeader("Content-Type", "application/json; charset=utf-8");
-                request.AddBody(new {login = Login, pass = Password});
-                IRestResponse<AuthResponse> res3 = null;
-                while (string.IsNullOrEmpty(Token))
-                {
-                    res3 = await _client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
-                    Token = res3?.Data?.Token;
-                }
-
-                TokenDate = DateTime.Parse(res3?.Data?.Timestamp) + TimeSpan.FromHours(24);
-                Log.Info($"Получен токен: {Token}");
-            }
-        }
-
-        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod)
+        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod,
+            string authToken)
         {
             RestRequest request;
-            if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)
-            {
-                request = new RestRequest("getToken", Method.POST)
-                {
-                    RequestFormat = DataFormat.Json
-                };
-                request.AddHeader("Content-Type", "application/json; charset=utf-8");
-                request.AddBody(new {login = Login, pass = Password});
-                var res3 = await _client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
-                Token = res3.Data.Token;
-                TokenDate = DateTime.Parse(res3.Data.Timestamp) + TimeSpan.FromHours(24);
-                Log.Info($"Получен токен: {Token}");
-            }
 
             request = new RestRequest($"{GroupId}/sell", Method.POST)
             {
                 RequestFormat = DataFormat.Json
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
-            request.AddHeader("Token", Token);
-            request.AddBody(new
+            request.AddHeader("Token", authToken);
+            request.AddJsonBody(new
             {
                 timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
                 external_id = Guid.NewGuid().ToString("N"),
@@ -334,14 +286,14 @@ namespace BillingProvider.Core.KKMDrivers
             });
             var res = await _client.ExecuteAsync<SellResponse>(request, _cancelTokenSource.Token);
             Log.Info($"UUID тестового чека: {res.Data.Uuid}");
-            // Log.Info(
-            //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
+            Log.Info(
+                $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={authToken}");
 
             var req = new RestRequest($"{GroupId}/report/{res.Data.Uuid}", Method.GET)
             {
                 RequestFormat = DataFormat.Json
             };
-            req.AddHeader("Token", Token);
+            req.AddHeader("Token", authToken);
             await Task.Delay(7500);
             var res0 = await _client.ExecuteAsync<ReportResponse>(req, _cancelTokenSource.Token);
             try
@@ -356,19 +308,7 @@ namespace BillingProvider.Core.KKMDrivers
             }
         }
 
-        public async void TestConnection()
-        {
-            var request = new RestRequest("getToken", Method.POST)
-            {
-                RequestFormat = DataFormat.Json
-            };
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
-            request.AddBody(new {login = Login, pass = Password});
-            var res = await _client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
-            Token = res.Data.Token;
-            Log.Info($"Получен токен: {Token}");
-            Log.Info($"Дата окончания: {res.Data.Timestamp}");
-        }
+        public async void TestConnection() => await Task.Delay(100);
 
         public async void GetKktInfo()
         {
@@ -378,7 +318,7 @@ namespace BillingProvider.Core.KKMDrivers
                 RequestFormat = DataFormat.Json
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
-            request.AddBody(new {login = Login, pass = Password});
+            request.AddJsonBody(new {login = Login, pass = Password});
             var res = await client.ExecuteAsync<AuthResponse>(request, _cancelTokenSource.Token);
             var token = res.Data.Token;
             Log.Info($"Получен токен: {token}");
@@ -401,7 +341,7 @@ namespace BillingProvider.Core.KKMDrivers
             public string Payload { get; set; }
         }
 
-        private class AuthResponse
+        public class AuthResponse
         {
             public string Token { get; set; }
             public string Timestamp { get; set; }

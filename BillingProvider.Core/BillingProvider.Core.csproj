@@ -72,6 +72,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="AtolAuthService.cs" />
         <Compile Include="Comm\Tasks\Response\ResponseTaskBase.cs" />
         <Compile Include="Comm\Tasks\Response\ResponseTaskStatus.cs" />
         <Compile Include="FileStorage.cs" />
