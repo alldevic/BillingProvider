@@ -16,6 +16,12 @@ namespace BillingProvider.Core
         {
             var firstLine = File.ReadLines(path).First();
 
+            if (path.EndsWith(".txt") && firstLine.Split(';').Length == 6)
+            {
+                Log.Debug("Select Tinkoff parser");
+                return new TinParser(path, paymentMethod, signMethodCalculation);    
+            }
+
             if (string.Equals(firstLine, "[") || firstLine.StartsWith("{"))
             {
                 Log.Debug("Select inner parser");
