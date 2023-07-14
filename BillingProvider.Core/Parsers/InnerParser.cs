@@ -33,7 +33,7 @@ namespace BillingProvider.Core.Parsers
         private class Node
         {
             public string Time { get; set; }
-            public string Level { get;  set; }
+            public string Level { get; set; }
             public string Message { get; set; }
             public ClientInfo Item { get; set; }
         };

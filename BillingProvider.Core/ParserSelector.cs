@@ -19,7 +19,7 @@ namespace BillingProvider.Core
             if (path.EndsWith(".txt") && firstLine.Split(';').Length == 6)
             {
                 Log.Debug("Select Tinkoff parser");
-                return new TinParser(path, paymentMethod, signMethodCalculation);    
+                return new TinParser(path, paymentMethod, signMethodCalculation);
             }
 
             if (string.Equals(firstLine, "[") || firstLine.StartsWith("{"))

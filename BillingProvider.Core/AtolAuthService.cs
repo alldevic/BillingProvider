@@ -15,12 +15,12 @@ namespace BillingProvider.Core
         {
             Expired = expired;
             Token = token;
-
         }
     }
+
     public static class AtolAuthService
     {
-        public static TokenStruct GetToken(string host, string login, string  password)
+        public static TokenStruct GetToken(string host, string login, string password)
         {
             var client = new RestClient(host);
             var request = new RestRequest("getToken", Method.POST)
@@ -31,7 +31,7 @@ namespace BillingProvider.Core
             request.AddJsonBody(new {login = login, pass = password});
             var res = client.Execute<AtolOnlineDriver.AuthResponse>(request);
             // _token = res.Data.Token;
-            var expired  = DateTime.Parse(res.Data.Timestamp) + TimeSpan.FromHours(24);
+            var expired = DateTime.Parse(res.Data.Timestamp) + TimeSpan.FromHours(24);
             return new TokenStruct(expired, res.Data.Token);
         }
     }

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -33,83 +33,83 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa">
-          <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+            <Private>True</Private>
         </Reference>
         <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa">
-          <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+            <Private>True</Private>
         </Reference>
         <Reference Include="HtmlAgilityPack, Version=1.11.46.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
-          <HintPath>..\packages\HtmlAgilityPack.1.11.46\lib\Net45\HtmlAgilityPack.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\HtmlAgilityPack.1.11.46\lib\Net45\HtmlAgilityPack.dll</HintPath>
+            <Private>True</Private>
         </Reference>
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="Microsoft.VisualBasic" />
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="Microsoft.VisualBasic"/>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-          <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+            <Private>True</Private>
         </Reference>
         <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
-          <HintPath>..\packages\NLog.4.7.12\lib\net45\NLog.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\NLog.4.7.12\lib\net45\NLog.dll</HintPath>
+            <Private>True</Private>
         </Reference>
         <Reference Include="RestSharp, Version=106.12.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75">
-          <HintPath>..\packages\RestSharp.106.12.0\lib\net452\RestSharp.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\RestSharp.106.12.0\lib\net452\RestSharp.dll</HintPath>
+            <Private>True</Private>
         </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Configuration" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.IO.Compression" />
-        <Reference Include="System.Net.Http" />
-        <Reference Include="System.Runtime.Serialization" />
-        <Reference Include="System.Security" />
-        <Reference Include="System.ServiceModel" />
-        <Reference Include="System.Transactions" />
-        <Reference Include="System.Web" />
-        <Reference Include="System.Xml" />
+        <Reference Include="System"/>
+        <Reference Include="System.Configuration"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.IO.Compression"/>
+        <Reference Include="System.Net.Http"/>
+        <Reference Include="System.Runtime.Serialization"/>
+        <Reference Include="System.Security"/>
+        <Reference Include="System.ServiceModel"/>
+        <Reference Include="System.Transactions"/>
+        <Reference Include="System.Web"/>
+        <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AtolAuthService.cs" />
-        <Compile Include="Comm\Tasks\Response\ResponseTaskBase.cs" />
-        <Compile Include="Comm\Tasks\Response\ResponseTaskStatus.cs" />
-        <Compile Include="FileStorage.cs" />
-        <Compile Include="KKMDrivers\AtolOnlineDriver.cs" />
-        <Compile Include="KKMDrivers\IKKMDriver.cs" />
-        <Compile Include="KKMDrivers\KKMServerDriver.cs" />
-        <Compile Include="Models\ClientInfo.cs" />
-        <Compile Include="Models\KkmServerResponse.cs" />
-        <Compile Include="Models\PaymentMethod.cs" />
-        <Compile Include="Models\SignMethodCalculation.cs" />
-        <Compile Include="Models\Vat.cs" />
-        <Compile Include="ObjectExtensions.cs" />
-        <Compile Include="ParserSelector.cs" />
-        <Compile Include="Parsers\BankTransfer\BankTransferDocumentParser.cs" />
-        <Compile Include="Parsers\BankTransfer\StringWorks.cs" />
-        <Compile Include="Parsers\BankTransfer\TransferDocument.cs" />
-        <Compile Include="Parsers\CsvKbbParser.cs" />
-        <Compile Include="Parsers\EspSberParser.cs" />
-        <Compile Include="Parsers\EtXlsParser.cs" />
-        <Compile Include="Parsers\HtmlKbbParser.cs" />
-        <Compile Include="Parsers\InnerParser.cs" />
-        <Compile Include="Parsers\IParser.cs" />
-        <Compile Include="Parsers\OneCParser.cs" />
-        <Compile Include="Parsers\OneCXlsxParser.cs" />
-        <Compile Include="Parsers\SpecSberParser.cs" />
-        <Compile Include="Parsers\TinParser.cs" />
-        <Compile Include="Parsers\TxtMailParser.cs" />
-        <Compile Include="Parsers\XlsxParser.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="AtolAuthService.cs"/>
+        <Compile Include="Comm\Tasks\Response\ResponseTaskBase.cs"/>
+        <Compile Include="Comm\Tasks\Response\ResponseTaskStatus.cs"/>
+        <Compile Include="FileStorage.cs"/>
+        <Compile Include="KKMDrivers\AtolOnlineDriver.cs"/>
+        <Compile Include="KKMDrivers\IKKMDriver.cs"/>
+        <Compile Include="KKMDrivers\KKMServerDriver.cs"/>
+        <Compile Include="Models\ClientInfo.cs"/>
+        <Compile Include="Models\KkmServerResponse.cs"/>
+        <Compile Include="Models\PaymentMethod.cs"/>
+        <Compile Include="Models\SignMethodCalculation.cs"/>
+        <Compile Include="Models\Vat.cs"/>
+        <Compile Include="ObjectExtensions.cs"/>
+        <Compile Include="ParserSelector.cs"/>
+        <Compile Include="Parsers\BankTransfer\BankTransferDocumentParser.cs"/>
+        <Compile Include="Parsers\BankTransfer\StringWorks.cs"/>
+        <Compile Include="Parsers\BankTransfer\TransferDocument.cs"/>
+        <Compile Include="Parsers\CsvKbbParser.cs"/>
+        <Compile Include="Parsers\EspSberParser.cs"/>
+        <Compile Include="Parsers\EtXlsParser.cs"/>
+        <Compile Include="Parsers\HtmlKbbParser.cs"/>
+        <Compile Include="Parsers\InnerParser.cs"/>
+        <Compile Include="Parsers\IParser.cs"/>
+        <Compile Include="Parsers\OneCParser.cs"/>
+        <Compile Include="Parsers\OneCXlsxParser.cs"/>
+        <Compile Include="Parsers\SpecSberParser.cs"/>
+        <Compile Include="Parsers\TinParser.cs"/>
+        <Compile Include="Parsers\TxtMailParser.cs"/>
+        <Compile Include="Parsers\XlsxParser.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>
-      <None Include="packages.config" />
+        <None Include="packages.config"/>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Comm\Tasks" />
+        <Folder Include="Comm\Tasks"/>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">

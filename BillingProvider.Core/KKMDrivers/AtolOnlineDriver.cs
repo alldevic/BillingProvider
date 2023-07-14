@@ -52,7 +52,7 @@ namespace BillingProvider.Core.KKMDrivers
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
             string source, CancellationToken ct,
             SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT,
-            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081, 
+            PaymentMethod paymentMethod = PaymentMethod.ElectronicPayment_1081,
             string authToken = "")
         {
             if (ct.IsCancellationRequested)
@@ -65,8 +65,8 @@ namespace BillingProvider.Core.KKMDrivers
             }
 
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
-            
-            
+
+
             sum = sum.Replace(".", ",");
 
             if (string.Equals(sum, "0") || string.Equals(sum, "0.0") || string.Equals(sum, "0.00"))
@@ -78,7 +78,7 @@ namespace BillingProvider.Core.KKMDrivers
                     ResponseTaskStatus = ResponseTaskStatus.Complete
                 };
             }
-            
+
             var checkStrings = name.Split(';');
             var tmpStrings = new List<object>();
             foreach (var str in checkStrings)
@@ -226,7 +226,8 @@ namespace BillingProvider.Core.KKMDrivers
             Log.Info($"Ссылка на ОФД ({uuid}): {url}");
         }
 
-        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod, string authToken)
+        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod,
+            string authToken)
         {
             RestRequest request;
 

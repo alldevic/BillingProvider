@@ -111,7 +111,8 @@ namespace BillingProvider.Core.KKMDrivers
             return await ExecuteCommand(final_receipt);
         }
 
-        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod, string authToken = null)
+        public async void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod,
+            string authToken = null)
         {
             Log.Info($"Регистрация тестового чека");
 

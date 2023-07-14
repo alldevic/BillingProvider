@@ -96,11 +96,10 @@ namespace BillingProvider.WinForms
             _storage.Load();
 
 
-            var tokenInfo = AtolAuthService.GetToken(_appSettings.AtolHost, _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword);
+            var tokenInfo = AtolAuthService.GetToken(_appSettings.AtolHost, _appSettings.AtolOnlineLogin,
+                _appSettings.AtolOnlinePassword);
             _appSettings.AtolToken = tokenInfo.Token;
             _appSettings.AtolTokenExpiredDateTime = tokenInfo.Expired;
-
-
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -285,7 +284,8 @@ namespace BillingProvider.WinForms
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(TestCheckToolStripMenuItem)} clicked");
-            _conn.RegisterTestCheck(_appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod, _appSettings.AtolToken);
+            _conn.RegisterTestCheck(_appSettings.ServerSignMethodCalculation, _appSettings.ServerPaymentMethod,
+                _appSettings.AtolToken);
         }
 
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)

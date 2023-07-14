@@ -37,10 +37,10 @@ namespace BillingProvider.Core.Parsers
             using (var stream = File.Open(Path, FileMode.Open, FileAccess.Read))
             {
                 using (var reader = ExcelReaderFactory.CreateCsvReader(stream, new ExcelReaderConfiguration
-                {
-                    FallbackEncoding = Encoding.GetEncoding(1251),
-                    AutodetectSeparators = new[] {';'}
-                }))
+                       {
+                           FallbackEncoding = Encoding.GetEncoding(1251),
+                           AutodetectSeparators = new[] {';'}
+                       }))
                 {
                     var result = reader.AsDataSet().Tables[0].Rows;
                     for (var i = 0; i < result.Count; i++)

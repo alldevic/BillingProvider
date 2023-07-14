@@ -141,8 +141,8 @@ namespace BillingProvider.Core.Parsers.BankTransfer
                 doc.PayerAccount = document["ПлательщикСчет"];
                 if (document.ContainsKey("ДатаСписано") && !String.IsNullOrWhiteSpace(document["ДатаСписано"]))
                     doc.WriteoffDate = DateTime.Parse(document["ДатаСписано"], culture);
-               
-                
+
+
                 if (document.ContainsKey("Плательщик"))
                     doc.PayerName = document["Плательщик"];
                 else
@@ -154,8 +154,7 @@ namespace BillingProvider.Core.Parsers.BankTransfer
 //                    !String.IsNullOrWhiteSpace(doc.PayerName.Substring(0, doc.PayerName.IndexOf("//"))))
 //                    doc.PayerName = doc.PayerName.Substring(0, doc.PayerName.IndexOf("//"));
 
-                
-                
+
                 doc.PayerInn = document["ПлательщикИНН"];
                 doc.PayerKpp = document["ПлательщикКПП"];
                 doc.PayerCheckingAccount = document["ПлательщикРасчСчет"];
@@ -170,11 +169,15 @@ namespace BillingProvider.Core.Parsers.BankTransfer
                 else
                     doc.RecipientName = document["Получатель1"];
                 if (doc.RecipientName.Contains("р/с") &&
-                    !String.IsNullOrWhiteSpace(doc.RecipientName.Substring(0, doc.RecipientName.IndexOf("р/с", StringComparison.Ordinal))))
-                    doc.RecipientName = doc.RecipientName.Substring(0, doc.RecipientName.IndexOf("р/с", StringComparison.Ordinal));
+                    !String.IsNullOrWhiteSpace(doc.RecipientName.Substring(0,
+                        doc.RecipientName.IndexOf("р/с", StringComparison.Ordinal))))
+                    doc.RecipientName =
+                        doc.RecipientName.Substring(0, doc.RecipientName.IndexOf("р/с", StringComparison.Ordinal));
                 if (doc.RecipientName.Contains("//") &&
-                    !String.IsNullOrWhiteSpace(doc.RecipientName.Substring(0, doc.RecipientName.IndexOf("//", StringComparison.Ordinal))))
-                    doc.RecipientName = doc.RecipientName.Substring(0, doc.RecipientName.IndexOf("//", StringComparison.Ordinal));
+                    !String.IsNullOrWhiteSpace(doc.RecipientName.Substring(0,
+                        doc.RecipientName.IndexOf("//", StringComparison.Ordinal))))
+                    doc.RecipientName =
+                        doc.RecipientName.Substring(0, doc.RecipientName.IndexOf("//", StringComparison.Ordinal));
                 doc.RecipientInn = document["ПолучательИНН"];
                 doc.RecipientKpp = document["ПолучательКПП"];
                 doc.RecipientCheckingAccount = document["ПолучательРасчСчет"];

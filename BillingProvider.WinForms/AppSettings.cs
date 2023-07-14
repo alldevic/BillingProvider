@@ -66,14 +66,14 @@ namespace BillingProvider.WinForms
             "Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частыми обращением к серверу")]
         [DisplayName("Задержка (мс)")]
         public int AtolOnlineDelay { get; set; } = 2500;
-        
+
         [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("Текущий токен Atol Online")]
         [DisplayName("Токен")]
         [ReadOnly(true)]
         public string AtolToken { get; set; } = "";
-        
+
         [DynamicPropertyFilter(nameof(KkmDriver), nameof(KkmDrivers.atol))]
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(

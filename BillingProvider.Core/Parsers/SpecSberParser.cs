@@ -40,10 +40,10 @@ namespace BillingProvider.Core.Parsers
             using (var stream = File.Open(Path, FileMode.Open, FileAccess.Read))
             {
                 using (var reader = ExcelReaderFactory.CreateCsvReader(stream, new ExcelReaderConfiguration
-                {
-                    FallbackEncoding = Encoding.GetEncoding(1251),
-                    AutodetectSeparators = new[] {';'}
-                }))
+                       {
+                           FallbackEncoding = Encoding.GetEncoding(1251),
+                           AutodetectSeparators = new[] {';'}
+                       }))
                 {
                     var result = reader.AsDataSet().Tables[0].Rows;
                     for (var i = 0; i < result.Count; i++)
@@ -86,7 +86,7 @@ namespace BillingProvider.Core.Parsers
                                     string.Equals(posName, "ГОСПОШЛИНА") ||
                                     string.Equals(posName, "ПЕНИ ПО СУДУ") ||
                                     string.Equals(posName, "ПЕНЯ")
-                                )
+                                   )
                                 {
                                     if (row[j + 3].ToString() == "[!]")
                                     {
@@ -108,7 +108,8 @@ namespace BillingProvider.Core.Parsers
                                 j += 3;
                             }
 
-                            rawSum = decimal.Parse(row[j + 5].ToString().Replace(",", "."), NumberFormatInfo.InvariantInfo);
+                            rawSum = decimal.Parse(row[j + 5].ToString().Replace(",", "."),
+                                NumberFormatInfo.InvariantInfo);
                         }
 
 
