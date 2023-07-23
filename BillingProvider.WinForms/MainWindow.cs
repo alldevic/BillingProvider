@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -471,7 +472,6 @@ beliy_ns@kuzro.ru", @"О программе");
             CancellationTokenSource cancellationTokenSource, SignMethodCalculation signMethodCalculation,
             PaymentMethod paymentMethod)
         {
-            
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
             tmrQueue.Stop();
             try
@@ -506,12 +506,17 @@ beliy_ns@kuzro.ru", @"О программе");
                 return;
             }
 
+            while (!Utils.PingServer(_appSettings.AtolHost))
+            {
+                _log.Debug("Ping...");
+            }
+
             if (_appSettings.AtolTokenExpiredDateTime < DateTime.Now + TimeSpan.FromSeconds(60))
             {
                 RenewToken();
             }
 
-                _taskQueue.Dequeue().Invoke();
+            _taskQueue.Dequeue().Invoke();
             _log.Info($"Позиций в очереди: {_taskQueue.Count}");
         }
 

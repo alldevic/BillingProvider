@@ -20,7 +20,7 @@ namespace BillingProvider.Core
 
     public static class AtolAuthService
     {
-        public static TokenStruct GetToken(string host, string login, string password)  
+        public static TokenStruct GetToken(string host, string login, string password)
         {
             var client = new RestClient(host);
             var request = new RestRequest("getToken", Method.POST)

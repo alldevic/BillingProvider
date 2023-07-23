@@ -19,31 +19,31 @@ namespace BillingProvider.WinForms
         [Description("ИНН организации; сравнивается со значением в фискальном накопителе")]
         [DisplayName("ИНН")]
         public string AtolOnlineINN { get; set; } = "";
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("Код группы ККТ, относящейся к интернет-магазину, зарегистрированному в “АТОЛ Онлайн”")]
         [DisplayName("Идентификатор группы ККТ")]
         public string AtolOnlineGroupID { get; set; } = "";
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("При расчётах в интернете это адрес сайта; сравнивается со значением в фискальном накопителе")]
         [DisplayName("Адрес места расчетов")]
         public string AtolOnlineHostname { get; set; } = "";
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Логин пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
         [DisplayName("Логин")]
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlineLogin { get; set; } = "";
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Пароль пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
         [DisplayName("Пароль")]
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlinePassword { get; set; } = "";
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Адрес тестовой среды (ФФД 1.05): https://testonline.atol.ru/possystem/v4/" +
@@ -51,23 +51,25 @@ namespace BillingProvider.WinForms
         [DisplayName("Адрес среды:")]
         [RefreshProperties(RefreshProperties.All)]
         public string AtolHost { get; set; } = "";
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частыми обращением к серверу")]
         [DisplayName("Задержка (мс)")]
         public int AtolOnlineDelay { get; set; } = 2500;
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description("Текущий токен Atol Online")]
         [DisplayName("Токен")]
+        [RefreshProperties(RefreshProperties.All)]
         [ReadOnly(true)]
         public string AtolToken { get; set; } = "";
-        
+
         [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
         [Description(
             "Дата истечения токена")]
         [DisplayName("Дата истечения")]
+        [RefreshProperties(RefreshProperties.All)]
         [ReadOnly(true)]
         public DateTime AtolTokenExpiredDateTime { get; set; }
 
@@ -96,15 +98,15 @@ namespace BillingProvider.WinForms
         [DisplayName("Email")]
         [RefreshProperties(RefreshProperties.All)]
         public string CompanyMail { get; set; }
-        
-        
+
+
         [CustomSortedCategory("Общие", 3, 6)]
         [Description("Способ оплаты по умолчанию")]
         [DisplayName("Способ оплаты")]
         [RefreshProperties(RefreshProperties.All)]
         [TypeConverter(typeof(EnumTypeConverter))]
         public PaymentMethod ServerPaymentMethod { get; set; } = PaymentMethod.Cash_1031;
-        
+
         [CustomSortedCategory("Общие", 3, 6)]
         [Description("Признак способа расчета по умолчанию")]
         [DisplayName("Признак способа расчета")]
@@ -115,14 +117,14 @@ namespace BillingProvider.WinForms
         #endregion
 
         #region Watcher
-        
+
         [CustomSortedCategory("Отслеживание папки", 6, 6)]
         [Description("Путь до папки")]
         [DisplayName("Папка")]
         [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
         [RefreshProperties(RefreshProperties.All)]
         public string FolderPath { get; set; }
-        
+
         [CustomSortedCategory("Отслеживание папки", 6, 6)]
         [Description("Сканирование подпапок на наличие изменений")]
         [DisplayName("Включая подпапки")]
@@ -217,7 +219,7 @@ namespace BillingProvider.WinForms
                 ForceAutosumEnabled =
                     Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(ForceAutosumEnabled)}"]);
                 Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
-                
+
                 ServerPaymentMethod =
                     (PaymentMethod) Convert.ToInt32(ConfigurationManager.AppSettings[$"{nameof(ServerPaymentMethod)}"]);
                 Log.Trace($"{nameof(ServerPaymentMethod)}='{ServerPaymentMethod}'");
@@ -292,7 +294,7 @@ namespace BillingProvider.WinForms
 
             configuration.AppSettings.Settings[nameof(ForceAutosumEnabled)].Value = ForceAutosumEnabled.ToString();
             Log.Trace($"{nameof(ForceAutosumEnabled)}='{ForceAutosumEnabled}'");
-            
+
             configuration.AppSettings.Settings[nameof(ServerPaymentMethod)].Value =
                 ((int) ServerPaymentMethod).ToString();
             Log.Trace($"{nameof(ServerPaymentMethod)}='{ServerPaymentMethod}'");
