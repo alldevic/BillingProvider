@@ -308,7 +308,13 @@ namespace BillingProvider.Core.KKMDrivers
             }
         }
 
-        public async void TestConnection() => await Task.Delay(100);
+        public async Task<bool> TestConnection()
+        {
+            var request = new RestRequest(Method.HEAD);
+            var res = await _client.ExecuteAsync(request, _cancelTokenSource.Token);
+            return string.IsNullOrEmpty(res.ErrorMessage);
+        }
+
 
         public async void GetKktInfo()
         {

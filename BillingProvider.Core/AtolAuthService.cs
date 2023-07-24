@@ -29,10 +29,16 @@ namespace BillingProvider.Core
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddJsonBody(new {login = login, pass = password});
+
             var res = client.Execute<AtolOnlineDriver.AuthResponse>(request);
             // _token = res.Data.Token;
-            var expired = DateTime.Parse(res.Data.Timestamp) + TimeSpan.FromHours(24);
-            return new TokenStruct(expired, res.Data.Token);
+            if (string.IsNullOrEmpty(res.ErrorMessage))
+            {
+                var expired = DateTime.Parse(res.Data.Timestamp) + TimeSpan.FromHours(24);
+                return new TokenStruct(expired, res.Data.Token);
+            }
+
+            return new TokenStruct(DateTime.Now, string.Empty);
         }
     }
 }

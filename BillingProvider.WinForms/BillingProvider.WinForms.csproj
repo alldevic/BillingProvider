@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -38,18 +40,20 @@
     <PropertyGroup />
     <ItemGroup>
         <Reference Include="HtmlAgilityPack, Version=1.11.50.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
-          <HintPath>..\packages\HtmlAgilityPack.1.11.50\lib\Net45\HtmlAgilityPack.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\HtmlAgilityPack.1.11.50\lib\Net45\HtmlAgilityPack.dll</HintPath>
+            <Private>True</Private>
         </Reference>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-          <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-          <Private>True</Private>
+            <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+            <Private>True</Private>
         </Reference>
-        <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-          <HintPath>..\packages\NLog.4.7.15\lib\net45\NLog.dll</HintPath>
+        <Reference
+            Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+            <HintPath>..\packages\NLog.4.7.15\lib\net45\NLog.dll</HintPath>
         </Reference>
-        <Reference Include="NLog.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-          <HintPath>..\packages\NLog.Windows.Forms.4.6.0\lib\net35\NLog.Windows.Forms.dll</HintPath>
+        <Reference
+            Include="NLog.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+            <HintPath>..\packages\NLog.Windows.Forms.4.6.0\lib\net35\NLog.Windows.Forms.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Configuration" />
@@ -128,19 +132,29 @@
         <Content Include="billing.ico" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+    <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets"
+            Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
 
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
         <PropertyGroup>
             <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
         </PropertyGroup>
-        <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
-        <AssemblyInfo CodeLanguage="CS" OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" AssemblyVersion="$(Version)" AssemblyFileVersion="$(Version)" AssemblyTitle="BillingProvider $(Version)" AssemblyDescription="BillingProvider $(Version)" AssemblyCompany="Nikolay Bely" AssemblyProduct="BillingProvider" AssemblyCopyright="Copyright (c) Nikolay Bely 2020" ComVisible="false" Guid="75A2B281-0EE5-40D0-A491-8EADFCCC609D" />
-        <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
+        <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')"
+               Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
+        <AssemblyInfo CodeLanguage="CS" OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs"
+                      AssemblyVersion="$(Version)" AssemblyFileVersion="$(Version)"
+                      AssemblyTitle="BillingProvider $(Version)" AssemblyDescription="BillingProvider $(Version)"
+                      AssemblyCompany="Nikolay Bely" AssemblyProduct="BillingProvider"
+                      AssemblyCopyright="Copyright (c) Nikolay Bely 2020" ComVisible="false"
+                      Guid="75A2B281-0EE5-40D0-A491-8EADFCCC609D" />
+        <Error
+            Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')"
+            Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
     </Target>
 
-    
-    <Target Name="GenerateZip" AfterTargets="CleanReferenceCopyLocalPaths" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+    <Target Name="GenerateZip" AfterTargets="CleanReferenceCopyLocalPaths"
+            Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <RemoveDir Directories="@(FluentValidationExcludedCultures->'$(OutputPath)%(Filename)')" />
         <ItemGroup>
             <XMLFilesToDelete Include="$(TargetDir)\*.xml" />
@@ -154,9 +168,11 @@
         <GetAssemblyIdentity AssemblyFiles="$(TargetDir)\BillingProvider.exe">
             <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
         </GetAssemblyIdentity>
-        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider_%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true" />
+        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider_%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)"
+             Files="@(ZipFiles)" Flatten="False" Quiet="true" />
     </Target>
 
-    
-    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
+
+    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets"
+            Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
 </Project>

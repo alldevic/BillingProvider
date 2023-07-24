@@ -4,7 +4,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -80,11 +79,10 @@ namespace BillingProvider.WinForms
             _storage = new FileStorage(@"history.txt");
             _storage.Load();
 
-
-            var tokenInfo = AtolAuthService.GetToken(_appSettings.AtolHost, _appSettings.AtolOnlineLogin,
-                _appSettings.AtolOnlinePassword);
-            _appSettings.AtolToken = tokenInfo.Token;
-            _appSettings.AtolTokenExpiredDateTime = tokenInfo.Expired;
+            if (_appSettings.AtolTokenExpiredDateTime < DateTime.Now + TimeSpan.FromSeconds(60))
+            {
+                RenewToken();
+            }
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -213,10 +211,17 @@ namespace BillingProvider.WinForms
             }
         }
 
-        private void PingToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void PingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(PingToolStripMenuItem)} clicked");
-            _conn.TestConnection();
+            if (await _conn.TestConnection())
+            {
+                _log.Info($"Сервер {_appSettings.AtolHost} доступен");
+            }
+            else
+            {
+                _log.Info($"Сервер {_appSettings.AtolHost} не доступен");
+            }
         }
 
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
@@ -266,6 +271,17 @@ beliy_ns@kuzro.ru", @"О программе");
 
                 try
                 {
+                    while (!await _conn.TestConnection())
+                    {
+                        _log.Info("Попытка установить свяь с сервером...");
+                        await Task.Delay(3000, CancellationToken.None);
+                    }
+
+                    if (_appSettings.AtolTokenExpiredDateTime < DateTime.Now + TimeSpan.FromSeconds(60))
+                    {
+                        RenewToken();
+                    }
+
                     var response = await _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(),
                         currentRow.Cells[3].Value.ToString(),
                         currentRow.Cells[2].Value.ToString(), string.Empty, currentRow.ToString(), token,
@@ -498,7 +514,7 @@ beliy_ns@kuzro.ru", @"О программе");
 
         private readonly Queue<Action> _taskQueue = new Queue<Action>();
 
-        private void tmrQueue_Tick(object sender, EventArgs e)
+        private async void tmrQueue_Tick(object sender, EventArgs e)
         {
             if (_taskQueue.Count == 0)
             {
@@ -506,9 +522,10 @@ beliy_ns@kuzro.ru", @"О программе");
                 return;
             }
 
-            while (!Utils.PingServer(_appSettings.AtolHost))
+            while (!await _conn.TestConnection())
             {
-                _log.Debug("Ping...");
+                _log.Info("Попытка установить связь с сервером");
+                await Task.Delay(3000, CancellationToken.None);
             }
 
             if (_appSettings.AtolTokenExpiredDateTime < DateTime.Now + TimeSpan.FromSeconds(60))
@@ -694,6 +711,7 @@ beliy_ns@kuzro.ru", @"О программе");
             _appSettings.AtolToken = tmp.Token;
             _appSettings.AtolTokenExpiredDateTime = tmp.Expired;
             _appSettings.UpdateSettings();
+            gridSettings.Refresh();
         }
     }
 }

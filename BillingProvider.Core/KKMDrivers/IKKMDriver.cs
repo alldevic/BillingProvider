@@ -23,7 +23,7 @@ namespace BillingProvider.Core.KKMDrivers
         void RegisterTestCheck(SignMethodCalculation signMethodCalculation, PaymentMethod paymentMethod,
             string authToken);
 
-        void TestConnection();
+        Task<bool> TestConnection();
 
         void GetKktInfo();
     }

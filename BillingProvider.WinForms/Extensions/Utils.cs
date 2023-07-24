@@ -18,24 +18,5 @@ namespace BillingProvider.WinForms.Extensions
                 row.Cells[i].Style.BackColor = color;
             }
         }
-
-        public static bool PingServer(string server)
-        {
-            var ping = new Ping();
-            try
-            {
-                var reply = ping.Send(server, 3000);
-                if (reply.Status != IPStatus.Success)
-                {
-                    return false;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
-        }
     }
 }

@@ -15,36 +15,36 @@ namespace BillingProvider.WinForms
 
         #region AtolOnline
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 7)]
         [Description("ИНН организации; сравнивается со значением в фискальном накопителе")]
         [DisplayName("ИНН")]
         public string AtolOnlineINN { get; set; } = "";
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 7)]
         [Description("Код группы ККТ, относящейся к интернет-магазину, зарегистрированному в “АТОЛ Онлайн”")]
         [DisplayName("Идентификатор группы ККТ")]
         public string AtolOnlineGroupID { get; set; } = "";
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 7)]
         [Description("При расчётах в интернете это адрес сайта; сравнивается со значением в фискальном накопителе")]
         [DisplayName("Адрес места расчетов")]
         public string AtolOnlineHostname { get; set; } = "";
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 7)]
         [Description(
             "Логин пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
         [DisplayName("Логин")]
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlineLogin { get; set; } = "";
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 7)]
         [Description(
             "Пароль пользователя для отправки данных. Его можно получить из файла настроек для CMS в личном кабинете пользователя “АТОЛ Онлайн”")]
         [DisplayName("Пароль")]
         [RefreshProperties(RefreshProperties.All)]
         public string AtolOnlinePassword { get; set; } = "";
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 7)]
         [Description(
             "Адрес тестовой среды (ФФД 1.05): https://testonline.atol.ru/possystem/v4/" +
             "Адрес production: https://online.atol.ru/possystem/v4/")]
@@ -52,20 +52,24 @@ namespace BillingProvider.WinForms
         [RefreshProperties(RefreshProperties.All)]
         public string AtolHost { get; set; } = "";
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн", 5, 7)]
         [Description(
             "Задержка в миллисекундах между обращения к АТОЛ Онлайн. Слишком маленькое число может привести к ошибкам, в связи с частыми обращением к серверу")]
         [DisplayName("Задержка (мс)")]
         public int AtolOnlineDelay { get; set; } = 2500;
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        #endregion
+
+        #region AtolOnlineToken
+
+        [CustomSortedCategory("АТОЛ Онлайн Токен", 6, 7)]
         [Description("Текущий токен Atol Online")]
         [DisplayName("Токен")]
         [RefreshProperties(RefreshProperties.All)]
         [ReadOnly(true)]
         public string AtolToken { get; set; } = "";
 
-        [CustomSortedCategory("АТОЛ Онлайн", 5, 6)]
+        [CustomSortedCategory("АТОЛ Онлайн Токен", 6, 7)]
         [Description(
             "Дата истечения токена")]
         [DisplayName("Дата истечения")]
@@ -77,13 +81,13 @@ namespace BillingProvider.WinForms
 
         #region Cashier
 
-        [CustomSortedCategory("Кассир", 1, 6)]
+        [CustomSortedCategory("Кассир", 1, 7)]
         [Description("Фамилия и инициалы текущего кассира")]
         [DisplayName("Имя")]
         [RefreshProperties(RefreshProperties.All)]
         public string CashierName { get; set; }
 
-        [CustomSortedCategory("Кассир", 1, 6)]
+        [CustomSortedCategory("Кассир", 1, 7)]
         [Description("ИНН текущего кассира")]
         [DisplayName("ИНН")]
         [RefreshProperties(RefreshProperties.All)]
@@ -93,21 +97,21 @@ namespace BillingProvider.WinForms
 
         #region Common
 
-        [CustomSortedCategory("Общие", 3, 6)]
+        [CustomSortedCategory("Общие", 3, 7)]
         [Description("Адрес электронной почты компании")]
         [DisplayName("Email")]
         [RefreshProperties(RefreshProperties.All)]
         public string CompanyMail { get; set; }
 
 
-        [CustomSortedCategory("Общие", 3, 6)]
+        [CustomSortedCategory("Общие", 3, 7)]
         [Description("Способ оплаты по умолчанию")]
         [DisplayName("Способ оплаты")]
         [RefreshProperties(RefreshProperties.All)]
         [TypeConverter(typeof(EnumTypeConverter))]
         public PaymentMethod ServerPaymentMethod { get; set; } = PaymentMethod.Cash_1031;
 
-        [CustomSortedCategory("Общие", 3, 6)]
+        [CustomSortedCategory("Общие", 3, 7)]
         [Description("Признак способа расчета по умолчанию")]
         [DisplayName("Признак способа расчета")]
         [RefreshProperties(RefreshProperties.All)]
@@ -118,14 +122,14 @@ namespace BillingProvider.WinForms
 
         #region Watcher
 
-        [CustomSortedCategory("Отслеживание папки", 6, 6)]
+        [CustomSortedCategory("Отслеживание папки", 7, 7)]
         [Description("Путь до папки")]
         [DisplayName("Папка")]
         [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
         [RefreshProperties(RefreshProperties.All)]
         public string FolderPath { get; set; }
 
-        [CustomSortedCategory("Отслеживание папки", 6, 6)]
+        [CustomSortedCategory("Отслеживание папки", 7, 7)]
         [Description("Сканирование подпапок на наличие изменений")]
         [DisplayName("Включая подпапки")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
@@ -136,27 +140,27 @@ namespace BillingProvider.WinForms
 
         #region Defaults
 
-        [CustomSortedCategory("Умолчания", 2, 6)]
+        [CustomSortedCategory("Умолчания", 2, 7)]
         [Description("Наименование позиции по умолчанию")]
         [DisplayName("Позиция")]
         [RefreshProperties(RefreshProperties.All)]
         public string DefaultPositionName { get; set; }
 
-        [CustomSortedCategory("Умолчания", 2, 6)]
+        [CustomSortedCategory("Умолчания", 2, 7)]
         [Description("Использовать имя позиции по умолчанию")]
         [DisplayName("Использовать позицию")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
         public bool PositionEnabled { get; set; }
 
-        [CustomSortedCategory("Умолчания", 2, 6)]
+        [CustomSortedCategory("Умолчания", 2, 7)]
         [Description("Подставлять сумму в позицию сгенерированную по умолчанию (только таблица)")]
         [DisplayName("Подставлять сумму")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
         [RefreshProperties(RefreshProperties.All)]
         public bool AutosumEnabled { get; set; }
 
-        [CustomSortedCategory("Умолчания", 2, 6)]
+        [CustomSortedCategory("Умолчания", 2, 7)]
         [Description("Обновлять позицию даже если в ней уже записано значени")]
         [DisplayName("Пересчитывать принудительно")]
         [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
@@ -228,6 +232,13 @@ namespace BillingProvider.WinForms
                     (SignMethodCalculation) Convert.ToInt32(
                         ConfigurationManager.AppSettings[$"{nameof(ServerSignMethodCalculation)}"]);
                 Log.Trace($"{nameof(ServerSignMethodCalculation)}='{ServerSignMethodCalculation}'");
+
+                AtolToken = ConfigurationManager.AppSettings[$"{nameof(AtolToken)}"];
+                Log.Trace($"{nameof(AtolToken)}='{AtolToken}'");
+
+                AtolTokenExpiredDateTime =
+                    Convert.ToDateTime(ConfigurationManager.AppSettings[$"{nameof(AtolTokenExpiredDateTime)}"]);
+                Log.Trace($"{nameof(AtolTokenExpiredDateTime)}='{AtolTokenExpiredDateTime}'");
             }
             catch (Exception e)
             {
@@ -302,6 +313,14 @@ namespace BillingProvider.WinForms
             configuration.AppSettings.Settings[nameof(ServerSignMethodCalculation)].Value =
                 ((int) ServerSignMethodCalculation).ToString();
             Log.Trace($"{nameof(ServerSignMethodCalculation)}='{ServerSignMethodCalculation}'");
+
+
+            configuration.AppSettings.Settings[nameof(AtolToken)].Value = AtolToken;
+            Log.Trace($"{nameof(AtolToken)}='{AtolToken}'");
+
+            configuration.AppSettings.Settings[nameof(AtolTokenExpiredDateTime)].Value =
+                AtolTokenExpiredDateTime.ToString();
+            Log.Trace($"{nameof(AtolTokenExpiredDateTime)}='{AtolTokenExpiredDateTime}'");
 
             configuration.Save(ConfigurationSaveMode.Modified, false);
             ConfigurationManager.RefreshSection("appSettings");
