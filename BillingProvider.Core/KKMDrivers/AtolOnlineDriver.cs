@@ -47,9 +47,6 @@ namespace BillingProvider.Core.KKMDrivers
 
         public string CompanyEmail { get; }
 
-        private string Token { get; set; }
-        private DateTime TokenDate { get; set; }
-
         public async Task<ResponseTaskBase> RegisterCheck(string clientInfo, string name, string sum, string filePath,
             string source, CancellationToken ct,
             SignMethodCalculation signMethodCalculation = SignMethodCalculation.FULL_PAYMENT,
@@ -187,9 +184,9 @@ namespace BillingProvider.Core.KKMDrivers
                 // Log.Info(
                 //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
 
-                if (res?.Data?.Uuid == null)
+                if (res.Data?.Uuid == null)
                 {
-                    throw new ArgumentNullException("UUID не получен");
+                    throw new ArgumentNullException(res.Data.Uuid, "UUID не получен");
                 }
 
                 GetOfdUrl(res.Data.Uuid, authToken);
