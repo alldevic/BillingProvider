@@ -305,10 +305,10 @@ namespace BillingProvider.Core.KKMDrivers
             }
         }
 
-        public async Task<bool> TestConnection()
+        public bool TestConnection()
         {
             var request = new RestRequest(Method.HEAD);
-            var res = await _client.ExecuteAsync(request, _cancelTokenSource.Token);
+            var res = _client.Execute(request);
             return string.IsNullOrEmpty(res.ErrorMessage);
         }
 

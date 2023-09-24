@@ -211,17 +211,12 @@ namespace BillingProvider.WinForms
             }
         }
 
-        private async void PingToolStripMenuItem_Click(object sender, EventArgs e)
+        private void PingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(PingToolStripMenuItem)} clicked");
-            if (await _conn.TestConnection())
-            {
-                _log.Info($"Сервер {_appSettings.AtolHost} доступен");
-            }
-            else
-            {
-                _log.Info($"Сервер {_appSettings.AtolHost} не доступен");
-            }
+            _log.Info(_conn.TestConnection()
+                ? $"Сервер {_appSettings.AtolHost} доступен"
+                : $"Сервер {_appSettings.AtolHost} не доступен");
         }
 
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
@@ -271,10 +266,10 @@ beliy_ns@kuzro.ru", @"О программе");
 
                 try
                 {
-                    while (!await _conn.TestConnection())
+                    while (!_conn.TestConnection())
                     {
-                        _log.Info("Попытка установить свяь с сервером...");
-                        await Task.Delay(3000, CancellationToken.None);
+                        _log.Info("Попытка установить связь с сервером...");
+                        await Task.Delay(10000, CancellationToken.None);
                     }
 
                     if (_appSettings.AtolTokenExpiredDateTime < DateTime.Now + TimeSpan.FromSeconds(60))
@@ -516,16 +511,16 @@ beliy_ns@kuzro.ru", @"О программе");
 
         private async void tmrQueue_Tick(object sender, EventArgs e)
         {
+            tmrQueue.Stop();
             if (_taskQueue.Count == 0)
             {
-                tmrQueue.Stop();
                 return;
             }
 
-            while (!await _conn.TestConnection())
+            while (!_conn.TestConnection())
             {
-                _log.Info("Попытка установить связь с сервером");
-                await Task.Delay(3000, CancellationToken.None);
+                _log.Info("Попытка установить связь с сервером...");
+                await Task.Delay(10000, CancellationToken.None);
             }
 
             if (_appSettings.AtolTokenExpiredDateTime < DateTime.Now + TimeSpan.FromSeconds(60))
