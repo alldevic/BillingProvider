@@ -1,1 +1,5 @@
-# Billing Provider 0.3.54
+# Billing Provider 0.4.0
+
+## Изменения
+
+- Переход на APIv4
