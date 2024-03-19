@@ -14,9 +14,10 @@ using BillingProvider.Core.Comm.Tasks.Response;
 using BillingProvider.Core.KKMDrivers;
 using BillingProvider.Core.Models;
 using BillingProvider.Core.Parsers;
-using BillingProvider.WinForms.Extensions;
 using NLog;
 using NLog.Targets;
+using Utils = BillingProvider.WinForms.Extensions.Utils;
+
 
 namespace BillingProvider.WinForms
 {
@@ -698,6 +699,7 @@ beliy_ns@kuzro.ru", @"О программе");
         }
 
         private void NewTokenToolStripMenuItem_Click(object sender, EventArgs e) => RenewToken();
+
 
         private void RenewToken()
         {

@@ -46,13 +46,14 @@ namespace BillingProvider.Core.Parsers
                     for (var i = 0; i < result.Count; i++)
                     {
                         var x = result[i];
-                        Log.Debug($"{x[1]}; {x[2]}; Вывоз ТКО; {x[4]}");
+                        Log.Debug(
+                            $"{x[1].ToString().NormalizeJson()}; {x[2].ToString().NormalizeJson()}; Вывоз ТКО; {x[4]}");
                         var tmp = new ClientInfo
                         {
                             Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
                             SourcePath = Path,
-                            Address = x[2].ToString(),
-                            Name = x[1].ToString(),
+                            Address = x[2].ToString().NormalizeJson(),
+                            Name = x[1].ToString().NormalizeJson(),
                             PaymentMethod = DefaultPaymentMethod,
                             SignMethodCalculation = DefaultSignMethodCalculation
                         };

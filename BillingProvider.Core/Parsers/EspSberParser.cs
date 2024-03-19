@@ -47,7 +47,7 @@ namespace BillingProvider.Core.Parsers
                     for (var i = 0; i < result.Count - 1; i++)
                     {
                         var x = result[i];
-                        Log.Debug($"{x[1]}; Обращение с ТКО; {x[3]}");
+                        Log.Debug($"{x[1].ToString().NormalizeJson()}; Обращение с ТКО; {x[3]}");
 
                         var sum = x[3].ToString();
                         while (sum.Length < 3)
@@ -61,8 +61,8 @@ namespace BillingProvider.Core.Parsers
                         {
                             Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
                             SourcePath = Path,
-                            Address = x[1].ToString(),
-                            Name = x[1].ToString(),
+                            Address = x[1].ToString().NormalizeJson(),
+                            Name = x[1].ToString().NormalizeJson(),
                             PaymentMethod = DefaultPaymentMethod,
                             SignMethodCalculation = DefaultSignMethodCalculation
                         };

@@ -51,13 +51,16 @@ namespace BillingProvider.Core.Parsers
                         continue;
                     }
 
-                    Log.Debug($"Client info: '{row[0]}; {row[1]}'");
+                    var name = row[0].NormalizeJson();
+                    var address = row[1].NormalizeJson();
+
+                    Log.Debug($"Client info: '{name}; {address}'");
                     var tmp = new ClientInfo
                     {
                         Source = source,
                         SourcePath = Path,
-                        Address = row[1],
-                        Name = row[0],
+                        Address = address,
+                        Name = name,
                         PaymentMethod = DefaultPaymentMethod,
                         SignMethodCalculation = DefaultSignMethodCalculation
                     };

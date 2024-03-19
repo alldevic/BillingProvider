@@ -40,8 +40,8 @@
           <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
           <Private>True</Private>
         </Reference>
-        <Reference Include="HtmlAgilityPack, Version=1.11.58.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
-          <HintPath>..\packages\HtmlAgilityPack.1.11.58\lib\Net45\HtmlAgilityPack.dll</HintPath>
+        <Reference Include="HtmlAgilityPack, Version=1.11.59.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
+          <HintPath>..\packages\HtmlAgilityPack.1.11.59\lib\Net45\HtmlAgilityPack.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
@@ -99,6 +99,7 @@
         <Compile Include="Parsers\TxtMailParser.cs" />
         <Compile Include="Parsers\XlsxParser.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Utils.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

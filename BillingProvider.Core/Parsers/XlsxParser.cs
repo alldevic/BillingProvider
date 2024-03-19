@@ -30,13 +30,16 @@ namespace BillingProvider.Core.Parsers
                         try
                         {
                             var x = result[i];
-                            Log.Debug($"{x[0]}, {x[1]}, {x[2]}; {x[3]}; {x[4]}, {x[8]}; {x[7]}");
+                            Log.Debug(
+                                $"{x[0]}, {x[1]}, {x[2]}; {x[3].ToString().NormalizeJson()}; {x[4].ToString().NormalizeJson()}, {x[8]}; {x[7]}");
                             var tmp = new ClientInfo
                             {
                                 Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
                                 SourcePath = Path,
                                 Address = $"{x[0]}, дом {x[1]}, кв. {x[2]}",
-                                Name = !string.IsNullOrEmpty(x[3].ToString()) ? x[3].ToString() : x[4].ToString(),
+                                Name = !string.IsNullOrEmpty(x[3].ToString())
+                                    ? x[3].ToString().NormalizeJson()
+                                    : x[4].ToString().NormalizeJson(),
                                 PaymentMethod = DefaultPaymentMethod,
                                 SignMethodCalculation = DefaultSignMethodCalculation
                             };

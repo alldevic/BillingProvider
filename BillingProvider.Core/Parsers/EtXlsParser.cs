@@ -30,13 +30,13 @@ namespace BillingProvider.Core.Parsers
                         try
                         {
                             var x = result[i];
-                            Log.Debug($"{x[0]}, {x[1]}, {x[2]}; {x[3]}");
+                            Log.Debug($"{x[0]}, {x[1]}, {x[2].ToString().NormalizeJson()}; {x[3]}");
                             var tmp = new ClientInfo
                             {
                                 Source = string.Join(";", x.ItemArray.Where(o => o is string).ToArray()),
                                 SourcePath = Path,
                                 Address = string.Empty,
-                                Name = x[2].ToString(),
+                                Name = x[2].ToString().NormalizeJson(),
                                 PaymentMethod = DefaultPaymentMethod,
                                 SignMethodCalculation = DefaultSignMethodCalculation
                             };

@@ -60,8 +60,10 @@ namespace BillingProvider.Core.Parsers
                         {
                             Source = string.Join(";", row.Where(o => o is string).ToArray()),
                             SourcePath = Path,
-                            Address = row[7].ToString(),
-                            Name = !string.IsNullOrEmpty(row[6].ToString()) ? row[6].ToString() : row[5].ToString(),
+                            Address = row[7].ToString().NormalizeJson(),
+                            Name = !string.IsNullOrEmpty(row[6].ToString())
+                                ? row[6].ToString().NormalizeJson()
+                                : row[5].ToString().NormalizeJson(),
                             PaymentMethod = DefaultPaymentMethod,
                             SignMethodCalculation = DefaultSignMethodCalculation
                         };
