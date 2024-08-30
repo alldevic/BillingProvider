@@ -38,8 +38,8 @@
     </PropertyGroup>
     <PropertyGroup />
     <ItemGroup>
-        <Reference Include="HtmlAgilityPack, Version=1.11.59.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
-          <HintPath>..\packages\HtmlAgilityPack.1.11.59\lib\Net45\HtmlAgilityPack.dll</HintPath>
+        <Reference Include="HtmlAgilityPack, Version=1.11.64.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
+          <HintPath>..\packages\HtmlAgilityPack.1.11.64\lib\Net45\HtmlAgilityPack.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
@@ -137,7 +137,7 @@
         </PropertyGroup>
         <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
         <AssemblyInfo CodeLanguage="CS" OutputFile="$(MSBuildProjectDirectory)\Properties\AssemblyInfo.cs" AssemblyVersion="$(Version)" AssemblyFileVersion="$(Version)" AssemblyTitle="BillingProvider $(Version)" AssemblyDescription="BillingProvider $(Version)" AssemblyCompany="Nikolay Bely" AssemblyProduct="BillingProvider" AssemblyCopyright="Copyright (c) Nikolay Bely 2020" ComVisible="false" Guid="75A2B281-0EE5-40D0-A491-8EADFCCC609D" />
-        <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.26\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.26\build\ILRepack.Lib.MSBuild.Task.targets'))" />
+        <Error Condition="!Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.34.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILRepack.Lib.MSBuild.Task.2.0.34.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
     </Target>
 
 
@@ -159,5 +159,5 @@
     </Target>
 
 
-    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.26\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.26\build\ILRepack.Lib.MSBuild.Task.targets')" />
+    <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.34.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.34.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
 </Project>

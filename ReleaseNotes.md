@@ -1,3 +1,3 @@
-# Billing Provider 0.4.2
+# Billing Provider 0.4.3
 
-CI test
+Тестовое решение для обработки 502 ошибки

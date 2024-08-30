@@ -170,8 +170,9 @@ namespace BillingProvider.Core.KKMDrivers
                         }
                     }
                 );
+                var cnt = 0;
 
-
+                rerun:
                 var res = await _client.ExecuteAsync<SellResponse>(request, _cancelTokenSource.Token);
                 if (!string.IsNullOrEmpty(res.Data?.Uuid))
                 {
@@ -179,6 +180,15 @@ namespace BillingProvider.Core.KKMDrivers
                 }
                 else
                 {
+                    if (res.Content.Contains("html") && res.Content.Contains("502") && (cnt < 3))
+                    {
+                        cnt++;
+                        Log.Info($"{clientInfo}: обработка 502, попытка {cnt}, ждем...");
+                        await Task.Delay(5000);
+
+                        goto rerun;
+                    }
+
                     throw new ArgumentNullException($"UUID не получен\n\n{res.Content}");
                 }
                 // Log.Info(
