@@ -1,3 +1,3 @@
-# Billing Provider 0.4.3
+# Billing Provider 0.4.4
 
 Тестовое решение для обработки 502 ошибки
