@@ -85,9 +85,9 @@ namespace BillingProvider.Core.Parsers
                                 if (string.IsNullOrEmpty(posSum) ||
                                     string.Equals(posSum.Replace(",", "."), "0.00") ||
                                     string.IsNullOrEmpty(posName) ||
-                                    string.Equals(posName, "ГОСПОШЛИНА") ||
-                                    string.Equals(posName, "ПЕНИ ПО СУДУ") ||
-                                    string.Equals(posName, "ПЕНЯ")
+                                    string.Equals(posName.ToLower(), "ГОСПОШЛИНА".ToLower()) ||
+                                    string.Equals(posName.ToLower(), "ПЕНИ ПО СУДУ".ToLower()) ||
+                                    string.Equals(posName.ToLower(), "ПЕНЯ".ToLower())
                                    )
                                 {
                                     if (row[j + 3].ToString() == "[!]")
